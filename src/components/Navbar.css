@@ -1,0 +1,387 @@
+/* Header Component Styles */
+
+/* Promo Banner */
+
+
+@media (min-width: 768px) {
+  .promo-text {
+    font-size: 0.875rem;
+  }
+}
+
+
+
+/* Top Header */
+.top-header {
+  font-size: 3rem;
+}
+
+.top-header .dropdown-toggle::after {
+  display: none;
+}
+
+.top-header a {
+  transition: color 0.3s ease;
+}
+
+.top-header a:hover {
+  color: #fff !important;
+}
+
+/* Main Header */
+.main-header {
+  z-index: 1030;
+}
+
+.logo-img {
+  height: 3rem;
+  width: auto;
+}
+
+@media (min-width: 768px) {
+  .logo-img {
+    height: 6.5rem;
+  }
+  
+}
+
+/* Mobile Menu Button */
+.mobile-menu-btn {
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.mobile-menu-btn:hover {
+  color: #06b6d4 !important;
+}
+
+/* Desktop Navigation */
+.navbar-nav .nav-link {
+  transition: color 0.3s ease;
+  padding: 0.5rem 0;
+  font-size: large;
+  font-weight: 500;
+}
+
+.navbar-nav .nav-link:hover {
+  color: #06b6d4 !important;
+}
+
+/* Mega Menu */
+.mega-dropdown .dropdown-menu {
+  width: 500px;
+  border: none;
+}
+
+.mega-menu {
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s ease, visibility 0.2s ease;
+}
+
+.mega-dropdown:hover .mega-menu {
+  opacity: 1;
+  visibility: visible;
+}
+
+.category-link {
+  transition: color 0.3s ease;
+}
+
+.category-link:hover {
+  color: #06b6d4 !important;
+}
+
+/* Search Toggle */
+.search-toggle-btn {
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.search-toggle-btn:hover {
+  color: #06b6d4 !important;
+}
+
+/* Search Dropdown */
+.search-dropdown {
+  width: 250px;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+  z-index: 1050;
+}
+
+.search-dropdown.show {
+  opacity: 1;
+  visibility: visible;
+}
+
+@media (min-width: 768px) {
+  .search-dropdown {
+    width: 300px;
+  }
+}
+
+/* Account Link */
+.account-link {
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.account-link:hover {
+  color: #06b6d4 !important;
+}
+
+/* Cart Toggle */
+.cart-toggle-btn:hover {
+  color: #06b6d4 !important;
+}
+
+.cart-badge {
+  font-size: 0.625rem;
+  padding: 0.25em 0.4em;
+  font-weight: 600;
+}
+
+/* Cart Dropdown */
+.cart-dropdown {
+  width: 300px;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+  z-index: 1050;
+}
+
+.cart-dropdown.show {
+  opacity: 1;
+  visibility: visible;
+}
+
+@media (min-width: 768px) {
+  .cart-dropdown {
+    width: 350px;
+  }
+}
+
+.cart-items-container {
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.cart-item-image {
+  width: 4rem;
+  height: 4rem;
+}
+
+.cart-item-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.cart-item-link:hover {
+  color: #06b6d4 !important;
+}
+
+.remove-item-btn {
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.remove-item-btn:hover {
+  color: #dc3545 !important;
+}
+
+/* Mobile Menu */
+.mobile-menu {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 320px;
+  height: 100%;
+  background: white;
+  z-index: 9999;
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+  transform: translateX(-100%);
+  transition: transform 0.3s ease-in-out;
+  overflow-y: auto;
+}
+
+.mobile-menu.show {
+  transform: translateX(0);
+}
+
+.mobile-logo {
+  height: 2rem;
+  width: auto;
+}
+
+/* Mobile Navigation Links */
+.mobile-nav-link {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.mobile-nav-link:hover {
+  background-color: #f3f4f6 !important;
+  color: #06b6d4 !important;
+}
+
+/* Mobile Submenu */
+.mobile-submenu {
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease, opacity 0.3s ease;
+}
+
+.mobile-submenu.show {
+  max-height: 500px;
+  opacity: 1;
+}
+
+.mobile-submenu-link {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.mobile-submenu-link:hover {
+  background-color: #f9fafb !important;
+  color: #06b6d4 !important;
+}
+
+/* Mobile Menu Overlay */
+.mobile-menu-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 9998;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.mobile-menu-overlay.show {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Utility Classes */
+.min-w-0 {
+  min-width: 0;
+}
+
+/* Responsive Font Sizes */
+@media (min-width: 768px) {
+  .fs-md-3 {
+    font-size: 1.75rem !important;
+  }
+}
+
+/* Dropdown Animations */
+.dropdown-menu {
+  animation: fadeIn 0.2s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Ensure dropdowns work on hover for desktop */
+@media (min-width: 992px) {
+  .dropdown:hover > .dropdown-menu {
+    display: block;
+  }
+  
+  .dropdown > .dropdown-toggle:active {
+    pointer-events: none;
+  }
+}
+
+/* Remove default Bootstrap dropdown caret for custom styling */
+.navbar-nav .dropdown-toggle::after {
+  display: none;
+}
+
+/* Custom scrollbar for cart items */
+.cart-items-container::-webkit-scrollbar {
+  width: 6px;
+}
+
+.cart-items-container::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.cart-items-container::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 10px;
+}
+
+.cart-items-container::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* Mobile menu scrollbar */
+.mobile-menu::-webkit-scrollbar {
+  width: 6px;
+}
+
+.mobile-menu::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.mobile-menu::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 10px;
+}
+
+.mobile-menu::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* Fix for Bootstrap info color to match cyan */
+.btn-info {
+  background-color: #06b6d4;
+  border-color: #06b6d4;
+}
+
+.btn-info:hover {
+  background-color: #0891b2;
+  border-color: #0891b2;
+}
+
+.text-info {
+  color: #06b6d4 !important;
+}
+
+/* Ensure proper z-index layering */
+.sticky-top {
+  z-index: 1020;
+}
+
+/* Accessibility improvements */
+.mobile-menu-btn:focus,
+.search-toggle-btn:focus,
+.cart-toggle-btn:focus {
+  outline: 2px solid #06b6d4;
+  outline-offset: 2px;
+}
+
+/* Print styles */
+@media print {
+  .mobile-menu,
+  .mobile-menu-overlay,
+  .top-header {
+    display: none !important;
+  }
+}

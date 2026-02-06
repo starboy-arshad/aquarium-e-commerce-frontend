@@ -1,0 +1,33 @@
+/* Order Details Modal Spacing Fix */
+.modal-content {
+  padding: 10px; /* outer breathing space */
+}
+
+.modal-header {
+  padding: 16px 20px;
+}
+
+.modal-body {
+  padding: 20px 24px; /* main inner spacing */
+}
+
+.modal-footer {
+  padding: 16px 20px;
+}
+
+.modal-body h6 {
+  margin-bottom: 10px;
+}
+
+.modal-body p {
+  margin-bottom: 14px;
+  line-height: 1.6;
+}
+
+.modal-body .d-flex {
+  padding: 4px 0;
+}
+
+.modal-body hr {
+  margin: 16px 0;
+}

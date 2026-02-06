@@ -1,0 +1,35 @@
+/* Page wrapper styles */
+.page-wrapper {
+  position: relative;
+  overflow-x: hidden;
+  width: 100%;
+  max-width: 100vw;
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+.main {
+  position: relative;
+  
+}
+
+/* Sticky header styles */
+.sticky-header {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+  background: rgba(255, 255, 255, 0.95); /* Semi-transparent white background */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Remove space for hero slider */
+.intro-section {
+  padding-top: 0;
+}
+
+/* Make hero slider bigger */
+.intro-slide {
+  min-height: 520px;
+}
