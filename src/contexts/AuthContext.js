@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useReducer, useEffect } from 'react';
+import { API_BASE_URL } from '../config';
 
 const AuthContext = createContext();
 
@@ -36,7 +37,7 @@ export const AuthProvider = ({ children }) => {
   const login = async (email, password) => {
     try {
       dispatch({ type: 'LOGIN_START' });
-      const response = await fetch('/api/users/login', {
+      const response = await fetch(`${API_BASE_URL}/api/users/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -58,7 +59,7 @@ export const AuthProvider = ({ children }) => {
   const register = async (name, email, password) => {
     try {
       dispatch({ type: 'LOGIN_START' });
-      const response = await fetch('/api/users', {
+      const response = await fetch(`${API_BASE_URL}/api/users`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -81,7 +82,7 @@ export const AuthProvider = ({ children }) => {
     try {
       dispatch({ type: 'LOGIN_START' });
       const userInfo = JSON.parse(localStorage.getItem('userInfo'));
-      const response = await fetch('/api/users/profile', {
+      const response = await fetch(`${API_BASE_URL}/api/users/profile`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -117,7 +118,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   const resetPassword = async (email, otp, newPassword) => {
-    const response = await fetch('/api/users/verify-otp', {
+    const response = await fetch(`${API_BASE_URL}/api/users/verify-otp`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

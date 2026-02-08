@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
+import { API_BASE_URL } from '../config';
 
 const UserManagement = () => {
   const { user } = useAuth();
@@ -35,7 +36,7 @@ const UserManagement = () => {
     const action = currentAdminStatus ? 'remove admin privileges from' : 'grant admin privileges to';
     if (window.confirm(`Are you sure you want to ${action} this user?`)) {
       try {
-        const response = await fetch(`/api/users/${userId}`, {
+        const response = await fetch(`${API_BASE_URL}/api/users/${userId}`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',

@@ -53,7 +53,7 @@ function App() {
 
   useEffect(() => {
     const hideLoading = () => {
-      setTimeout(() => setIsLoading(false), 2000); // Keep for 2 seconds after load
+      setIsLoading(false);
     };
 
     if (document.readyState === 'complete') {
@@ -63,7 +63,7 @@ function App() {
     }
 
     // Fallback timeout in case load event doesn't fire properly
-    const fallbackTimeout = setTimeout(() => setIsLoading(false), 7000);
+    const fallbackTimeout = setTimeout(() => setIsLoading(false), 3000);
 
     return () => {
       window.removeEventListener('load', hideLoading);

@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useAuth } from './AuthContext';
+import { API_BASE_URL } from '../config';
 
 const CartContext = createContext();
 
@@ -35,7 +36,7 @@ export const CartProvider = ({ children }) => {
       const loadAndMergeCarts = async () => {
         try {
           setIsLoading(true);
-          const response = await fetch('/api/cart', {
+          const response = await fetch(`${API_BASE_URL}/api/cart`, {
             headers: getAuthHeaders(),
           });
           
@@ -113,7 +114,7 @@ export const CartProvider = ({ children }) => {
       // Sync with database
       try {
         console.log('Adding to cart for logged-in user');
-        const response = await fetch('/api/cart', {
+        const response = await fetch(`${API_BASE_URL}/api/cart`, {
           method: 'POST',
           headers: getAuthHeaders(),
           body: JSON.stringify({
