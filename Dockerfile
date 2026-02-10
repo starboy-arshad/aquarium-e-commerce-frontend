@@ -27,8 +27,8 @@ COPY nginx.conf /etc/nginx/nginx.conf
 # Copy built app from first stage
 COPY --from=build /app/build /usr/share/nginx/html
 
-# Create nginx user for security
-RUN adduser -D -s /bin/sh nginx
+# Create nginx user for security (only if it doesn't exist)
+RUN id -u nginx &>/dev/null || adduser -D -s /bin/sh nginx
 
 # Set proper permissions
 RUN chown -R nginx:nginx /usr/share/nginx/html
