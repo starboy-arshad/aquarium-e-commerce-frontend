@@ -68,7 +68,7 @@ const HeroSlider = () => {
       <div className="container">
         <div id="hero-carousel" className="owl-carousel inner-carousel owl-simple rows cols-1" ref={carouselRef} style={{width: '100%'}}>
           <div className="intro-slide" style={{position: 'relative', backgroundColor: "#2a323e", minHeight: '600px'}}>
-            <video autoPlay muted loop style={{position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover'}}>
+            <video autoPlay muted loop playsInline style={{position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover'}}>
               <source src={`${process.env.PUBLIC_URL}/assets/Clown_Fish_.mp4`} type="video/mp4" />
             </video>
             <div style={{position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', backgroundColor: 'rgba(0, 0, 0, 0.4)', zIndex: 0}}></div>
