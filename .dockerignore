@@ -15,7 +15,6 @@ coverage
 .DS_Store
 *.log
 src/
-public/
 *.test.js
 *.test.jsx
 *.spec.js
