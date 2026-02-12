@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import { API_BASE_URL } from '../config';
 import Header from './Header';
 import Footer from './Footer';
 
@@ -36,7 +37,7 @@ const ProductManagement = () => {
 
   const fetchProducts = async () => {
     try {
-      const response = await fetch('https://p01--backend--fbt2wjdzbm9v.code.run/api/products');
+      const response = await fetch(`${API_BASE_URL}/api/products`);
       const data = await response.json();
       setProducts(data.products);
       setLoading(false);
@@ -48,7 +49,7 @@ const ProductManagement = () => {
 
   const fetchCategories = async () => {
     try {
-      const response = await fetch('https://p01--backend--fbt2wjdzbm9v.code.run/api/categories');
+      const response = await fetch(`${API_BASE_URL}/api/categories`);
       const data = await response.json();
       setCategories(data);
     } catch (err) {
@@ -76,7 +77,9 @@ const ProductManagement = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const url = editingProduct ? `/api/products/${editingProduct._id}` : '/api/products';
+      const url = editingProduct 
+        ? `${API_BASE_URL}/api/products/${editingProduct._id}` 
+        : `${API_BASE_URL}/api/products`;
       const method = editingProduct ? 'PUT' : 'POST';
 
       // Create FormData for file upload
@@ -129,7 +132,7 @@ const ProductManagement = () => {
   const handleDelete = async (id) => {
     if (window.confirm('Are you sure you want to delete this product?')) {
       try {
-        const response = await fetch(`/api/products/${id}`, {
+        const response = await fetch(`${API_BASE_URL}/api/products/${id}`, {
           method: 'DELETE',
           headers: {
             'Authorization': `Bearer ${user.token}`,
