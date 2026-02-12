@@ -18,7 +18,7 @@ const Header = () => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await fetch('/api/categories');
+        const response = await fetch('https://p01--backend--fbt2wjdzbm9v.code.run/api/categories');
         const data = await response.json();
         setCategories(data);
         setLoading(false);
@@ -80,7 +80,7 @@ const Header = () => {
      
       
       <div className="sticky-wrapper">
-        <div className="header-middle sticky-header">
+        <div className="header-middle sticky-header" style={{ marginBottom: '20px' }}>
           <div className="container">
             <div className="header-left">
               <button 

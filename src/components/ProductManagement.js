@@ -36,7 +36,7 @@ const ProductManagement = () => {
 
   const fetchProducts = async () => {
     try {
-      const response = await fetch('/api/products');
+      const response = await fetch('https://p01--backend--fbt2wjdzbm9v.code.run/api/products');
       const data = await response.json();
       setProducts(data.products);
       setLoading(false);
@@ -48,7 +48,7 @@ const ProductManagement = () => {
 
   const fetchCategories = async () => {
     try {
-      const response = await fetch('/api/categories');
+      const response = await fetch('https://p01--backend--fbt2wjdzbm9v.code.run/api/categories');
       const data = await response.json();
       setCategories(data);
     } catch (err) {

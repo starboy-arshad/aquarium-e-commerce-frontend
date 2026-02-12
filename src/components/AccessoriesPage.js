@@ -43,7 +43,7 @@ const AccessoriesPage = () => {
         selectedCategory.forEach(cat => params.append('category', cat));
       }
 
-      const response = await fetch(`/api/accessories?${params}`);
+      const response = await fetch(`https://p01--backend--fbt2wjdzbm9v.code.run/api/accessories?${params}`);
       if (!response.ok) {
         throw new Error('Failed to fetch accessories');
       }
@@ -59,7 +59,7 @@ const AccessoriesPage = () => {
 
   const fetchCategories = async () => {
     try {
-      const response = await fetch('/api/accessories/categories');
+      const response = await fetch('https://p01--backend--fbt2wjdzbm9v.code.run/api/accessories/categories');
       if (!response.ok) {
         throw new Error('Failed to fetch categories');
       }

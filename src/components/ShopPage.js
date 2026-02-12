@@ -65,7 +65,7 @@ const ShopPage = () => {
         params.append('maxPrice', priceRange[1]);
       }
 
-      const response = await fetch(`/api/products?${params}`);
+      const response = await fetch(`https://p01--backend--fbt2wjdzbm9v.code.run/api/products?${params}`);
       if (!response.ok) {
         throw new Error('Failed to fetch products');
       }
@@ -81,7 +81,7 @@ const ShopPage = () => {
 
   const fetchCategories = async () => {
     try {
-      const response = await fetch('/api/products/categories');
+      const response = await fetch('https://p01--backend--fbt2wjdzbm9v.code.run/api/products/categories');
       if (!response.ok) {
         throw new Error('Failed to fetch categories');
       }

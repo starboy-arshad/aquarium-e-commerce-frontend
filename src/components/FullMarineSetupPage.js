@@ -24,7 +24,7 @@ const FullMarineSetupPage = () => {
         sortBy: sortBy,
       });
 
-      const response = await fetch(`/api/full-marine-setup?${params}`);
+      const response = await fetch(`https://p01--backend--fbt2wjdzbm9v.code.run/api/full-marine-setup?${params}`);
       if (!response.ok) {
         throw new Error('Failed to fetch products');
       }

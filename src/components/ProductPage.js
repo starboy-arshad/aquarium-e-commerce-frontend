@@ -18,10 +18,10 @@ const ProductPage = () => {
     const fetchProduct = async () => {
       try {
         // First try to fetch from regular products API
-        let response = await fetch(`/api/products/${id}`);
+        let response = await fetch(`https://p01--backend--fbt2wjdzbm9v.code.run/api/products/${id}`);
         if (!response.ok) {
           // If not found in regular products, try full marine setup API
-          response = await fetch(`/api/full-marine-setup/${id}`);
+          response = await fetch(`https://p01--backend--fbt2wjdzbm9v.code.run/api/full-marine-setup/${id}`);
           if (!response.ok) {
             throw new Error('Product not found');
           }
@@ -46,7 +46,7 @@ const ProductPage = () => {
         
         // Fetch from regular products
         try {
-          const response = await fetch('/api/products');
+          const response = await fetch('https://p01--backend--fbt2wjdzbm9v.code.run/api/products');
           if (response.ok) {
             const data = await response.json();
             relatedProductsData = relatedProductsData.concat(data.products);
@@ -57,7 +57,7 @@ const ProductPage = () => {
         
         // Fetch from full marine setup products
         try {
-          const response = await fetch('/api/full-marine-setup');
+          const response = await fetch('https://p01--backend--fbt2wjdzbm9v.code.run/api/full-marine-setup');
           if (response.ok) {
             const data = await response.json();
             relatedProductsData = relatedProductsData.concat(data.products);
@@ -76,7 +76,7 @@ const ProductPage = () => {
 
     const fetchPolicies = async () => {
       try {
-        const response = await fetch('/api/policies');
+        const response = await fetch('https://p01--backend--fbt2wjdzbm9v.code.run/api/policies');
         if (response.ok) {
           const data = await response.json();
           setPolicies(data);

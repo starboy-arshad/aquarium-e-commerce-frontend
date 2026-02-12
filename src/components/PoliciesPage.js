@@ -16,7 +16,7 @@ const PoliciesPage = () => {
 
   const fetchPolicies = async () => {
     try {
-      const response = await fetch('/api/policies');
+      const response = await fetch('https://p01--backend--fbt2wjdzbm9v.code.run/api/policies');
       if (response.ok) {
         const data = await response.json();
         setPolicies(data);
