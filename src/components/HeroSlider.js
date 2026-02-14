@@ -68,11 +68,11 @@ const HeroSlider = () => {
       <div id="hero-carousel" className="owl-carousel inner-carousel owl-simple rows cols-1" ref={carouselRef}>
         <div className="intro-slide">
           <video autoPlay muted loop playsInline>
-            <source src={`${process.env.PUBLIC_URL}/assets/Clown_Fish_.mp4`} type="video/mp4" />
+            <source src="/assets/Clown_Fish_.mp4" type="video/mp4" />
           </video>
-          <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', backgroundColor: 'rgba(0, 0, 0, 0.4)', zIndex: 0 }}></div>
-          <div className="container" style={{ position: 'relative', height: '100%' }}>
-            <div className="intro-content intro-content-left" style={{ position: 'absolute', top: '50%', left: '15px', transform: 'translateY(-50%)', zIndex: 1 }}>
+          <div className="overlay"></div>
+          <div className="container">
+            <div className="intro-content intro-content-left">
               <h6 className="font-weight-normal text-primary my-2 mt-0">Aquarium Sale</h6>
               <h3 className="intro-title font-weight-bold text-white mb-0">Erode Marine<br />Aquarium</h3>
               <h3 className="intro-desc mb-2 font-weight-light text-secondary">"Bring the Ocean Home"</h3>
