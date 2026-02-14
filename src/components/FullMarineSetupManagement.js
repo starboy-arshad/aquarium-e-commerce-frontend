@@ -116,12 +116,12 @@ const FullMarineSetupManagement = () => {
   return (
     <div className="page-wrapper">
       <Header />
-      <main className="main">
+      <main className="main" style={{ paddingTop: '100px' }}>
         <div className="container">
           <div className="d-flex justify-content-between align-items-center mb-4">
             <h1>Full Marine Setup Management</h1>
             <div>
-            <Link to="/full-marine-setup" className="btn btn-primary me-2">View in Shop</Link>
+              <Link to="/full-marine-setup" className="btn btn-primary me-2">View in Shop</Link>
               <Link to="/admin" className="btn btn-secondary">Back to Admin Panel</Link>
             </div>
           </div>

@@ -111,7 +111,7 @@ const AccountPage = () => {
   return (
     <div className="page-wrapper">
       <Header />
-      <main className="main">
+      <main className="main" style={{ paddingTop: '100px' }}>
         <div className="page-header text-center" style={{ backgroundImage: `url(${process.env.PUBLIC_URL}/assets/shop_card.jpg)`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
           <div className="container">
             <h1 className="page-title" style={{ color: 'white' }}>Account<span>Shop</span></h1>
@@ -199,8 +199,8 @@ const AccountPage = () => {
                     {activeTab === 'dashboard' && (
                       <div className="tab-pane fade show active" id="tab-dashboard" role="tabpanel" aria-labelledby="tab-dashboard-link">
                         <p>Hello <span className="font-weight-normal text-dark">{lastName}</span> (not <span className="font-weight-normal text-dark">{lastName}</span>? <a href="#" onClick={(e) => { e.preventDefault(); logout(); navigate('/'); }}>Log out</a>)
-                        <br />
-                        From your account dashboard you can view your <a href="#tab-orders" className="tab-trigger-link link-underline" onClick={() => handleTabClick('orders')}>recent orders</a>, manage your <a href="#tab-address" className="tab-trigger-link" onClick={() => handleTabClick('address')}>shipping and billing addresses</a>, and <a href="#tab-account" className="tab-trigger-link" onClick={() => handleTabClick('account')}>edit your password and account details</a>.</p>
+                          <br />
+                          From your account dashboard you can view your <a href="#tab-orders" className="tab-trigger-link link-underline" onClick={() => handleTabClick('orders')}>recent orders</a>, manage your <a href="#tab-address" className="tab-trigger-link" onClick={() => handleTabClick('address')}>shipping and billing addresses</a>, and <a href="#tab-account" className="tab-trigger-link" onClick={() => handleTabClick('account')}>edit your password and account details</a>.</p>
                       </div>
                     )}
                     {activeTab === 'orders' && (
@@ -322,7 +322,7 @@ const AccountPage = () => {
                                   </div>
                                 ) : (
                                   <p>You have not set up this type of address yet.<br />
-                                  <button className="btn btn-primary" onClick={() => setShowBillingForm(true)}>Add Address</button></p>
+                                    <button className="btn btn-primary" onClick={() => setShowBillingForm(true)}>Add Address</button></p>
                                 )}
                               </div>
                             </div>
@@ -385,7 +385,7 @@ const AccountPage = () => {
                                   </div>
                                 ) : (
                                   <p>You have not set up this type of address yet.<br />
-                                  <button className="btn btn-primary" onClick={() => setShowShippingForm(true)}>Add Address</button></p>
+                                    <button className="btn btn-primary" onClick={() => setShowShippingForm(true)}>Add Address</button></p>
                                 )}
                               </div>
                             </div>

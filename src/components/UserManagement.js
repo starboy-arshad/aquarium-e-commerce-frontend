@@ -59,7 +59,7 @@ const UserManagement = () => {
   if (loading) return <div className="text-center mt-5">Loading users...</div>;
 
   return (
-    <main className="main">
+    <main className="main" style={{ paddingTop: '100px' }}>
       <div className="container">
         <div className="d-flex justify-content-between align-items-center mb-4">
           <h1>User Management</h1>

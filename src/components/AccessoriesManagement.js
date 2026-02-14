@@ -156,7 +156,7 @@ const AccessoriesManagement = () => {
   return (
     <div className="page-wrapper">
       <Header />
-      <main className="main">
+      <main className="main" style={{ paddingTop: '100px' }}>
         <div className="container">
           <div className="d-flex justify-content-between align-items-center mb-4">
             <h1>Accessories Management {filteredCategory && `- ${filteredCategory}`}</h1>

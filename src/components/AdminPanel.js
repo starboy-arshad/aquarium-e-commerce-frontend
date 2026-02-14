@@ -6,7 +6,7 @@ const AdminPanel = () => {
   return (
     <div className="page-wrapper">
       <Header />
-      <main className="main">
+      <main className="main" style={{ paddingTop: '100px' }}>
         <div className="container">
           <h1 className="text-center mb-4">Admin Panel</h1>
           <div className="row">

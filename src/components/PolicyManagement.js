@@ -66,7 +66,7 @@ const PolicyManagement = () => {
 
   return (
     <AdminLayout>
-      <div className="container">
+      <div className="container" style={{ paddingTop: '100px' }}>
         <h1 className="mb-4">Policy Management</h1>
 
         {message && (
