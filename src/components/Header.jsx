@@ -21,10 +21,16 @@ const Header = () => {
       try {
         const response = await fetch(`${API_BASE_URL}/api/categories`);
         const data = await response.json();
-        setCategories(data);
+        if (response.ok && Array.isArray(data)) {
+          setCategories(data);
+        } else {
+          console.error('API Error fetching categories:', data);
+          setCategories([]);
+        }
         setLoading(false);
       } catch (error) {
         console.error('Failed to fetch categories:', error);
+        setCategories([]);
         setLoading(false);
       }
     };
@@ -114,7 +120,7 @@ const Header = () => {
                                   <div className="col-md-6">
                                     <div className="menu-title">Categories</div>
                                     <ul>
-                                      {categories.slice(0, Math.ceil(categories.length / 2)).map(category => (
+                                      {(Array.isArray(categories) ? categories : []).slice(0, Math.ceil((Array.isArray(categories) ? categories.length : 0) / 2)).map(category => (
                                         <li key={category._id}>
                                           <Link to={`/shop?category=${encodeURIComponent(category.name)}`}>
                                             {category.name}
@@ -126,7 +132,7 @@ const Header = () => {
                                   <div className="col-md-6">
                                     <div className="menu-title">&nbsp;</div>
                                     <ul>
-                                      {categories.slice(Math.ceil(categories.length / 2)).map(category => (
+                                      {(Array.isArray(categories) ? categories : []).slice(Math.ceil((Array.isArray(categories) ? categories.length : 0) / 2)).map(category => (
                                         <li key={category._id}>
                                           <Link to={`/shop?category=${encodeURIComponent(category.name)}`}>
                                             {category.name}
@@ -275,7 +281,7 @@ const Header = () => {
                   {loading ? (
                     <li>Loading categories...</li>
                   ) : (
-                    categories.map(category => (
+                    (Array.isArray(categories) ? categories : []).map(category => (
                       <li key={category._id}>
                         <Link
                           to={`/shop?category=${encodeURIComponent(category.name)}`}

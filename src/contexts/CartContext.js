@@ -39,10 +39,10 @@ export const CartProvider = ({ children }) => {
           const response = await fetch(`${API_BASE_URL}/api/cart`, {
             headers: getAuthHeaders(),
           });
-          
+
           if (response.ok) {
             const cartData = await response.json();
-            const dbItems = cartData.items.map(item => ({
+            const dbItems = (cartData?.items || []).map(item => ({
               id: item.product?._id || item.productId || item.product,
               name: item.name,
               price: item.price,
@@ -52,7 +52,7 @@ export const CartProvider = ({ children }) => {
 
             // Merge guest cart (if any) with database cart
             const mergedItems = [...dbItems];
-            cartItems.forEach(localItem => {
+            (Array.isArray(cartItems) ? cartItems : []).forEach(localItem => {
               const existingItem = mergedItems.find(item => item.id === localItem.id);
               if (existingItem) {
                 existingItem.quantity += localItem.quantity;
@@ -64,9 +64,14 @@ export const CartProvider = ({ children }) => {
             setCartItems(mergedItems);
             // Sync merged cart to database
             await syncCartItemsToDatabase(mergedItems);
+          } else if (response.status === 401) {
+            console.error('Session expired or unauthorized. Clearing user info.');
+            localStorage.removeItem('userInfo');
+            localStorage.removeItem('cart');
+            setCartItems([]);
           } else {
-            // No database cart exists, sync local cart to database
-            await syncCartItemsToDatabase(cartItems);
+            // No database cart exists or other error, sync local cart to database
+            await syncCartItemsToDatabase(Array.isArray(cartItems) ? cartItems : []);
           }
         } catch (error) {
           console.error('Error loading and merging carts:', error);
@@ -109,7 +114,7 @@ export const CartProvider = ({ children }) => {
 
   const addToCart = async (product, quantity = 1) => {
     console.log('addToCart called with:', { product, quantity, user });
-    
+
     if (user) {
       // Sync with database
       try {
@@ -261,7 +266,7 @@ export const CartProvider = ({ children }) => {
   const clearCart = async () => {
     if (user) {
       try {
-      await fetch(`${API_BASE_URL}/api/cart`, {
+        await fetch(`${API_BASE_URL}/api/cart`, {
           method: 'DELETE',
           headers: getAuthHeaders(),
         });
