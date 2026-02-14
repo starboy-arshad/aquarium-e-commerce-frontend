@@ -64,11 +64,11 @@ const HeroSlider = () => {
   }, []);
 
   return (
-    <div className="intro-section bg-image" style={{ backgroundImage: `url(${process.env.PUBLIC_URL}/assets/images/demos/demo-28/background.jpg)`, backgroundSize: 'cover' }}>
+    <div className="intro-section bg-image" style={{ backgroundImage: `url(${process.env.PUBLIC_URL}/assets/images/demos/demo-28/background.jpg)`, backgroundSize: 'cover', width: '100%' }}>
       <div id="hero-carousel" className="owl-carousel inner-carousel owl-simple rows cols-1" ref={carouselRef}>
         <div className="intro-slide">
           <video autoPlay muted loop playsInline>
-            <source src="/assets/Clown_Fish_.mp4" type="video/mp4" />
+            <source src={`${process.env.PUBLIC_URL}/assets/Clown_Fish_.mp4`} type="video/mp4" />
           </video>
           <div className="overlay"></div>
           <div className="container">
