@@ -146,7 +146,7 @@ const Header = () => {
                   <li><Link to="/full-marine-setup">Full Marine Setup</Link></li>
                   <li><Link to="/accessories">Accessories</Link></li>
                   <li><Link to="/contact">Contact</Link></li>
-                  <li><Link to="/admin">Admin Panel</Link></li>
+                  {user && user.isAdmin && <li><Link to="/admin">Admin Panel</Link></li>}
                 </ul>
               </nav>
             </div>
@@ -297,9 +297,11 @@ const Header = () => {
               <li>
                 <Link to="/contact" onClick={closeMobileMenu}>Contact</Link>
               </li>
-              <li>
-                <Link to="/admin" onClick={closeMobileMenu}>Admin Panel</Link>
-              </li>
+              {user && user.isAdmin && (
+                <li>
+                  <Link to="/admin" onClick={closeMobileMenu}>Admin Panel</Link>
+                </li>
+              )}
 
               {/* Mobile-only menu items */}
               <li className="separator"></li>
