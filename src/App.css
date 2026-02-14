@@ -38,10 +38,10 @@
 
 /* Force carousel and all its sub-elements to be full width */
 #hero-carousel,
-.owl-stage-outer,
-.owl-stage,
-.owl-item,
-.intro-slide {
+#hero-carousel .owl-stage-outer,
+#hero-carousel .owl-stage,
+#hero-carousel .owl-item,
+.intro-section .intro-slide {
   width: 100% !important;
   max-width: 100% !important;
   min-width: 100% !important;
@@ -50,14 +50,14 @@
 }
 
 /* Make hero slider bigger and handle video scaling */
-.intro-slide {
+.intro-section .intro-slide {
   min-height: 600px !important;
   height: 600px !important;
   position: relative !important;
   overflow: hidden !important;
 }
 
-.intro-slide video {
+.intro-section .intro-slide video {
   position: absolute !important;
   top: 50% !important;
   left: 50% !important;
@@ -71,8 +71,7 @@
   opacity: 1 !important;
 }
 
-
-.intro-slide .overlay {
+.intro-section .intro-slide .overlay {
   position: absolute !important;
   top: 0 !important;
   left: 0 !important;
@@ -82,7 +81,7 @@
   z-index: 2 !important;
 }
 
-.intro-slide .container {
+.intro-section .intro-slide .container {
   position: relative !important;
   z-index: 3 !important;
   height: 100% !important;
