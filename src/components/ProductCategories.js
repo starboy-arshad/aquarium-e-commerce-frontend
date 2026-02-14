@@ -10,7 +10,7 @@ const ProductCategories = () => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-      const response = await fetch(`${API_BASE_URL}/api/categories`);
+        const response = await fetch(`${API_BASE_URL}/api/categories`);
         if (!response.ok) {
           throw new Error('Failed to fetch categories');
         }
@@ -59,9 +59,9 @@ const ProductCategories = () => {
         <div className="row">
           {categories.map((category, index) => (
             <div key={category._id} className="col-6 col-sm-4 col-md-3 col-lg-2 col-xl-8col">
-            <Link to={`/shop?category=${encodeURIComponent(category.name)}`} className="cat bg-white pt-1 mb-2">
+              <Link to={`/shop?category=${encodeURIComponent(category.name)}`} className="cat bg-white pt-1 mb-2">
                 <div className="cat-image d-flex justify-content-center align-items-center">
-                  <img src={category.image ? `${process.env.PUBLIC_URL}/assets/images/categories/${category.image}` : `${process.env.PUBLIC_URL}/assets/images/demos/demo-28/categories/${index + 1}.jpg`} width="137" height="137" alt={category.name} />
+                  <img src={category.image ? (category.image.startsWith('http') ? category.image : `${API_BASE_URL}${category.image.startsWith('/') ? '' : '/'}${category.image.includes('uploads') ? '' : 'uploads/'}${category.image}`) : `${process.env.PUBLIC_URL}/assets/images/demos/demo-28/categories/${index + 1}.jpg`} width="137" height="137" alt={category.name} />
                 </div>
                 <div className="cat-content text-center">
                   <div className="cat-title">{category.name}</div>

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useCart } from '../contexts/CartContext';
 import { useAuth } from '../contexts/AuthContext';
+import { API_BASE_URL } from '../config';
 import './Header.css';
 
 const Header = () => {
@@ -18,7 +19,7 @@ const Header = () => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await fetch('https://p01--backend--fbt2wjdzbm9v.code.run/api/categories');
+        const response = await fetch(`${API_BASE_URL}/api/categories`);
         const data = await response.json();
         setCategories(data);
         setLoading(false);
@@ -75,26 +76,26 @@ const Header = () => {
 
   return (
     <header className="header header-28 bg-transparent">
-   
-      
-     
-      
+
+
+
+
       <div className="sticky-wrapper">
         <div className="header-middle sticky-header" style={{ marginBottom: '20px' }}>
           <div className="container">
             <div className="header-left">
-              <button 
-                className="mobile-menu-toggler" 
+              <button
+                className="mobile-menu-toggler"
                 onClick={toggleMobileMenu}
                 style={{ background: 'none', border: 'none', fontSize: '24px', cursor: 'pointer' }}
               >
                 <i className="icon-bars"></i>
               </button>
-              
+
               <Link to="/" className="logo">
                 <img src="/assets/images/erode_marine.jpg" alt="Aquarium Shop Logo" width="70" height="25" />
               </Link>
-              
+
               <nav className="main-nav">
                 <ul className="menu sf-arrows">
                   <li><Link to="/">Home</Link></li>
@@ -149,12 +150,12 @@ const Header = () => {
                 </ul>
               </nav>
             </div>
-            
+
             <div className="header-right">
               <div className="header-search">
-                <a 
-                  href="#" 
-                  className="search-toggle" 
+                <a
+                  href="#"
+                  className="search-toggle"
                   onClick={(e) => {
                     e.preventDefault();
                     setSearchOpen(!searchOpen);
@@ -178,13 +179,13 @@ const Header = () => {
                   </div>
                 </form>
               </div>
-              
+
               <div className="icon position-relative" style={{ marginRight: '15px' }}>
                 <Link to="/account">
                   <i className="icon-user" style={{ fontSize: '24px' }}></i>
                 </Link>
               </div>
-              
+
               <div className="dropdown cart-dropdown">
                 <Link to="/cart" className="dropdown-toggle">
                   <div className="icon position-relative">
@@ -211,12 +212,12 @@ const Header = () => {
                           </div>
                           <figure className="product-image-container">
                             <Link to={`/product/${item.id}`} className="product-image">
-                              <img src={item.image} alt="product" />
+                              <img src={item.image ? (item.image.startsWith('http') ? item.image : `${API_BASE_URL}${item.image.startsWith('/') ? '' : '/'}${item.image}`) : '/assets/images/products/product-1.jpg'} alt="product" />
                             </Link>
                           </figure>
-                          <a 
-                            href="#" 
-                            className="btn-remove" 
+                          <a
+                            href="#"
+                            className="btn-remove"
                             onClick={(e) => {
                               e.preventDefault();
                               removeFromCart(item.id);
@@ -248,7 +249,7 @@ const Header = () => {
           </div>
         </div>
       </div>
-      
+
       {/* Mobile Menu */}
       <div className={`mobile-menu-container ${mobileMenuOpen ? 'active' : ''}`}>
         <div className="mobile-menu-wrapper">
@@ -261,8 +262,8 @@ const Header = () => {
                 <Link to="/shop" onClick={closeMobileMenu}>Shop all products</Link>
               </li>
               <li className={`megamenu-list ${activeMobileMenu === 'livestock' ? 'active' : ''}`}>
-                <a 
-                  href="#" 
+                <a
+                  href="#"
                   onClick={(e) => {
                     e.preventDefault();
                     toggleMobileSubmenu('livestock');
@@ -276,7 +277,7 @@ const Header = () => {
                   ) : (
                     categories.map(category => (
                       <li key={category._id}>
-                        <Link 
+                        <Link
                           to={`/shop?category=${encodeURIComponent(category.name)}`}
                           onClick={closeMobileMenu}
                         >
@@ -299,10 +300,10 @@ const Header = () => {
               <li>
                 <Link to="/admin" onClick={closeMobileMenu}>Admin Panel</Link>
               </li>
-              
+
               {/* Mobile-only menu items */}
               <li className="separator"></li>
-              
+
               <li>
                 {user ? (
                   <a href="#" onClick={handleLogout}>
@@ -316,14 +317,14 @@ const Header = () => {
                   </Link>
                 )}
               </li>
-              
+
               <li>
                 <Link to="/account" onClick={closeMobileMenu}>
                   <i className="icon-cog" style={{ marginRight: '10px' }}></i>
                   My Account
                 </Link>
               </li>
-              
+
               <li>
                 <Link to="/cart" onClick={closeMobileMenu}>
                   <i className="icon-shopping-cart" style={{ marginRight: '10px' }}></i>
@@ -333,15 +334,15 @@ const Header = () => {
             </ul>
           </div>
         </div>
-        
+
         <button className="mobile-menu-close" onClick={closeMobileMenu}>
           <i className="icon-close"></i>
         </button>
       </div>
-      
+
       {/* Mobile Menu Overlay */}
-      <div 
-        className={`mobile-menu-overlay ${mobileMenuOpen ? 'active' : ''}`} 
+      <div
+        className={`mobile-menu-overlay ${mobileMenuOpen ? 'active' : ''}`}
         onClick={closeMobileMenu}
       ></div>
     </header>
