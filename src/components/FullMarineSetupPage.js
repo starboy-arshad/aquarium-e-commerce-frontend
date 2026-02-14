@@ -156,18 +156,18 @@ const FullMarineSetupPage = () => {
             <div className="row justify-content-center">
               {(() => {
                 const colClass = gridColumns === 2 ? "col-6 col-md-6 col-lg-6 col-xl-6" :
-                                 gridColumns === 3 ? "col-6 col-md-4 col-lg-4 col-xl-4" :
-                                 "col-6 col-md-4 col-lg-4 col-xl-3";
+                  gridColumns === 3 ? "col-6 col-md-4 col-lg-4 col-xl-4" :
+                    "col-6 col-md-4 col-lg-4 col-xl-3";
                 return products.map((product) => (
                   <div key={product._id} className={colClass}>
                     <div className="product product-7 text-center">
                       <figure className="product-media">
                         <Link to={`/product/${product._id}`}>
-                          <img src={product.images && product.images.length > 0 ? product.images[0] : product.image} alt={product.name} className="product-image" />
+                          <img src={product.images && product.images.length > 0 ? `${API_BASE_URL}${product.images[0]}` : (product.image ? `${API_BASE_URL}${product.image}` : '')} alt={product.name} className="product-image" />
                         </Link>
 
                         <div className="product-action">
-                          <button 
+                          <button
                             className="btn-product btn-cart"
                             onClick={(e) => {
                               e.preventDefault();

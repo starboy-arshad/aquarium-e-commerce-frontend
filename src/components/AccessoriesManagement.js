@@ -74,7 +74,7 @@ const AccessoriesManagement = () => {
 
       // Create FormData for file upload
       const formDataObj = new FormData();
-      
+
       // Add form fields
       Object.keys(formData).forEach(key => {
         formDataObj.append(key, formData[key]);
@@ -269,6 +269,34 @@ const AccessoriesManagement = () => {
                       {imageFiles.length > 0 && (
                         <div className="mt-2">
                           <small className="text-muted">Selected files: {imageFiles.length}</small>
+                        </div>
+                      )}
+                      {editingAccessory && editingAccessory.images && editingAccessory.images.length > 0 && (
+                        <div className="mt-2">
+                          <label className="form-label d-block text-muted">Current Images:</label>
+                          <div className="row">
+                            {editingAccessory.images.map((img, idx) => (
+                              <div key={idx} className="col-4 mb-2">
+                                <img
+                                  src={`${API_BASE_URL}${img.startsWith('/') ? '' : '/'}${img}`}
+                                  alt="Current"
+                                  className="img-thumbnail"
+                                  style={{ width: '100%', height: '50px', objectFit: 'cover' }}
+                                />
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                      {editingAccessory && editingAccessory.image && (!editingAccessory.images || editingAccessory.images.length === 0) && (
+                        <div className="mt-2">
+                          <label className="form-label d-block text-muted">Current Image:</label>
+                          <img
+                            src={`${API_BASE_URL}${editingAccessory.image.startsWith('/') ? '' : '/'}${editingAccessory.image}`}
+                            alt="Current"
+                            className="img-thumbnail"
+                            style={{ width: '80px', height: '80px', objectFit: 'cover' }}
+                          />
                         </div>
                       )}
                     </div>

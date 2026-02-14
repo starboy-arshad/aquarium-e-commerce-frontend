@@ -68,7 +68,7 @@ const ProductManagement = () => {
   const handleFileChange = (e) => {
     const files = Array.from(e.target.files);
     setSelectedFiles(files);
-    
+
     // Create preview URLs for the selected files
     const fileURLs = files.map(file => URL.createObjectURL(file));
     setPreviewImages(fileURLs);
@@ -77,14 +77,14 @@ const ProductManagement = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const url = editingProduct 
+      const url = editingProduct
         ? `${API_BASE_URL}/api/products/${editingProduct._id}`
         : `${API_BASE_URL}/api/products`;
       const method = editingProduct ? 'PUT' : 'POST';
 
       // Create FormData for file upload
       const formDataWithFiles = new FormData();
-      
+
       // Add form fields to FormData
       Object.keys(formData).forEach(key => {
         formDataWithFiles.append(key, formData[key]);
@@ -203,8 +203,8 @@ const ProductManagement = () => {
                           <tr key={product._id}>
                             <td>
                               {product.images && product.images.length > 0 && (
-                                <img 
-                                  src={product.images[0]} 
+                                <img
+                                  src={`${API_BASE_URL}${product.images[0].startsWith('/') ? '' : '/'}${product.images[0]}`}
                                   alt={product.name}
                                   style={{ width: '50px', height: '50px', objectFit: 'cover', marginRight: '10px' }}
                                 />
@@ -310,7 +310,7 @@ const ProductManagement = () => {
                         <small className="text-muted">Select up to 5 images (max 5MB each)</small>
                       </div>
                     </div>
-                    
+
                     {/* Image Preview */}
                     {previewImages.length > 0 && (
                       <div className="mb-3">
@@ -318,8 +318,8 @@ const ProductManagement = () => {
                         <div className="row">
                           {previewImages.map((url, index) => (
                             <div key={index} className="col-md-4 mb-2">
-                              <img 
-                                src={url} 
+                              <img
+                                src={url}
                                 alt={`Preview ${index + 1}`}
                                 className="img-thumbnail"
                                 style={{ width: '100%', height: '100px', objectFit: 'cover' }}
@@ -329,7 +329,7 @@ const ProductManagement = () => {
                         </div>
                       </div>
                     )}
-                    
+
                     {/* Show existing images when editing */}
                     {editingProduct && editingProduct.images && editingProduct.images.length > 0 && (
                       <div className="mb-3">
@@ -337,8 +337,8 @@ const ProductManagement = () => {
                         <div className="row">
                           {editingProduct.images.map((image, index) => (
                             <div key={index} className="col-md-4 mb-2">
-                              <img 
-                                src={image} 
+                              <img
+                                src={`${API_BASE_URL}${image.startsWith('/') ? '' : '/'}${image}`}
                                 alt={`Current ${index + 1}`}
                                 className="img-thumbnail"
                                 style={{ width: '100%', height: '100px', objectFit: 'cover' }}

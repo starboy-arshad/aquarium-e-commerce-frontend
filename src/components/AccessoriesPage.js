@@ -218,7 +218,7 @@ const AccessoriesPage = () => {
                         <div className="product product-7 text-center">
                           <figure className="product-media">
                             <Link to={`/accessory/${accessory._id}`}>
-                              <img src={accessory.images && accessory.images.length > 0 ? accessory.images[0] : accessory.image} alt={accessory.name} className="product-image" />
+                              <img src={accessory.images && accessory.images.length > 0 ? `${API_BASE_URL}${accessory.images[0]}` : (accessory.image ? `${API_BASE_URL}${accessory.image}` : '')} alt={accessory.name} className="product-image" />
                             </Link>
                             <div className="product-action-vertical">
                               <a href="#" className="btn-product-icon btn-wishlist btn-expandable"><span>add to wishlist</span></a>

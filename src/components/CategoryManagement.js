@@ -243,8 +243,14 @@ const CategoryManagement = () => {
                         onChange={(e) => setFormData(prev => ({ ...prev, image: e.target.files[0] }))}
                       />
                       {editingCategory && editingCategory.image && (
-                        <div className="mt-2">
-                          <small className="text-muted">Current image: {editingCategory.image}</small>
+                        <div className="mt-2 text-center">
+                          <label className="form-label d-block text-muted">Current Image:</label>
+                          <img
+                            src={`${API_BASE_URL}${editingCategory.image.startsWith('/') ? '' : '/'}${editingCategory.image.includes('uploads') ? '' : 'uploads/'}${editingCategory.image}`}
+                            alt="Current"
+                            className="img-thumbnail"
+                            style={{ width: '150px', height: '150px', objectFit: 'cover' }}
+                          />
                         </div>
                       )}
                     </div>

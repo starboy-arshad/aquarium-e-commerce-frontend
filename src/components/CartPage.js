@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useCart } from '../contexts/CartContext';
+import { API_BASE_URL } from '../config';
 
 const CartPage = () => {
   const { cartItems, updateQuantity, removeFromCart } = useCart();
@@ -63,7 +64,7 @@ const CartPage = () => {
                           <div className="product">
                             <figure className="product-media">
                               <Link to={`/product/${item.id}`}>
-                                <img src={item.images && item.images.length > 0 ? item.images[0] : item.image} alt="Product image" />
+                                <img src={item.image ? (item.image.startsWith('http') ? item.image : `${API_BASE_URL}${item.image.startsWith('/') ? '' : '/'}${item.image}`) : (item.images && item.images.length > 0 ? `${API_BASE_URL}${item.images[0].startsWith('/') ? '' : '/'}${item.images[0]}` : '/assets/images/products/product-1.jpg')} alt="Product image" />
                               </Link>
                             </figure>
                             <h3 className="product-title">

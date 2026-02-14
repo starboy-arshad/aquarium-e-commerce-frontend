@@ -110,48 +110,48 @@ const AccessoryPage = () => {
               <div className="col-md-6">
                 <div className="product-gallery product-gallery-vertical">
                   <div className="row">
-                  <figure className="product-main-image">
-                    <img id="product-zoom" src={mainImage || (accessory.images && accessory.images.length > 0 ? accessory.images[0] : accessory.image)} data-zoom-image={mainImage || (accessory.images && accessory.images.length > 0 ? accessory.images[0] : accessory.image)} alt="product image" />
-                    <a href="#" id="btn-product-gallery" className="btn-product-gallery" onClick={(e) => {
-                      e.preventDefault();
-                      // Open gallery modal or zoom functionality
-                      console.log('Opening accessory gallery for:', accessory.name);
-                    }}>
-                      <i className="icon-arrows"></i>
-                    </a>
-                  </figure>
-                  <div id="product-zoom-gallery" className="product-image-gallery">
-                    {accessory.images && accessory.images.length > 0 ? (
-                      accessory.images.map((img, index) => (
-                        <a 
-                          key={index} 
-                          className={`product-gallery-item ${index === 0 ? 'active' : ''}`} 
-                          href="#" 
-                          data-image={img} 
-                          data-zoom-image={img}
+                    <figure className="product-main-image">
+                      <img id="product-zoom" src={mainImage ? `${API_BASE_URL}${mainImage}` : (accessory.images && accessory.images.length > 0 ? `${API_BASE_URL}${accessory.images[0]}` : (accessory.image ? `${API_BASE_URL}${accessory.image}` : ''))} data-zoom-image={mainImage ? `${API_BASE_URL}${mainImage}` : (accessory.images && accessory.images.length > 0 ? `${API_BASE_URL}${accessory.images[0]}` : (accessory.image ? `${API_BASE_URL}${accessory.image}` : ''))} alt="product image" />
+                      <a href="#" id="btn-product-gallery" className="btn-product-gallery" onClick={(e) => {
+                        e.preventDefault();
+                        // Open gallery modal or zoom functionality
+                        console.log('Opening accessory gallery for:', accessory.name);
+                      }}>
+                        <i className="icon-arrows"></i>
+                      </a>
+                    </figure>
+                    <div id="product-zoom-gallery" className="product-image-gallery">
+                      {accessory.images && accessory.images.length > 0 ? (
+                        accessory.images.map((img, index) => (
+                          <a
+                            key={index}
+                            className={`product-gallery-item ${index === 0 ? 'active' : ''}`}
+                            href="#"
+                            data-image={`${API_BASE_URL}${img}`}
+                            data-zoom-image={`${API_BASE_URL}${img}`}
+                            onClick={(e) => {
+                              e.preventDefault();
+                              handleImageClick(img);
+                            }}
+                          >
+                            <img src={`${API_BASE_URL}${img}`} alt={`accessory image ${index + 1}`} />
+                          </a>
+                        ))
+                      ) : (
+                        <a
+                          className="product-gallery-item active"
+                          href="#"
+                          data-image={`${API_BASE_URL}${accessory.image}`}
+                          data-zoom-image={`${API_BASE_URL}${accessory.image}`}
                           onClick={(e) => {
                             e.preventDefault();
-                            handleImageClick(img);
+                            handleImageClick(accessory.image);
                           }}
                         >
-                          <img src={img} alt={`accessory image ${index + 1}`} />
+                          <img src={accessory.image ? `${API_BASE_URL}${accessory.image}` : ''} alt="accessory side" />
                         </a>
-                      ))
-                    ) : (
-                      <a 
-                        className="product-gallery-item active" 
-                        href="#" 
-                        data-image={accessory.image} 
-                        data-zoom-image={accessory.image}
-                        onClick={(e) => {
-                          e.preventDefault();
-                          handleImageClick(accessory.image);
-                        }}
-                      >
-                        <img src={accessory.image} alt="accessory side" />
-                      </a>
-                    )}
-                  </div>
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -274,7 +274,7 @@ const AccessoryPage = () => {
                   <div key={a._id} className="product product-7 text-center">
                     <figure className="product-media">
                       <a href={`/accessory/${a._id}`}>
-                        <img src={a.images && a.images.length > 0 ? a.images[0] : a.image} alt="Product image" className="product-image" />
+                        <img src={a.images && a.images.length > 0 ? `${API_BASE_URL}${a.images[0]}` : (a.image ? `${API_BASE_URL}${a.image}` : '')} alt="Product image" className="product-image" />
                       </a>
                       <div className="product-action">
                         <a href="#" className="btn-product btn-cart" onClick={(e) => {

@@ -11,7 +11,7 @@ const CategoryPage = () => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-      const response = await fetch(`${API_BASE_URL}/api/categories`);
+        const response = await fetch(`${API_BASE_URL}/api/categories`);
         if (!response.ok) {
           throw new Error('Failed to fetch categories');
         }
@@ -85,7 +85,7 @@ const CategoryPage = () => {
         <div className="owl-carousel owl-simple carousel-equal-height carousel-with-shadow" ref={carouselRef}>
           {categories.map((category, index) => {
             const imageSrc = category.image
-              ? `/uploads/${category.image}`
+              ? (category.image.startsWith('http') ? category.image : `${API_BASE_URL}${category.image.startsWith('/') ? '' : '/'}${category.image.includes('uploads') ? '' : 'uploads/'}${category.image}`)
               : `${process.env.PUBLIC_URL}/assets/images/demos/demo-28/categories/${index + 1}.jpg`;
 
             return (
