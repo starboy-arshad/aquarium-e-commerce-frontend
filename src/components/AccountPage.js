@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Header from './Header';
 import Footer from './Footer';
 import { useAuth } from '../contexts/AuthContext';
+import { API_BASE_URL } from '../config';
 import './AccountPage.css';
 
 const AccountPage = () => {
@@ -41,7 +42,7 @@ const AccountPage = () => {
     try {
       setOrdersLoading(true);
       setOrdersError('');
-      const response = await fetch('/api/orders/myorders', {
+      const response = await fetch(`${API_BASE_URL}/api/orders/myorders`, {
         headers: {
           'Authorization': `Bearer ${user.token}`,
         },

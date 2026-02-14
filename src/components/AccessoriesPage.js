@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useCart } from '../contexts/CartContext';
+import { API_BASE_URL } from '../config';
 
 const AccessoriesPage = () => {
   const location = useLocation();
@@ -43,7 +44,7 @@ const AccessoriesPage = () => {
         selectedCategory.forEach(cat => params.append('category', cat));
       }
 
-      const response = await fetch(`https://p01--backend--fbt2wjdzbm9v.code.run/api/accessories?${params}`);
+      const response = await fetch(`${API_BASE_URL}/api/accessories?${params}`);
       if (!response.ok) {
         throw new Error('Failed to fetch accessories');
       }
@@ -59,7 +60,7 @@ const AccessoriesPage = () => {
 
   const fetchCategories = async () => {
     try {
-      const response = await fetch('https://p01--backend--fbt2wjdzbm9v.code.run/api/accessories/categories');
+      const response = await fetch(`${API_BASE_URL}/api/accessories/categories`);
       if (!response.ok) {
         throw new Error('Failed to fetch categories');
       }
@@ -242,7 +243,7 @@ const AccessoriesPage = () => {
                             </div>
                             <h3 className="product-title"><Link to={`/accessory/${accessory._id}`}>{accessory.name}</Link></h3>
                             <div className="product-price">
-                              ${accessory.price}
+                              ₹{accessory.price}
                             </div>
                             <div className="product-stock">
                               Stock: {accessory.stock}
@@ -322,7 +323,7 @@ const AccessoriesPage = () => {
                     <div className="widget-body">
                       <div className="filter-price">
                         <div className="filter-price-text">
-                          Price Range: <span>${priceRange[0]} - ${priceRange[1]}</span>
+                          Price Range: <span>₹{priceRange[0]} - ₹{priceRange[1]}</span>
                         </div>
                         <div className="price-slider">
                           <input

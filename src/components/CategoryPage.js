@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
+import { API_BASE_URL } from '../config';
 
 const CategoryPage = () => {
   const [categories, setCategories] = useState([]);
@@ -10,7 +11,7 @@ const CategoryPage = () => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await fetch('/api/categories');
+      const response = await fetch(`${API_BASE_URL}/api/categories`);
         if (!response.ok) {
           throw new Error('Failed to fetch categories');
         }

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import { API_BASE_URL } from '../config';
 import Header from './Header';
 import Footer from './Footer';
 
@@ -24,7 +25,7 @@ const FullMarineSetupManagement = () => {
 
   const fetchProducts = async () => {
     try {
-      const response = await fetch('/api/full-marine-setup');
+      const response = await fetch(`${API_BASE_URL}/api/full-marine-setup`);
       const data = await response.json();
       setProducts(data.products);
       setLoading(false);
@@ -45,7 +46,7 @@ const FullMarineSetupManagement = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const url = editingProduct ? `/api/full-marine-setup/${editingProduct._id}` : '/api/full-marine-setup';
+      const url = editingProduct ? `${API_BASE_URL}/api/full-marine-setup/${editingProduct._id}` : `${API_BASE_URL}/api/full-marine-setup`;
       const method = editingProduct ? 'PUT' : 'POST';
 
       const response = await fetch(url, {
@@ -84,7 +85,7 @@ const FullMarineSetupManagement = () => {
   const handleDelete = async (id) => {
     if (window.confirm('Are you sure you want to delete this product?')) {
       try {
-        const response = await fetch(`/api/full-marine-setup/${id}`, {
+        const response = await fetch(`${API_BASE_URL}/api/full-marine-setup/${id}`, {
           method: 'DELETE'
         });
 

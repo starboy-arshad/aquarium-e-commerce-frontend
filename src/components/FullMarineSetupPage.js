@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useCart } from '../contexts/CartContext';
+import { API_BASE_URL } from '../config';
 
 const FullMarineSetupPage = () => {
   const [products, setProducts] = useState([]);
@@ -24,7 +25,7 @@ const FullMarineSetupPage = () => {
         sortBy: sortBy,
       });
 
-      const response = await fetch(`https://p01--backend--fbt2wjdzbm9v.code.run/api/full-marine-setup?${params}`);
+      const response = await fetch(`${API_BASE_URL}/api/full-marine-setup?${params}`);
       if (!response.ok) {
         throw new Error('Failed to fetch products');
       }

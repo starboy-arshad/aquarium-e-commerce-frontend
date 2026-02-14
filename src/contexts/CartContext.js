@@ -36,7 +36,7 @@ export const CartProvider = ({ children }) => {
       const loadAndMergeCarts = async () => {
         try {
           setIsLoading(true);
-          const response = await fetch('https://p01--backend--fbt2wjdzbm9v.code.run/api/cart', {
+          const response = await fetch(`${API_BASE_URL}/api/cart`, {
             headers: getAuthHeaders(),
           });
           
@@ -114,7 +114,7 @@ export const CartProvider = ({ children }) => {
       // Sync with database
       try {
         console.log('Adding to cart for logged-in user');
-        const response = await fetch('https://p01--backend--fbt2wjdzbm9v.code.run/api/cart', {
+        const response = await fetch(`${API_BASE_URL}/api/cart`, {
           method: 'POST',
           headers: getAuthHeaders(),
           body: JSON.stringify({
@@ -173,7 +173,7 @@ export const CartProvider = ({ children }) => {
   const removeFromCart = async (id) => {
     if (user) {
       try {
-        const deleteResponse = await fetch(`https://p01--backend--fbt2wjdzbm9v.code.run/api/cart/${id}`, {
+        const deleteResponse = await fetch(`${API_BASE_URL}/api/cart/${id}`, {
           method: 'DELETE',
           headers: getAuthHeaders(),
         });
@@ -200,7 +200,7 @@ export const CartProvider = ({ children }) => {
 
     if (user) {
       try {
-        const updateResponse = await fetch(`https://p01--backend--fbt2wjdzbm9v.code.run/api/cart/${id}`, {
+        const updateResponse = await fetch(`${API_BASE_URL}/api/cart/${id}`, {
           method: 'PUT',
           headers: getAuthHeaders(),
           body: JSON.stringify({ quantity }),
@@ -234,14 +234,14 @@ export const CartProvider = ({ children }) => {
 
     try {
       // Clear existing cart and add all items
-      await fetch('https://p01--backend--fbt2wjdzbm9v.code.run/api/cart', {
+      await fetch(`${API_BASE_URL}/api/cart`, {
         method: 'DELETE',
         headers: getAuthHeaders(),
       });
 
       // Add each item to database
       for (const item of items) {
-        await fetch('https://p01--backend--fbt2wjdzbm9v.code.run/api/cart', {
+        await fetch(`${API_BASE_URL}/api/cart`, {
           method: 'POST',
           headers: getAuthHeaders(),
           body: JSON.stringify({
@@ -261,7 +261,7 @@ export const CartProvider = ({ children }) => {
   const clearCart = async () => {
     if (user) {
       try {
-        await fetch('https://p01--backend--fbt2wjdzbm9v.code.run/api/cart', {
+      await fetch(`${API_BASE_URL}/api/cart`, {
           method: 'DELETE',
           headers: getAuthHeaders(),
         });

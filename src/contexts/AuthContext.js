@@ -103,7 +103,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   const forgotPassword = async (email) => {
-    const response = await fetch('https://p01--backend--fbt2wjdzbm9v.code.run/api/users/forgot-password', {
+    const response = await fetch(`${API_BASE_URL}/api/users/forgot-password`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

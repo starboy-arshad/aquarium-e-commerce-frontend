@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import { API_BASE_URL } from '../config';
 import Header from './Header';
 import Footer from './Footer';
 
@@ -22,7 +23,7 @@ const CategoryManagement = () => {
 
   const fetchCategories = async () => {
     try {
-      const response = await fetch('/api/categories');
+      const response = await fetch(`${API_BASE_URL}/api/categories`);
       const data = await response.json();
       setCategories(data);
       setLoading(false);
@@ -50,7 +51,7 @@ const CategoryManagement = () => {
     }
 
     try {
-      const url = editingCategory ? `/api/categories/${editingCategory._id}` : '/api/categories';
+      const url = editingCategory ? `${API_BASE_URL}/api/categories/${editingCategory._id}` : `${API_BASE_URL}/api/categories`;
       const method = editingCategory ? 'PUT' : 'POST';
 
       const formDataToSend = new FormData();
@@ -114,7 +115,7 @@ const CategoryManagement = () => {
           return;
         }
 
-        const response = await fetch(`/api/categories/${id}`, {
+        const response = await fetch(`${API_BASE_URL}/api/categories/${id}`, {
           method: 'DELETE',
           headers: {
             'Authorization': `Bearer ${user.token}`,

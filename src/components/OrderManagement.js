@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
+import { API_BASE_URL } from '../config';
 import './OrderManagement.css';
 const OrderManagement = () => {
   const { user } = useAuth();
@@ -14,7 +15,7 @@ const OrderManagement = () => {
 
   const fetchOrders = async () => {
     try {
-      const response = await fetch('/api/orders', {
+      const response = await fetch(`${API_BASE_URL}/api/orders`, {
         headers: {
           'Authorization': `Bearer ${user.token}`,
         },
@@ -35,7 +36,7 @@ const OrderManagement = () => {
   const handleMarkAsDelivered = async (orderId) => {
     if (window.confirm('Are you sure you want to mark this order as delivered?')) {
       try {
-        const response = await fetch(`/api/orders/${orderId}/deliver`, {
+        const response = await fetch(`${API_BASE_URL}/api/orders/${orderId}/deliver`, {
           method: 'PUT',
           headers: {
             'Authorization': `Bearer ${user.token}`,
@@ -56,7 +57,7 @@ const OrderManagement = () => {
   const handleUpdateStatus = async (orderId, status) => {
     if (window.confirm(`Are you sure you want to mark this order as ${status}?`)) {
       try {
-        const response = await fetch(`/api/orders/${orderId}/status`, {
+        const response = await fetch(`${API_BASE_URL}/api/orders/${orderId}/status`, {
           method: 'PUT',
           headers: {
             'Authorization': `Bearer ${user.token}`,

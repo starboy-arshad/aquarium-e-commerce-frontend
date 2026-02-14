@@ -78,7 +78,7 @@ const ProductManagement = () => {
     e.preventDefault();
     try {
       const url = editingProduct 
-        ? `${API_BASE_URL}/api/products/${editingProduct._id}` 
+        ? `${API_BASE_URL}/api/products/${editingProduct._id}`
         : `${API_BASE_URL}/api/products`;
       const method = editingProduct ? 'PUT' : 'POST';
 

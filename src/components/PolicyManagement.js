@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
+import { API_BASE_URL } from '../config';
 import AdminLayout from './AdminLayout';
 
 const PolicyManagement = () => {
@@ -15,7 +16,7 @@ const PolicyManagement = () => {
 
   const fetchPolicies = async () => {
     try {
-      const response = await fetch('/api/policies');
+      const response = await fetch(`${API_BASE_URL}/api/policies`);
       if (response.ok) {
         const data = await response.json();
         setPolicies(data);
@@ -30,7 +31,7 @@ const PolicyManagement = () => {
   const handleSave = async () => {
     setSaving(true);
     try {
-      const response = await fetch('/api/policies', {
+      const response = await fetch(`${API_BASE_URL}/api/policies`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

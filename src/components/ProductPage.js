@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import { useCart } from '../contexts/CartContext';
+import { API_BASE_URL } from '../config';
 
 const ProductPage = () => {
   const { id } = useParams();
@@ -18,10 +19,10 @@ const ProductPage = () => {
     const fetchProduct = async () => {
       try {
         // First try to fetch from regular products API
-        let response = await fetch(`https://p01--backend--fbt2wjdzbm9v.code.run/api/products/${id}`);
+        let response = await fetch(`${API_BASE_URL}/api/products/${id}`);
         if (!response.ok) {
           // If not found in regular products, try full marine setup API
-          response = await fetch(`https://p01--backend--fbt2wjdzbm9v.code.run/api/full-marine-setup/${id}`);
+          response = await fetch(`${API_BASE_URL}/api/full-marine-setup/${id}`);
           if (!response.ok) {
             throw new Error('Product not found');
           }
@@ -46,7 +47,7 @@ const ProductPage = () => {
         
         // Fetch from regular products
         try {
-          const response = await fetch('https://p01--backend--fbt2wjdzbm9v.code.run/api/products');
+          const response = await fetch(`${API_BASE_URL}/api/products`);
           if (response.ok) {
             const data = await response.json();
             relatedProductsData = relatedProductsData.concat(data.products);
@@ -57,7 +58,7 @@ const ProductPage = () => {
         
         // Fetch from full marine setup products
         try {
-          const response = await fetch('https://p01--backend--fbt2wjdzbm9v.code.run/api/full-marine-setup');
+          const response = await fetch(`${API_BASE_URL}/api/full-marine-setup`);
           if (response.ok) {
             const data = await response.json();
             relatedProductsData = relatedProductsData.concat(data.products);
@@ -76,7 +77,7 @@ const ProductPage = () => {
 
     const fetchPolicies = async () => {
       try {
-        const response = await fetch('https://p01--backend--fbt2wjdzbm9v.code.run/api/policies');
+        const response = await fetch(`${API_BASE_URL}/api/policies`);
         if (response.ok) {
           const data = await response.json();
           setPolicies(data);
@@ -247,7 +248,7 @@ const ProductPage = () => {
                 <div className="product-gallery product-gallery-vertical">
                   <div className="row">
                   <figure className="product-main-image">
-                    <img id="product-zoom" src={mainImage || (product.images && product.images.length > 0 ? product.images[0] : product.image)} data-zoom-image={mainImage || (product.images && product.images.length > 0 ? product.images[0] : product.image)} alt="product image" />
+                    <img id="product-zoom" src={mainImage ? `${API_BASE_URL}${mainImage}` : (product.images && product.images.length > 0 ? `${API_BASE_URL}${product.images[0]}` : (product.image ? `${API_BASE_URL}${product.image}` : ''))} data-zoom-image={mainImage ? `${API_BASE_URL}${mainImage}` : (product.images && product.images.length > 0 ? `${API_BASE_URL}${product.images[0]}` : (product.image ? `${API_BASE_URL}${product.image}` : ''))} alt="product image" />
                     <a href="#" id="btn-product-gallery" className="btn-product-gallery" onClick={(e) => {
                       e.preventDefault();
                       // Open gallery modal or zoom functionality
@@ -265,14 +266,14 @@ const ProductPage = () => {
                           key={index} 
                           className={`product-gallery-item ${index === 0 ? 'active' : ''}`} 
                           href="#" 
-                          data-image={img} 
-                          data-zoom-image={img}
+                          data-image={`${API_BASE_URL}${img}`} 
+                          data-zoom-image={`${API_BASE_URL}${img}`}
                           onClick={(e) => {
                             e.preventDefault();
                             handleImageClick(img);
                           }}
                         >
-                          <img src={img} alt={`product image ${index + 1}`} />
+                          <img src={`${API_BASE_URL}${img}`} alt={`product image ${index + 1}`} />
                         </a>
                       ))
                     ) : (
@@ -286,7 +287,7 @@ const ProductPage = () => {
                           handleImageClick(product.image);
                         }}
                       >
-                        <img src={product.image} alt="product side" />
+                        <img src={product.image ? `${API_BASE_URL}${product.image}` : ''} alt="product side" />
                       </a>
                     )}
                   </div>
@@ -420,7 +421,7 @@ const ProductPage = () => {
                   <div key={p._id} className="product product-7 text-center">
                     <figure className="product-media">
                       <a href={`/product/${p._id}`}>
-                        <img src={p.images && p.images.length > 0 ? p.images[0] : p.image} alt="Product image" className="product-image" />
+                        <img src={p.images && p.images.length > 0 ? `${API_BASE_URL}${p.images[0]}` : (p.image ? `${API_BASE_URL}${p.image}` : '')} alt="Product image" className="product-image" />
                       </a>
                       <div className="product-action">
                         <a href="#" className="btn-product btn-cart" onClick={(e) => {

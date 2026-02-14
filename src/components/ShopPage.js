@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useCart } from '../contexts/CartContext';
+import { API_BASE_URL } from '../config';
 
 const ShopPage = () => {
   const location = useLocation();
@@ -65,7 +66,7 @@ const ShopPage = () => {
         params.append('maxPrice', priceRange[1]);
       }
 
-      const response = await fetch(`https://p01--backend--fbt2wjdzbm9v.code.run/api/products?${params}`);
+      const response = await fetch(`${API_BASE_URL}/api/products?${params}`);
       if (!response.ok) {
         throw new Error('Failed to fetch products');
       }
@@ -81,7 +82,7 @@ const ShopPage = () => {
 
   const fetchCategories = async () => {
     try {
-      const response = await fetch('https://p01--backend--fbt2wjdzbm9v.code.run/api/products/categories');
+      const response = await fetch(`${API_BASE_URL}/api/products/categories`);
       if (!response.ok) {
         throw new Error('Failed to fetch categories');
       }
@@ -243,7 +244,15 @@ const ShopPage = () => {
                         <div className="product product-7 text-center">
                           <figure className="product-media">
                             <Link to={`/product/${product._id}`}>
-                              <img src={product.images && product.images.length > 0 ? product.images[0] : product.image} alt={product.name} className="product-image" />
+                              <img 
+                                src={product.images && product.images.length > 0 ? `${API_BASE_URL}${product.images[0]}` : (product.image ? `${API_BASE_URL}${product.image}` : '/assets/images/products/product-1.jpg')} 
+                                alt={product.name} 
+                                className="product-image"
+                                onError={(e) => {
+                                  console.log('Image failed to load:', product.name, 'URL:', product.images && product.images.length > 0 ? `${API_BASE_URL}${product.images[0]}` : product.image);
+                                  e.target.src = '/assets/images/products/product-1.jpg';
+                                }}
+                              />
                             </Link>
 
                             <div className="product-action">

@@ -75,16 +75,16 @@ const AboutUs = () => {
           </p>
         </div>
 
-        <div className="contact-section mt-5 bg-light p-4 rounded">
+        <div className="contact-section mt-5 bg-light p-5 rounded">
           <h2>Visit Us</h2>
-          <p>
+          <p style={{ fontSize: '1.1rem' }}>
             We welcome you to visit our store in Erode to see our wide selection of fish, plants, and aquarium supplies. 
             Our knowledgeable staff is always ready to help you with any questions or advice you may need.
-          </p>
-          <p>
-            <strong>Address:</strong> 1/65, Thilagar Street, Veerappan Chatram, Erode – 638004, Tamil Nadu<br />
-            <strong>Phone:</strong> +91 7010934029<br />
-            <strong>Hours:</strong> Monday - Saturday: 9am - 7pm, Sunday: 10am - 6pm
+          </p> <br />
+          <p style={{ fontSize: '1.1rem' }}>
+            <strong>Address:</strong> <span style={{ fontSize: '1.7rem' }}>1/65, Thilagar Street, Veerappan Chatram, Erode – 638004, Tamil Nadu</span><br />
+            <strong>Phone:</strong> <span style={{ fontSize: '1.7rem' }}>+91 7010934029</span><br />
+            <strong>Hours:</strong> <span style={{ fontSize: '1.7rem' }}>Monday - Saturday: 9am - 7pm, Sunday: 10am - 6pm</span>
           </p>
         </div>
         </div>

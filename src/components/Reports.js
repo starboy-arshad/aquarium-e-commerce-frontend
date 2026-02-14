@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
+import { API_BASE_URL } from '../config';
 
 const Reports = () => {
   const { user } = useAuth();
@@ -20,11 +21,11 @@ const Reports = () => {
   const fetchStats = async () => {
     try {
       // Fetch products for count and low stock
-      const productsRes = await fetch('/api/products?pageNumber=1&pageSize=1000');
+      const productsRes = await fetch(`${API_BASE_URL}/api/products?pageNumber=1&pageSize=1000`);
       const productsData = await productsRes.json();
 
       // Fetch orders for count and revenue
-      const ordersRes = await fetch('/api/orders', {
+      const ordersRes = await fetch(`${API_BASE_URL}/api/orders`, {
         headers: {
           'Authorization': `Bearer ${user.token}`,
         },
@@ -32,7 +33,7 @@ const Reports = () => {
       const ordersData = await ordersRes.json();
 
       // Fetch users
-      const usersRes = await fetch('/api/users', {
+      const usersRes = await fetch(`${API_BASE_URL}/api/users`, {
         headers: {
           'Authorization': `Bearer ${user.token}`,
         },

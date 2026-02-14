@@ -40,7 +40,7 @@ import './App.css';
 
 function HomePage() {
   return (
-    <main className="main">
+    <main className="main" style={{ paddingTop: '100px' }}>
       <HeroSlider key="hero-slider" />
       <BannerGroup />
       <CategoryPage />
@@ -87,84 +87,108 @@ function App() {
           <Route path="/shop" element={
             <div className="page-wrapper">
               <Header />
-              <ShopPage />
+              <main className="main" style={{ paddingTop: '100px' }}>
+                <ShopPage />
+              </main>
               <Footer />
             </div>
           } />
           <Route path="/product/:id" element={
             <div className="page-wrapper">
               <Header />
-              <ProductPage />
+              <main className="main" style={{ paddingTop: '20px' }}>
+                <ProductPage />
+              </main>
               <Footer />
             </div>
           } />
           <Route path="/cart" element={
             <div className="page-wrapper">
               <Header />
-              <CartPage />
+              <main className="main" style={{ paddingTop: '100px' }}>
+                <CartPage />
+              </main>
               <Footer />
             </div>
           } />
           <Route path="/checkout" element={
             <div className="page-wrapper">
               <Header />
-              <Checkout />
+              <main className="main" style={{ paddingTop: '100px' }}>
+                <Checkout />
+              </main>
               <Footer />
             </div>
           } />
           <Route path="/order-success" element={
             <div className="page-wrapper">
               <Header />
-              <OrderSuccess />
+              <main className="main" style={{ paddingTop: '100px' }}>
+                <OrderSuccess />
+              </main>
               <Footer />
             </div>
           } />
           <Route path="/order/:orderId" element={
             <div className="page-wrapper">
               <Header />
-              <OrderDetails />
+              <main className="main" style={{ paddingTop: '100px' }}>
+                <OrderDetails />
+              </main>
               <Footer />
             </div>
           } />
           <Route path="/full-marine-setup" element={
             <div className="page-wrapper">
               <Header />
-              <FullMarineSetupPage />
+              <main className="main" style={{ paddingTop: '100px' }}>
+                <FullMarineSetupPage />
+              </main>
               <Footer />
             </div>
           } />
           <Route path="/accessories" element={
             <div className="page-wrapper">
               <Header />
-              <AccessoriesPage />
+              <main className="main" style={{ paddingTop: '100px' }}>
+                <AccessoriesPage />
+              </main>
               <Footer />
             </div>
           } />
           <Route path="/accessory/:id" element={
             <div className="page-wrapper">
               <Header />
-              <AccessoryPage />
+              <main className="main" style={{ paddingTop: '100px' }}>
+                <AccessoryPage />
+              </main>
               <Footer />
             </div>
           } />
           <Route path="/contact" element={
             <div className="page-wrapper">
               <Header />
-              <ContactPage />
+              <main className="main" style={{ paddingTop: '0px' }}>
+                <ContactPage />
+              </main>
               <Footer />
             </div>
           } />
           <Route path="/about" element={
             <div className="page-wrapper">
               <Header />
-              <AboutUs />
+              <main className="main" style={{ paddingTop: '100px' }}>
+                <AboutUs />
+              </main>
               <Footer />
             </div>
           } />
           <Route path="/policies" element={
             <div className="page-wrapper">
               <Header />
-              <PoliciesPage />
+              <main className="main" style={{ paddingTop: '100px' }}>
+                <PoliciesPage />
+              </main>
               <Footer />
             </div>
           } />

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useCart } from '../contexts/CartContext';
+import { API_BASE_URL } from '../config';
 
 const AccessoryPage = () => {
   const { id } = useParams();
@@ -16,7 +17,7 @@ const AccessoryPage = () => {
   useEffect(() => {
     const fetchAccessory = async () => {
       try {
-        const response = await fetch(`/api/accessories/${id}`);
+        const response = await fetch(`${API_BASE_URL}/api/accessories/${id}`);
         if (!response.ok) {
           throw new Error('Accessory not found');
         }
@@ -35,7 +36,7 @@ const AccessoryPage = () => {
   useEffect(() => {
     const fetchRelated = async () => {
       try {
-        const response = await fetch('/api/accessories');
+        const response = await fetch(`${API_BASE_URL}/api/accessories`);
         if (response.ok) {
           const data = await response.json();
           // Filter out current accessory and limit to 4
@@ -49,7 +50,7 @@ const AccessoryPage = () => {
 
     const fetchPolicies = async () => {
       try {
-        const response = await fetch('/api/policies');
+        const response = await fetch(`${API_BASE_URL}/api/policies`);
         if (response.ok) {
           const data = await response.json();
           setPolicies(data);
@@ -160,7 +161,7 @@ const AccessoryPage = () => {
                   <h1 className="product-title">{accessory.name}</h1>
 
                   <div className="product-price">
-                    ${accessory.price}
+                    ₹{accessory.price}
                   </div>
 
                   <div className="product-content">
@@ -293,7 +294,7 @@ const AccessoryPage = () => {
                       </div>
                       <h3 className="product-title"><a href={`/accessory/${a._id}`}>{a.name}</a></h3>
                       <div className="product-price">
-                        ${a.price}
+                        ₹{a.price}
                       </div>
                     </div>
                   </div>

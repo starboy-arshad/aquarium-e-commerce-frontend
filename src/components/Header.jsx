@@ -191,7 +191,7 @@ const Header = () => {
                     <i className="icon-shopping-cart" style={{ fontSize: '24px' }}></i>
                     <span className="cart-count">{getCartItemsCount()}</span>
                   </div>
-                  <span className="cart-txt font-weight-normal">${getCartTotal().toFixed(2)}</span>
+                  <span className="cart-txt font-weight-normal">₹{getCartTotal().toFixed(2)}</span>
                 </Link>
                 <div className="dropdown-menu dropdown-menu-right">
                   <div className="dropdown-cart-products">
@@ -206,7 +206,7 @@ const Header = () => {
                             </h4>
                             <span className="cart-product-info">
                               <span className="cart-product-qty">{item.quantity}</span>
-                              x ${item.price.toFixed(2)}
+                              x ₹{item.price.toFixed(2)}
                             </span>
                           </div>
                           <figure className="product-image-container">
@@ -232,7 +232,7 @@ const Header = () => {
                     <>
                       <div className="dropdown-cart-total">
                         <span>Total</span>
-                        <span className="cart-total-price">${getCartTotal().toFixed(2)}</span>
+                        <span className="cart-total-price">₹{getCartTotal().toFixed(2)}</span>
                       </div>
                       <div className="dropdown-cart-action">
                         <Link to="/cart" className="btn btn-primary">View Cart</Link>

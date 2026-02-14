@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { API_BASE_URL } from '../config';
 
 const PoliciesPage = () => {
   const [policies, setPolicies] = useState({
@@ -16,7 +17,7 @@ const PoliciesPage = () => {
 
   const fetchPolicies = async () => {
     try {
-      const response = await fetch('https://p01--backend--fbt2wjdzbm9v.code.run/api/policies');
+      const response = await fetch(`${API_BASE_URL}/api/policies`);
       if (response.ok) {
         const data = await response.json();
         setPolicies(data);

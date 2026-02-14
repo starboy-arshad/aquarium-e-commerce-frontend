@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import { API_BASE_URL } from '../config';
 import './OrderDetails.css';
 
 const OrderDetails = () => {
@@ -19,7 +20,7 @@ const OrderDetails = () => {
     try {
       setLoading(true);
       setError('');
-      const response = await fetch(`/api/orders/${orderId}`, {
+      const response = await fetch(`${API_BASE_URL}/api/orders/${orderId}`, {
         headers: {
           'Authorization': `Bearer ${user.token}`,
         },
@@ -53,7 +54,7 @@ const OrderDetails = () => {
     }
 
     try {
-      const response = await fetch(`/api/orders/${orderId}/status`, {
+        const response = await fetch(`${API_BASE_URL}/api/orders/${orderId}/status`, {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${user.token}`,

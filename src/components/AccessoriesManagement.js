@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import { API_BASE_URL } from '../config';
 import Header from './Header';
 import Footer from './Footer';
 
@@ -33,7 +34,7 @@ const AccessoriesManagement = () => {
 
   const fetchAccessories = async () => {
     try {
-      const response = await fetch('/api/accessories');
+      const response = await fetch(`${API_BASE_URL}/api/accessories`);
       const data = await response.json();
       setAccessories(data.accessories);
       setLoading(false);
@@ -45,7 +46,7 @@ const AccessoriesManagement = () => {
 
   const fetchCategories = async () => {
     try {
-      const response = await fetch('/api/categories');
+      const response = await fetch(`${API_BASE_URL}/api/categories`);
       const data = await response.json();
       setCategories(data);
     } catch (err) {
@@ -68,7 +69,7 @@ const AccessoriesManagement = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const url = editingAccessory ? `/api/accessories/${editingAccessory._id}` : '/api/accessories';
+      const url = editingAccessory ? `${API_BASE_URL}/api/accessories/${editingAccessory._id}` : `${API_BASE_URL}/api/accessories`;
       const method = editingAccessory ? 'PUT' : 'POST';
 
       // Create FormData for file upload
@@ -121,7 +122,7 @@ const AccessoriesManagement = () => {
   const handleDelete = async (id) => {
     if (window.confirm('Are you sure you want to delete this accessory?')) {
       try {
-        const response = await fetch(`/api/accessories/${id}`, {
+        const response = await fetch(`${API_BASE_URL}/api/accessories/${id}`, {
           method: 'DELETE',
           headers: {
             'Authorization': `Bearer ${user.token}`,
