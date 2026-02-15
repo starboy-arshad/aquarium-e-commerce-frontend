@@ -1,21 +1,65 @@
+/* ============================= */
+/* Order Details Page Styling */
+/* ============================= */
+
 .order-details-page {
-  padding: 2rem 0;
+  padding: 40px 0;
 }
 
+/* Order Meta */
 .order-meta {
-  font-size: 1.1rem;
-  font-weight: 600;
+  font-size: 14px;
+  font-weight: 500;
+  gap: 10px;
+  flex-wrap: wrap;
 }
+
+/* Cards */
+.card {
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.card-header {
+  padding: 16px 20px;
+}
+
+.card-body {
+  padding: 20px;
+}
+
+/* Table */
+.table th,
+.table td {
+  vertical-align: middle;
+  font-size: 14px;
+}
+
+.table h6 {
+  font-size: 15px;
+  margin-bottom: 4px;
+}
+
+/* Order Summary Box */
+.border.rounded {
+  border-radius: 10px !important;
+  padding: 20px !important;
+}
+
+/* ============================= */
+/* Timeline Styling */
+/* ============================= */
 
 .timeline {
   position: relative;
-  padding-left: 2rem;
+  padding-left: 40px;
+  margin-top: 10px;
 }
 
 .timeline::before {
   content: '';
   position: absolute;
-  left: 15px;
+  left: 14px;
   top: 0;
   bottom: 0;
   width: 2px;
@@ -24,72 +68,137 @@
 
 .timeline-item {
   position: relative;
-  margin-bottom: 2rem;
+  margin-bottom: 30px;
 }
 
 .timeline-marker {
   position: absolute;
-  left: -2.25rem;
-  top: 0;
-  width: 30px;
-  height: 30px;
+  left: -26px;
+  top: 4px;
+  width: 28px;
+  height: 28px;
   background-color: #fff;
-  border: 2px solid #007bff;
+  border: 2px solid #0d6efd;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #007bff;
-  font-size: 1rem;
+  color: #0d6efd;
+  font-size: 14px;
 }
 
 .timeline-content {
-  margin-left: 1rem;
+  padding-left: 10px;
 }
 
 .timeline-content h6 {
-  margin-bottom: 0.25rem;
-  font-size: 1rem;
+  margin-bottom: 5px;
+  font-size: 15px;
+  font-weight: 600;
 }
 
 .timeline-content p {
-  font-size: 0.875rem;
+  font-size: 13px;
+  margin-bottom: 0;
 }
 
-/* Responsive adjustments */
+
+/* ============================= */
+/* Buttons Spacing */
+/* ============================= */
+
+.d-grid .btn {
+  margin-bottom: 10px;
+}
+
+/* ============================= */
+/* Responsive Design */
+/* ============================= */
+
+@media (max-width: 992px) {
+  .order-details-page {
+    padding: 30px 15px;
+  }
+
+  .card-body {
+    padding: 15px;
+  }
+}
+
 @media (max-width: 768px) {
-  .timeline::before {
-    left: 10px;
+
+  .order-meta {
+    flex-direction: column;
+    align-items: flex-start !important;
   }
-  
+
+  .timeline {
+    padding-left: 35px;
+  }
+
   .timeline-marker {
-    left: -1.75rem;
+    left: -24px;
   }
-  
-  .timeline-content {
-    margin-left: 0.5rem;
+
+  .timeline-content h6 {
+    font-size: 14px;
+  }
+
+  .timeline-content p {
+    font-size: 12px;
+  }
+
+  .table th,
+  .table td {
+    font-size: 13px;
   }
 }
 
-/* Print styles */
+@media (max-width: 576px) {
+
+  .order-details-page {
+    padding: 20px 10px;
+  }
+
+  h1 {
+    font-size: 22px;
+  }
+
+  .card-header h5,
+  .card-header h4 {
+    font-size: 16px;
+  }
+
+  .timeline-marker {
+    width: 24px;
+    height: 24px;
+    font-size: 12px;
+  }
+}
+
+/* ============================= */
+/* Print Styles */
+/* ============================= */
+
 @media print {
+
   .order-details-page {
     padding: 0;
   }
-  
+
   .btn {
     display: none !important;
   }
-  
+
   .card {
     border: none;
     box-shadow: none;
   }
-  
+
   .timeline::before {
     background-color: #000;
   }
-  
+
   .timeline-marker {
     border-color: #000;
     color: #000;

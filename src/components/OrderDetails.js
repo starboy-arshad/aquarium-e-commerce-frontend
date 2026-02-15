@@ -137,7 +137,7 @@ const OrderDetails = () => {
                 <h5 className="mb-0">Order #{order._id.substring(0, 8)}...</h5>
                 <div className="order-meta d-flex justify-content-between align-items-center mt-2">
                   <div>
-                    <span className="badge bg-primary me-2">Order Date: {formatDate(order.createdAt)}</span>
+                    <span className="badge bg-primary me-2">Order Date: {formatDate(order.createdAt)}</span> &nbsp; &nbsp;
                     <span className={`badge ${order.status === 'delivered' ? 'bg-success' : order.status === 'cancelled' ? 'bg-danger' : 'bg-warning'}`}>
                       Status: {order.status || 'Pending'}
                     </span>
@@ -156,12 +156,12 @@ const OrderDetails = () => {
                   <div className="col-md-6">
                     <h6>Shipping Address</h6>
                     <p className="mb-0">
-                      {order.shippingAddress.name}<br />
-                      {order.shippingAddress.street}<br />
-                      {order.shippingAddress.city}, {order.shippingAddress.state} {order.shippingAddress.zip}<br />
-                      {order.shippingAddress.country}<br />
-                      <strong>Phone:</strong> {order.shippingAddress.phone}<br />
-                      <strong>Email:</strong> {order.shippingAddress.email}
+                      {order.shippingAddress.name || user.name}<br />
+                      {order.shippingAddress.street || user.shippingAddress?.street || ''}<br />
+                      {order.shippingAddress.city || user.shippingAddress?.city || ''}, {order.shippingAddress.state || user.shippingAddress?.state || ''} {order.shippingAddress.zip || user.shippingAddress?.zip || ''}<br />
+                      {order.shippingAddress.country || user.shippingAddress?.country || ''}<br />
+                      <strong>Phone:</strong> {order.shippingAddress.phone || user.phone || user.shippingAddress?.phone || ''}<br />
+                      <strong>Email:</strong> {order.shippingAddress.email || user.email || user.shippingAddress?.email || ''}
                     </p>
                   </div>
                   <div className="col-md-6">
@@ -264,7 +264,7 @@ const OrderDetails = () => {
                   >
                     Continue Shopping
                   </button>
-                  
+                  &nbsp; 
                   {order.status !== 'cancelled' && !order.isDelivered && (
                     <button 
                       className="btn btn-danger"
@@ -287,7 +287,7 @@ const OrderDetails = () => {
             {/* Order Status Timeline */}
             <div className="card">
               <div className="card-header">
-                <h5 className="mb-0">Order Status</h5>
+                <h4 className="mb-0">Order Status</h4> <br/>
               </div>
               <div className="card-body">
                 <div className="timeline">
