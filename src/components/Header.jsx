@@ -218,7 +218,7 @@ const Header = () => {
                           </div>
                           <figure className="product-image-container">
                             <Link to={`/product/${item.id}`} className="product-image">
-                              <img src={item.image ? (item.image.startsWith('http') ? item.image : `${API_BASE_URL}${item.image.startsWith('/') ? '' : '/'}${item.image}`) : '/assets/images/products/product-1.jpg'} alt="product" />
+                              <img src={item.image ? (item.image.startsWith('http') ? item.image : `${API_BASE_URL}/${(item.image.startsWith('/') ? item.image.substring(1) : item.image).startsWith('uploads/') ? (item.image.startsWith('/') ? item.image.substring(1) : item.image) : `uploads/${(item.image.startsWith('/') ? item.image.substring(1) : item.image)}`}`) : '/assets/images/products/product-1.jpg'} alt="product" />
                             </Link>
                           </figure>
                           <a

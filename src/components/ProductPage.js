@@ -44,7 +44,7 @@ const ProductPage = () => {
       try {
         // Try to fetch related products from both APIs
         let relatedProductsData = [];
-        
+
         // Fetch from regular products
         try {
           const response = await fetch(`${API_BASE_URL}/api/products`);
@@ -55,7 +55,7 @@ const ProductPage = () => {
         } catch (err) {
           console.error('Failed to fetch regular products', err);
         }
-        
+
         // Fetch from full marine setup products
         try {
           const response = await fetch(`${API_BASE_URL}/api/full-marine-setup`);
@@ -66,7 +66,7 @@ const ProductPage = () => {
         } catch (err) {
           console.error('Failed to fetch full marine setup products', err);
         }
-        
+
         // Filter out current product and limit to 4
         const filtered = relatedProductsData.filter(p => p._id !== product._id).slice(0, 4);
         setRelatedProducts(filtered);
@@ -138,7 +138,7 @@ const ProductPage = () => {
     if (product) {
       const mainImage = document.getElementById('product-zoom');
       const galleryButton = document.getElementById('btn-product-gallery');
-      
+
       if (mainImage) {
         // Simple zoom functionality using CSS transform
         const handleMouseMove = (e) => {
@@ -147,7 +147,7 @@ const ProductPage = () => {
           const y = e.clientY - rect.top;
           const xPercent = (x / rect.width) * 100;
           const yPercent = (y / rect.height) * 100;
-          
+
           mainImage.style.transformOrigin = `${xPercent}% ${yPercent}%`;
           mainImage.style.transform = 'scale(2)';
         };
@@ -184,15 +184,24 @@ const ProductPage = () => {
           mainImage.removeEventListener('mousemove', handleMouseMove);
           mainImage.removeEventListener('mouseleave', handleMouseLeave);
           galleryItems.forEach(item => {
-            item.removeEventListener('click', () => {});
+            item.removeEventListener('click', () => { });
           });
           if (galleryButton) {
-            galleryButton.removeEventListener('click', () => {});
+            galleryButton.removeEventListener('click', () => { });
           }
         };
       }
     }
   }, [product]);
+
+  const getProductImage = (img) => {
+    if (!img) return '/assets/images/products/product-1.jpg';
+    if (img.startsWith('http')) return img;
+
+    const cleanImg = img.startsWith('/') ? img.substring(1) : img;
+    const finalPath = cleanImg.startsWith('uploads/') ? cleanImg : `uploads/${cleanImg}`;
+    return `${API_BASE_URL}/${finalPath}`;
+  };
 
   if (loading) {
     return (
@@ -247,50 +256,47 @@ const ProductPage = () => {
               <div className="col-md-6">
                 <div className="product-gallery product-gallery-vertical">
                   <div className="row">
-                  <figure className="product-main-image">
-                    <img id="product-zoom" src={mainImage ? `${API_BASE_URL}${mainImage}` : (product.images && product.images.length > 0 ? `${API_BASE_URL}${product.images[0]}` : (product.image ? `${API_BASE_URL}${product.image}` : ''))} data-zoom-image={mainImage ? `${API_BASE_URL}${mainImage}` : (product.images && product.images.length > 0 ? `${API_BASE_URL}${product.images[0]}` : (product.image ? `${API_BASE_URL}${product.image}` : ''))} alt="product image" />
-                    <a href="#" id="btn-product-gallery" className="btn-product-gallery" onClick={(e) => {
-                      e.preventDefault();
-                      // Open gallery modal or zoom functionality
-                      console.log('Opening product gallery for:', product.name);
-                      // This would typically trigger a modal or lightbox gallery
-                      // For now, we'll just log the action
-                    }}>
-                      <i className="icon-arrows"></i>
-                    </a>
-                  </figure>
-                  <div id="product-zoom-gallery" className="product-image-gallery">
-                    {product.images && product.images.length > 0 ? (
-                      product.images.map((img, index) => (
-                        <a 
-                          key={index} 
-                          className={`product-gallery-item ${index === 0 ? 'active' : ''}`} 
-                          href="#" 
-                          data-image={`${API_BASE_URL}${img}`} 
-                          data-zoom-image={`${API_BASE_URL}${img}`}
+                    <figure className="product-main-image">
+                      <img id="product-zoom" src={getProductImage(mainImage || (product.images && product.images.length > 0 ? product.images[0] : product.image))} data-zoom-image={getProductImage(mainImage || (product.images && product.images.length > 0 ? product.images[0] : product.image))} alt="product image" />
+                      <a href="#" id="btn-product-gallery" className="btn-product-gallery" onClick={(e) => {
+                        e.preventDefault();
+                        console.log('Opening product gallery for:', product.name);
+                      }}>
+                        <i className="icon-arrows"></i>
+                      </a>
+                    </figure>
+                    <div id="product-zoom-gallery" className="product-image-gallery">
+                      {product.images && product.images.length > 0 ? (
+                        product.images.map((img, index) => (
+                          <a
+                            key={index}
+                            className={`product-gallery-item ${index === 0 ? 'active' : ''}`}
+                            href="#"
+                            data-image={getProductImage(img)}
+                            data-zoom-image={getProductImage(img)}
+                            onClick={(e) => {
+                              e.preventDefault();
+                              handleImageClick(img);
+                            }}
+                          >
+                            <img src={getProductImage(img)} alt={`product image ${index + 1}`} />
+                          </a>
+                        ))
+                      ) : (
+                        <a
+                          className="product-gallery-item active"
+                          href="#"
+                          data-image={getProductImage(product.image)}
+                          data-zoom-image={getProductImage(product.image)}
                           onClick={(e) => {
                             e.preventDefault();
-                            handleImageClick(img);
+                            handleImageClick(product.image);
                           }}
                         >
-                          <img src={`${API_BASE_URL}${img}`} alt={`product image ${index + 1}`} />
+                          <img src={getProductImage(product.image)} alt="product side" />
                         </a>
-                      ))
-                    ) : (
-                      <a 
-                        className="product-gallery-item active" 
-                        href="#" 
-                        data-image={product.image} 
-                        data-zoom-image={product.image}
-                        onClick={(e) => {
-                          e.preventDefault();
-                          handleImageClick(product.image);
-                        }}
-                      >
-                        <img src={product.image ? `${API_BASE_URL}${product.image}` : ''} alt="product side" />
-                      </a>
-                    )}
-                  </div>
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -307,7 +313,7 @@ const ProductPage = () => {
 
                   <div className="product-content">
                     <p>{product.description}</p>
-                    
+
                   </div>
 
 
@@ -324,7 +330,7 @@ const ProductPage = () => {
                         // Create a cart-compatible product object
                         const cartProduct = {
                           ...product,
-                          image: product.images && product.images.length > 0 ? product.images[0] : product.image
+                          image: getProductImage(product.images && product.images.length > 0 ? product.images[0] : product.image)
                         };
                         addToCart(cartProduct, quantity);
                       }}><span>add to cart</span></a>
@@ -366,7 +372,7 @@ const ProductPage = () => {
                 <div className="product-desc-content">
                   <h3>Product Information</h3>
                   <p>{product.description}</p>
-                  
+
                 </div>
               </div>
               <div className="tab-pane fade" id="product-info-tab" role="tabpanel" aria-labelledby="product-info-link">
@@ -421,7 +427,7 @@ const ProductPage = () => {
                   <div key={p._id} className="product product-7 text-center">
                     <figure className="product-media">
                       <a href={`/product/${p._id}`}>
-                        <img src={p.images && p.images.length > 0 ? `${API_BASE_URL}${p.images[0]}` : (p.image ? `${API_BASE_URL}${p.image}` : '')} alt="Product image" className="product-image" />
+                        <img src={getProductImage(p.images && p.images.length > 0 ? p.images[0] : p.image)} alt="Product image" className="product-image" />
                       </a>
                       <div className="product-action">
                         <a href="#" className="btn-product btn-cart" onClick={(e) => {
@@ -451,7 +457,7 @@ const ProductPage = () => {
           )}
         </div>
       </div>
-    </main>
+    </main >
   );
 };
 

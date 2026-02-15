@@ -111,7 +111,7 @@ const AccessoryPage = () => {
                 <div className="product-gallery product-gallery-vertical">
                   <div className="row">
                     <figure className="product-main-image">
-                      <img id="product-zoom" src={mainImage ? `${API_BASE_URL}${mainImage}` : (accessory.images && accessory.images.length > 0 ? `${API_BASE_URL}${accessory.images[0]}` : (accessory.image ? `${API_BASE_URL}${accessory.image}` : ''))} data-zoom-image={mainImage ? `${API_BASE_URL}${mainImage}` : (accessory.images && accessory.images.length > 0 ? `${API_BASE_URL}${accessory.images[0]}` : (accessory.image ? `${API_BASE_URL}${accessory.image}` : ''))} alt="product image" />
+                      <img id="product-zoom" src={mainImage ? (mainImage.startsWith('http') ? mainImage : `${API_BASE_URL}${mainImage.startsWith('/') ? '' : '/'}${mainImage.includes('uploads') ? '' : 'uploads/'}${mainImage}`) : '/assets/images/products/product-1.jpg'} data-zoom-image={mainImage ? (mainImage.startsWith('http') ? mainImage : `${API_BASE_URL}${mainImage.startsWith('/') ? '' : '/'}${mainImage.includes('uploads') ? '' : 'uploads/'}${mainImage}`) : '/assets/images/products/product-1.jpg'} alt="product image" />
                       <a href="#" id="btn-product-gallery" className="btn-product-gallery" onClick={(e) => {
                         e.preventDefault();
                         // Open gallery modal or zoom functionality
@@ -127,28 +127,28 @@ const AccessoryPage = () => {
                             key={index}
                             className={`product-gallery-item ${index === 0 ? 'active' : ''}`}
                             href="#"
-                            data-image={`${API_BASE_URL}${img}`}
-                            data-zoom-image={`${API_BASE_URL}${img}`}
+                            data-image={img.startsWith('http') ? img : `${API_BASE_URL}${img.startsWith('/') ? '' : '/'}${img.includes('uploads') ? '' : 'uploads/'}${img}`}
+                            data-zoom-image={img.startsWith('http') ? img : `${API_BASE_URL}${img.startsWith('/') ? '' : '/'}${img.includes('uploads') ? '' : 'uploads/'}${img}`}
                             onClick={(e) => {
                               e.preventDefault();
                               handleImageClick(img);
                             }}
                           >
-                            <img src={`${API_BASE_URL}${img}`} alt={`accessory image ${index + 1}`} />
+                            <img src={img.startsWith('http') ? img : `${API_BASE_URL}${img.startsWith('/') ? '' : '/'}${img.includes('uploads') ? '' : 'uploads/'}${img}`} alt={`accessory image ${index + 1}`} />
                           </a>
                         ))
                       ) : (
                         <a
                           className="product-gallery-item active"
                           href="#"
-                          data-image={`${API_BASE_URL}${accessory.image}`}
-                          data-zoom-image={`${API_BASE_URL}${accessory.image}`}
+                          data-image={accessory.image ? (accessory.image.startsWith('http') ? accessory.image : `${API_BASE_URL}${accessory.image.startsWith('/') ? '' : '/'}${accessory.image.includes('uploads') ? '' : 'uploads/'}${accessory.image}`) : '/assets/images/products/product-1.jpg'}
+                          data-zoom-image={accessory.image ? (accessory.image.startsWith('http') ? accessory.image : `${API_BASE_URL}${accessory.image.startsWith('/') ? '' : '/'}${accessory.image.includes('uploads') ? '' : 'uploads/'}${accessory.image}`) : '/assets/images/products/product-1.jpg'}
                           onClick={(e) => {
                             e.preventDefault();
                             handleImageClick(accessory.image);
                           }}
                         >
-                          <img src={accessory.image ? `${API_BASE_URL}${accessory.image}` : ''} alt="accessory side" />
+                          <img src={accessory.image ? (accessory.image.startsWith('http') ? accessory.image : `${API_BASE_URL}${accessory.image.startsWith('/') ? '' : '/'}${accessory.image.includes('uploads') ? '' : 'uploads/'}${accessory.image}`) : '/assets/images/products/product-1.jpg'} alt="accessory side" />
                         </a>
                       )}
                     </div>

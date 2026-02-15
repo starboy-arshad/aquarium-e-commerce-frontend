@@ -5,7 +5,8 @@ import { API_BASE_URL } from '../config';
 
 const FullMarineSetupPage = () => {
   const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const [initialLoading, setInitialLoading] = useState(true);
   const [error, setError] = useState(null);
   const [page, setPage] = useState(1);
   const [pages, setPages] = useState(1);
@@ -32,8 +33,10 @@ const FullMarineSetupPage = () => {
       const data = await response.json();
       setProducts(data.products);
       setPages(data.pages);
+      setInitialLoading(false);
     } catch (err) {
       setError(err.message);
+      setInitialLoading(false);
     } finally {
       setLoading(false);
     }
@@ -52,7 +55,7 @@ const FullMarineSetupPage = () => {
     setGridColumns(columns);
   };
 
-  if (loading) {
+  if (initialLoading) {
     return (
       <main className="main">
         <div className="container">
@@ -158,12 +161,32 @@ const FullMarineSetupPage = () => {
                 const colClass = gridColumns === 2 ? "col-6 col-md-6 col-lg-6 col-xl-6" :
                   gridColumns === 3 ? "col-6 col-md-4 col-lg-4 col-xl-4" :
                     "col-6 col-md-4 col-lg-4 col-xl-3";
+
+                const getProductImage = (product) => {
+                  const img = (product.images && product.images.length > 0) ? product.images[0] : product.image;
+                  if (!img) return '/assets/images/products/product-1.jpg';
+                  if (img.startsWith('http')) return img;
+
+                  const cleanImg = img.startsWith('/') ? img.substring(1) : img;
+                  const finalPath = cleanImg.startsWith('uploads/') ? cleanImg : `uploads/${cleanImg}`;
+                  return `${API_BASE_URL}/${finalPath}`;
+                };
+
                 return products.map((product) => (
                   <div key={product._id} className={colClass}>
                     <div className="product product-7 text-center">
                       <figure className="product-media">
                         <Link to={`/product/${product._id}`}>
-                          <img src={product.images && product.images.length > 0 ? `${API_BASE_URL}${product.images[0]}` : (product.image ? `${API_BASE_URL}${product.image}` : '')} alt={product.name} className="product-image" />
+                          <img
+                            src={getProductImage(product)}
+                            alt={product.name}
+                            className="product-image"
+                            onError={(e) => {
+                              if (e.target.src !== '/assets/images/products/product-1.jpg') {
+                                e.target.src = '/assets/images/products/product-1.jpg';
+                              }
+                            }}
+                          />
                         </Link>
 
                         <div className="product-action">

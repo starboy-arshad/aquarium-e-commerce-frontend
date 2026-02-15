@@ -85,7 +85,7 @@ const CategoryPage = () => {
         <div className="owl-carousel owl-simple carousel-equal-height carousel-with-shadow" ref={carouselRef}>
           {categories.map((category, index) => {
             const imageSrc = category.image
-              ? (category.image.startsWith('http') ? category.image : `${API_BASE_URL}${category.image.startsWith('/') ? '' : '/'}${category.image.includes('uploads') ? '' : 'uploads/'}${category.image}`)
+              ? (category.image.startsWith('http') ? category.image : `${API_BASE_URL}/${(category.image.startsWith('/') ? category.image.substring(1) : category.image).startsWith('uploads/') ? (category.image.startsWith('/') ? category.image.substring(1) : category.image) : `uploads/${(category.image.startsWith('/') ? category.image.substring(1) : category.image)}`}`)
               : `${process.env.PUBLIC_URL}/assets/images/demos/demo-28/categories/${index + 1}.jpg`;
 
             return (

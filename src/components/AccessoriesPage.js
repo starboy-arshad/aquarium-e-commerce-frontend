@@ -213,12 +213,22 @@ const AccessoriesPage = () => {
                 <div className="row justify-content-center">
                   {(() => {
                     const colClass = "col-6 col-md-4 col-lg-4 col-xl-3";
+                    const getProductImage = (accessory) => {
+                      const img = (accessory.images && accessory.images.length > 0) ? accessory.images[0] : accessory.image;
+                      if (!img) return '/assets/images/products/product-1.jpg';
+                      if (img.startsWith('http')) return img;
+
+                      const cleanImg = img.startsWith('/') ? img.substring(1) : img;
+                      const finalPath = cleanImg.startsWith('uploads/') ? cleanImg : `uploads/${cleanImg}`;
+                      return `${API_BASE_URL}/${finalPath}`;
+                    };
+
                     return accessories.map((accessory) => (
                       <div key={accessory._id} className={colClass}>
                         <div className="product product-7 text-center">
                           <figure className="product-media">
                             <Link to={`/accessory/${accessory._id}`}>
-                              <img src={accessory.images && accessory.images.length > 0 ? `${API_BASE_URL}${accessory.images[0]}` : (accessory.image ? `${API_BASE_URL}${accessory.image}` : '')} alt={accessory.name} className="product-image" />
+                              <img src={getProductImage(accessory)} alt={accessory.name} className="product-image" />
                             </Link>
                             <div className="product-action-vertical">
                               <a href="#" className="btn-product-icon btn-wishlist btn-expandable"><span>add to wishlist</span></a>

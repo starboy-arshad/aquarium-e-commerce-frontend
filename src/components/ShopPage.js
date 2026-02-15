@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useCart } from '../contexts/CartContext';
 import { API_BASE_URL } from '../config';
@@ -18,6 +18,111 @@ const ShopPage = () => {
 
   const [priceRange, setPriceRange] = useState([0, 200]);
   const [gridColumns, setGridColumns] = useState(4);
+  const [imageLoadStates, setImageLoadStates] = useState({});
+
+  // Helper function to get properly formatted image URL
+  const getProductImage = (img) => {
+    if (!img) return '/assets/images/products/product-1.jpg';
+    if (img.startsWith('http')) return img;
+
+    // Handle different image path formats
+    let cleanImg = img;
+    if (img.startsWith('/')) {
+      cleanImg = img.substring(1);
+    }
+    
+    // If the image already has uploads/ prefix, use it as is
+    if (cleanImg.startsWith('uploads/')) {
+      return `${API_BASE_URL}/${cleanImg}`;
+    } else {
+      // For images without uploads/ prefix, add it
+      return `${API_BASE_URL}/uploads/${cleanImg}`;
+    }
+  };
+
+  // Debug function to log image URLs
+  const debugImageURL = (img, productName) => {
+    const url = getProductImage(img);
+    console.log(`Product: ${productName}, Image: ${img}, URL: ${url}`);
+    return url;
+  };
+
+  // Handle image load error
+  const handleImageError = (productId, imageType) => {
+    setImageLoadStates(prev => ({
+      ...prev,
+      [`${productId}-${imageType}`]: 'error'
+    }));
+  };
+
+  // Handle image load success
+  const handleImageLoad = (productId, imageType) => {
+    setImageLoadStates(prev => ({
+      ...prev,
+      [`${productId}-${imageType}`]: 'loaded'
+    }));
+  };
+
+  // Memoize the column class calculation to prevent unnecessary re-renders
+  const colClass = useMemo(() => {
+    return gridColumns === 2 ? "col-6 col-md-6 col-lg-6 col-xl-6" :
+      gridColumns === 3 ? "col-6 col-md-4 col-lg-4 col-xl-4" :
+        "col-6 col-md-4 col-lg-4 col-xl-3";
+  }, [gridColumns]);
+
+  // Memoize the product list rendering to prevent unnecessary re-renders
+  const productCards = useMemo(() => {
+    return products.map((product) => {
+      const rawImage = product.images && product.images.length > 0 ? product.images[0] : product.image;
+      const productImage = debugImageURL(rawImage, product.name);
+      const imageLoadState = imageLoadStates[`${product._id}-main`];
+      const hasError = imageLoadState === 'error';
+      
+      return (
+        <div key={product._id} className={colClass}>
+          <div className="product product-7 text-center">
+            <figure className="product-media">
+              <Link to={`/product/${product._id}`}>
+                <img
+                  src={hasError ? '/assets/images/products/product-1.jpg' : productImage}
+                  alt={product.name}
+                  className="product-image"
+                  onLoad={() => handleImageLoad(product._id, 'main')}
+                  onError={() => handleImageError(product._id, 'main')}
+                  style={{
+                    opacity: imageLoadState === 'loaded' ? 1 : (hasError ? 1 : 0),
+                    transition: 'opacity 0.3s ease-in-out'
+                  }}
+                />
+              </Link>
+
+              <div className="product-action">
+                <button className="btn-product btn-cart" onClick={() => {
+                  // Create a cart-compatible product object
+                  const cartProduct = {
+                    ...product,
+                    image: product.images && product.images.length > 0 ? product.images[0] : product.image
+                  };
+                  addToCart(cartProduct);
+                }}>
+                  <span>add to cart</span>
+                </button>
+              </div>
+            </figure>
+            <div className="product-body">
+              <div className="product-cat">
+                <a href="#">{product.category?.name}</a>
+              </div>
+              <h3 className="product-title"><Link to={`/product/${product._id}`}>{product.name}</Link></h3>
+              <div className="product-price">
+                ₹{product.price}
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    });
+  }, [products, colClass, imageLoadStates, addToCart, getProductImage, handleImageLoad, handleImageError]);
 
 
 
@@ -235,52 +340,7 @@ const ShopPage = () => {
 
               <div className="products mb-3">
                 <div className="row justify-content-center">
-                  {(() => {
-                    const colClass = gridColumns === 2 ? "col-6 col-md-6 col-lg-6 col-xl-6" :
-                                     gridColumns === 3 ? "col-6 col-md-4 col-lg-4 col-xl-4" :
-                                     "col-6 col-md-4 col-lg-4 col-xl-3";
-                    return products.map((product) => (
-                      <div key={product._id} className={colClass}>
-                        <div className="product product-7 text-center">
-                          <figure className="product-media">
-                            <Link to={`/product/${product._id}`}>
-                              <img 
-                                src={product.images && product.images.length > 0 ? `${API_BASE_URL}${product.images[0]}` : (product.image ? `${API_BASE_URL}${product.image}` : '/assets/images/products/product-1.jpg')} 
-                                alt={product.name} 
-                                className="product-image"
-                                onError={(e) => {
-                                  console.log('Image failed to load:', product.name, 'URL:', product.images && product.images.length > 0 ? `${API_BASE_URL}${product.images[0]}` : product.image);
-                                  e.target.src = '/assets/images/products/product-1.jpg';
-                                }}
-                              />
-                            </Link>
-
-                            <div className="product-action">
-                              <button className="btn-product btn-cart" onClick={() => {
-                                // Create a cart-compatible product object
-                                const cartProduct = {
-                                  ...product,
-                                  image: product.images && product.images.length > 0 ? product.images[0] : product.image
-                                };
-                                addToCart(cartProduct);
-                              }}>
-                                <span>add to cart</span>
-                              </button>
-                            </div>
-                          </figure>
-                          <div className="product-body">
-                            <div className="product-cat">
-                              <a href="#">{product.category?.name}</a>
-                            </div>
-                            <h3 className="product-title"><Link to={`/product/${product._id}`}>{product.name}</Link></h3>
-                            <div className="product-price">
-                              ₹{product.price}
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    ));
-                  })()}
+                  {productCards}
                 </div>
               </div>
 
