@@ -191,7 +191,7 @@ const AccessoriesManagement = () => {
                           <tr key={accessory._id}>
                             <td>{accessory.name}</td>
                             <td>{typeof accessory.category === 'object' && accessory.category ? accessory.category.name : accessory.category}</td>
-                            <td>${accessory.price}</td>
+                            <td>₹{accessory.price}</td>
                             <td>{accessory.stock}</td>
                             <td>
                               <button

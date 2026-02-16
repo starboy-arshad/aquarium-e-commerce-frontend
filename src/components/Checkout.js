@@ -268,9 +268,7 @@ const Checkout = () => {
                         checked={billingDetails.createAccount}
                         onChange={handleInputChange}
                       />
-                      <label className="custom-control-label" htmlFor="checkout-create-acc">
-                        Create an account?
-                      </label>
+                     
                     </div>
 
                     <div className="custom-control custom-checkbox">
@@ -282,9 +280,7 @@ const Checkout = () => {
                         checked={billingDetails.shipToDifferentAddress}
                         onChange={handleInputChange}
                       />
-                      <label className="custom-control-label" htmlFor="checkout-diff-address">
-                        Ship to a different address?
-                      </label>
+                      
                     </div>
 
                     <label>Order notes (optional)</label>

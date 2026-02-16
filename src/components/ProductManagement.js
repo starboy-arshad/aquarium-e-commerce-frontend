@@ -212,7 +212,7 @@ const ProductManagement = () => {
                               {product.name}
                             </td>
                             <td>{typeof product.category === 'object' && product.category ? product.category.name : product.category}</td>
-                            <td>${product.price}</td>
+                            <td>₹{product.price}</td>
                             <td>{product.stock}</td>
                             <td>
                               <button

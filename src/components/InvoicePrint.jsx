@@ -114,7 +114,7 @@ const InvoicePrint = () => {
       </div>
 
       <div className="invoice-footer">
-        <p>Thank you for your business!</p>
+        <p>Thank you for choosing us !</p>
         <div className="signature-line">
           Authorized Signature
         </div>
