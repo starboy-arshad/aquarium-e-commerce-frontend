@@ -276,9 +276,9 @@ const OrderDetails = () => {
                   
                   <button 
                     className="btn btn-outline-secondary"
-                    onClick={() => window.print()}
+                    onClick={() => navigate(`/invoice/${orderId}`)}
                   >
-                    Print Order
+                    Download Invoice
                   </button>
                 </div>
               </div>

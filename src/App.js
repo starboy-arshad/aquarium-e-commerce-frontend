@@ -36,6 +36,8 @@ import AccountPage from './components/AccountPage';
 import AboutUs from './components/AboutUs';
 import PoliciesPage from './components/PoliciesPage';
 import Loading from './components/Loading';
+import InvoicePrint from './components/InvoicePrint';
+
 import './App.css';
 
 function HomePage() {
@@ -242,6 +244,8 @@ function App() {
               <PolicyManagement />
             </AdminLayout>
           } />
+          <Route path="/invoice/:orderId" element={<InvoicePrint />} />
+
         </Routes>
         </Router>
       </CartProvider>
