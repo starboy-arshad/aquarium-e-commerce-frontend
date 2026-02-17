@@ -13,7 +13,6 @@ const CategoryManagement = () => {
   const [editingCategory, setEditingCategory] = useState(null);
   const [formData, setFormData] = useState({
     name: '',
-    description: '',
     image: null
   });
 
@@ -45,8 +44,8 @@ const CategoryManagement = () => {
     e.preventDefault();
 
     // Validate required fields
-    if (!formData.name.trim() || !formData.description.trim()) {
-      setError('Name and description are required');
+    if (!formData.name.trim()) {
+      setError('Name is required');
       return;
     }
 
@@ -56,14 +55,12 @@ const CategoryManagement = () => {
 
       const formDataToSend = new FormData();
       formDataToSend.append('name', formData.name.trim());
-      formDataToSend.append('description', formData.description.trim());
       if (formData.image) {
         formDataToSend.append('image', formData.image);
       }
 
       console.log('Sending form data:', {
         name: formData.name.trim(),
-        description: formData.description.trim(),
         hasImage: !!formData.image
       });
 
@@ -93,8 +90,7 @@ const CategoryManagement = () => {
   const handleEdit = (category) => {
     setEditingCategory(category);
     setFormData({
-      name: category.name,
-      description: category.description
+      name: category.name
     });
   };
 
@@ -141,7 +137,6 @@ const CategoryManagement = () => {
     setEditingCategory(null);
     setFormData({
       name: '',
-      description: '',
       image: null
     });
   };
@@ -170,34 +165,32 @@ const CategoryManagement = () => {
                   <div className="table-responsive">
                     <table className="table table-striped">
                       <thead>
-                        <tr>
-                          <th>Name</th>
-                          <th>Description</th>
-                          <th>Actions</th>
-                        </tr>
+        <tr>
+          <th>Name</th>
+          <th>Actions</th>
+        </tr>
                       </thead>
-                      <tbody>
-                        {categories.map(category => (
-                          <tr key={category._id}>
-                            <td>{category.name}</td>
-                            <td>{category.description}</td>
-                            <td>
-                              <button
-                                className="btn btn-sm btn-primary me-2"
-                                onClick={() => handleEdit(category)}
-                              >
-                                Edit
-                              </button>
-                              <button
-                                className="btn btn-sm btn-danger"
-                                onClick={() => handleDelete(category._id)}
-                              >
-                                Delete
-                              </button>
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
+                    <tbody>
+                      {categories.map(category => (
+                        <tr key={category._id}>
+                          <td>{category.name}</td>
+                          <td>
+                            <button
+                              className="btn btn-sm btn-primary me-2"
+                              onClick={() => handleEdit(category)}
+                            >
+                              Edit
+                            </button>
+                            <button
+                              className="btn btn-sm btn-danger"
+                              onClick={() => handleDelete(category._id)}
+                            >
+                              Delete
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
                     </table>
                   </div>
                 </div>
@@ -219,17 +212,6 @@ const CategoryManagement = () => {
                         name="name"
                         value={formData.name}
                         onChange={handleInputChange}
-                        required
-                      />
-                    </div>
-                    <div className="mb-3">
-                      <label className="form-label">Description</label>
-                      <textarea
-                        className="form-control"
-                        name="description"
-                        value={formData.description}
-                        onChange={handleInputChange}
-                        rows="3"
                         required
                       />
                     </div>
