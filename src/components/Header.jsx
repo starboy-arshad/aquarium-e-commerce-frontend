@@ -277,11 +277,13 @@ const Header = () => {
                 >
                   Livestock
                 </a>
-                <ul>
+                <ul style={{ display: activeMobileMenu === 'livestock' ? 'block' : 'none' }}>
                   {loading ? (
                     <li>Loading categories...</li>
+                  ) : categories.length === 0 ? (
+                    <li>No categories available</li>
                   ) : (
-                    (Array.isArray(categories) ? categories : []).map(category => (
+                    categories.map(category => (
                       <li key={category._id}>
                         <Link
                           to={`/shop?category=${encodeURIComponent(category.name)}`}

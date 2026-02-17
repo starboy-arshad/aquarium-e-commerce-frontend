@@ -86,10 +86,28 @@
     max-height: 0;
     overflow: hidden;
     transition: max-height 0.3s ease;
+    display: none;
+    color: #333; /* Ensure text is visible */
+    background: #fff; /* Ensure background is white */
 }
 
 .mobile-nav ul.mobile-menu > li.megamenu-list.active > ul {
     max-height: 1000px;
+    display: block;
+    color: #333; /* Ensure text is visible */
+    background: #fff; /* Ensure background is white */
+}
+
+.mobile-nav ul.mobile-menu > li.megamenu-list > ul > li > a {
+    color: #333 !important; /* Force black text color */
+    text-decoration: none;
+    padding: 8px 15px;
+    display: block;
+}
+
+.mobile-nav ul.mobile-menu > li.megamenu-list > ul > li > a:hover {
+    color: #007bff !important; /* Blue on hover */
+    background-color: #f8f9fa;
 }
 
 .mobile-nav ul.mobile-menu > li.megamenu-list > a {
