@@ -3,7 +3,347 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { API_BASE_URL } from '../config';
 import Header from './Header';
-import Footer from './Footer';
+
+const styles = {
+  pageWrapper: {
+    minHeight: '100vh',
+    display: 'flex',
+    flexDirection: 'column',
+    fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
+    backgroundColor: '#f5f7fa',
+    color: '#2d3748',
+  },
+  main: {
+    flex: 1,
+    paddingTop: '100px',
+    paddingBottom: '40px',
+  },
+  container: {
+    maxWidth: '1200px',
+    margin: '0 auto',
+    padding: '0 16px',
+  },
+  topBar: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: '24px',
+    flexWrap: 'wrap',
+    gap: '12px',
+  },
+  heading: {
+    fontSize: '1.6rem',
+    fontWeight: 700,
+    margin: 0,
+    color: '#1a202c',
+  },
+  btnGroup: {
+    display: 'flex',
+    gap: '8px',
+    flexWrap: 'wrap',
+  },
+  btnPrimaryLink: {
+    display: 'inline-block',
+    padding: '8px 16px',
+    backgroundColor: '#3182ce',
+    color: '#fff',
+    borderRadius: '6px',
+    textDecoration: 'none',
+    fontSize: '0.875rem',
+    fontWeight: 500,
+    border: 'none',
+    cursor: 'pointer',
+    transition: 'background-color 0.2s',
+  },
+  btnSecondaryLink: {
+    display: 'inline-block',
+    padding: '8px 16px',
+    backgroundColor: '#718096',
+    color: '#fff',
+    borderRadius: '6px',
+    textDecoration: 'none',
+    fontSize: '0.875rem',
+    fontWeight: 500,
+    border: 'none',
+    cursor: 'pointer',
+    transition: 'background-color 0.2s',
+  },
+  alert: {
+    padding: '12px 16px',
+    backgroundColor: '#fed7d7',
+    color: '#c53030',
+    borderRadius: '6px',
+    marginBottom: '20px',
+    border: '1px solid #fc8181',
+    fontSize: '0.9rem',
+  },
+  row: {
+    display: 'flex',
+    gap: '24px',
+    alignItems: 'flex-start',
+    flexWrap: 'wrap',
+  },
+  colList: {
+    flex: '2 1 500px',
+    minWidth: 0,
+  },
+  colForm: {
+    flex: '1 1 300px',
+    minWidth: 0,
+  },
+  card: {
+    backgroundColor: '#fff',
+    borderRadius: '10px',
+    boxShadow: '0 1px 8px rgba(0,0,0,0.08)',
+    overflow: 'hidden',
+    marginBottom: '24px',
+  },
+  cardHeader: {
+    padding: '14px 20px',
+    backgroundColor: '#edf2f7',
+    borderBottom: '1px solid #e2e8f0',
+  },
+  cardHeaderTitle: {
+    margin: 0,
+    fontSize: '1rem',
+    fontWeight: 600,
+    color: '#2d3748',
+  },
+  cardBody: {
+    padding: '20px',
+  },
+  tableWrapper: {
+    overflowX: 'auto',
+    WebkitOverflowScrolling: 'touch',
+  },
+  table: {
+    width: '100%',
+    borderCollapse: 'collapse',
+    fontSize: '0.875rem',
+  },
+  th: {
+    padding: '10px 12px',
+    backgroundColor: '#f7fafc',
+    borderBottom: '2px solid #e2e8f0',
+    textAlign: 'left',
+    fontWeight: 600,
+    color: '#4a5568',
+    whiteSpace: 'nowrap',
+  },
+  td: {
+    padding: '10px 12px',
+    borderBottom: '1px solid #edf2f7',
+    verticalAlign: 'middle',
+    color: '#4a5568',
+  },
+  thumbImg: {
+    width: '44px',
+    height: '44px',
+    objectFit: 'cover',
+    borderRadius: '6px',
+  },
+  actionCell: {
+    display: 'flex',
+    gap: '6px',
+    flexWrap: 'wrap',
+  },
+  btnPrimary: {
+    padding: '5px 12px',
+    backgroundColor: '#3182ce',
+    color: '#fff',
+    border: 'none',
+    borderRadius: '5px',
+    fontSize: '0.8rem',
+    fontWeight: 500,
+    cursor: 'pointer',
+    transition: 'background-color 0.2s',
+  },
+  btnDanger: {
+    padding: '5px 12px',
+    backgroundColor: '#e53e3e',
+    color: '#fff',
+    border: 'none',
+    borderRadius: '5px',
+    fontSize: '0.8rem',
+    fontWeight: 500,
+    cursor: 'pointer',
+    transition: 'background-color 0.2s',
+  },
+  formGroup: {
+    marginBottom: '16px',
+  },
+  label: {
+    display: 'block',
+    marginBottom: '6px',
+    fontSize: '0.875rem',
+    fontWeight: 500,
+    color: '#4a5568',
+  },
+  labelMuted: {
+    display: 'block',
+    marginBottom: '4px',
+    fontSize: '0.8rem',
+    color: '#718096',
+  },
+  input: {
+    width: '100%',
+    padding: '8px 12px',
+    border: '1px solid #cbd5e0',
+    borderRadius: '6px',
+    fontSize: '0.875rem',
+    color: '#2d3748',
+    backgroundColor: '#fff',
+    boxSizing: 'border-box',
+    outline: 'none',
+    transition: 'border-color 0.2s',
+  },
+  textarea: {
+    width: '100%',
+    padding: '8px 12px',
+    border: '1px solid #cbd5e0',
+    borderRadius: '6px',
+    fontSize: '0.875rem',
+    color: '#2d3748',
+    backgroundColor: '#fff',
+    boxSizing: 'border-box',
+    resize: 'vertical',
+    outline: 'none',
+    transition: 'border-color 0.2s',
+    fontFamily: 'inherit',
+  },
+  fileInput: {
+    width: '100%',
+    padding: '6px',
+    border: '1px solid #cbd5e0',
+    borderRadius: '6px',
+    fontSize: '0.875rem',
+    color: '#2d3748',
+    backgroundColor: '#fff',
+    boxSizing: 'border-box',
+    cursor: 'pointer',
+  },
+  previewImg: {
+    height: '100px',
+    borderRadius: '6px',
+    border: '1px solid #e2e8f0',
+    marginTop: '8px',
+    objectFit: 'cover',
+  },
+  formActions: {
+    display: 'flex',
+    gap: '10px',
+    marginTop: '8px',
+    flexWrap: 'wrap',
+  },
+  btnSubmit: {
+    padding: '9px 20px',
+    backgroundColor: '#3182ce',
+    color: '#fff',
+    border: 'none',
+    borderRadius: '6px',
+    fontSize: '0.875rem',
+    fontWeight: 600,
+    cursor: 'pointer',
+    transition: 'background-color 0.2s',
+  },
+  btnCancel: {
+    padding: '9px 20px',
+    backgroundColor: '#718096',
+    color: '#fff',
+    border: 'none',
+    borderRadius: '6px',
+    fontSize: '0.875rem',
+    fontWeight: 600,
+    cursor: 'pointer',
+    transition: 'background-color 0.2s',
+  },
+  loading: {
+    textAlign: 'center',
+    marginTop: '60px',
+    fontSize: '1rem',
+    color: '#718096',
+  },
+};
+
+const cssString = `
+  @media (max-width: 768px) {
+    .fms-row { flex-direction: column !important; }
+    .fms-col-list, .fms-col-form { flex: 1 1 100% !important; }
+    .fms-top-bar { flex-direction: column; align-items: flex-start !important; }
+    .fms-heading { font-size: 1.2rem !important; }
+  }
+
+  /* Hide table on mobile, show cards */
+  @media (max-width: 480px) {
+    .fms-table-view { display: none !important; }
+    .fms-card-view { display: block !important; }
+  }
+  @media (min-width: 481px) {
+    .fms-card-view { display: none !important; }
+    .fms-table-view { display: block !important; }
+  }
+
+  /* Mobile product cards */
+  .fms-product-card {
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 12px;
+    margin-bottom: 10px;
+    background: #fff;
+  }
+  .fms-product-card:last-child { margin-bottom: 0; }
+  .fms-product-card-top {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+  }
+  .fms-product-card-thumb {
+    width: 48px;
+    height: 48px;
+    object-fit: cover;
+    border-radius: 6px;
+    flex-shrink: 0;
+  }
+  .fms-product-card-name {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: #1a202c;
+    flex: 1;
+    word-break: break-word;
+  }
+  .fms-product-card-meta {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    font-size: 0.8rem;
+    color: #4a5568;
+    margin-bottom: 10px;
+  }
+  .fms-product-card-meta span { white-space: nowrap; }
+  .fms-product-card-actions {
+    display: flex;
+    gap: 8px;
+  }
+  .fms-product-card-actions button {
+    flex: 1;
+    padding: 7px 0;
+    font-size: 0.82rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+
+  .fms-btn-primary-link:hover { background-color: #2b6cb0 !important; }
+  .fms-btn-secondary-link:hover { background-color: #4a5568 !important; }
+  .fms-btn-primary:hover { background-color: #2b6cb0 !important; }
+  .fms-btn-danger:hover { background-color: #c53030 !important; }
+  .fms-btn-submit:hover { background-color: #2b6cb0 !important; }
+  .fms-btn-cancel:hover { background-color: #4a5568 !important; }
+  .fms-input:focus, .fms-textarea:focus { border-color: #3182ce !important; box-shadow: 0 0 0 3px rgba(49,130,206,0.15) !important; }
+  tr:last-child td { border-bottom: none !important; }
+`;
 
 const FullMarineSetupManagement = () => {
   const { user } = useAuth();
@@ -39,10 +379,7 @@ const FullMarineSetupManagement = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
+    setFormData(prev => ({ ...prev, [name]: value }));
   };
 
   const handleFileChange = (e) => {
@@ -50,7 +387,6 @@ const FullMarineSetupManagement = () => {
     if (file) {
       setSelectedFile(file);
       setPreviewImage(URL.createObjectURL(file));
-      // Also update image in formData to reflect a file is selected
       setFormData(prev => ({ ...prev, image: file.name }));
     }
   };
@@ -59,54 +395,31 @@ const FullMarineSetupManagement = () => {
     e.preventDefault();
     setError('');
 
-    // Basic frontend validation
-    if (!formData.name.trim()) {
-      setError('Name is required');
-      return;
-    }
-    if (!formData.description.trim()) {
-      setError('Description is required');
-      return;
-    }
-    if (!selectedFile && !editingProduct && !formData.image) {
-      setError('Product image is required');
-      return;
-    }
+    if (!formData.name.trim()) { setError('Name is required'); return; }
+    if (!formData.description.trim()) { setError('Description is required'); return; }
+    if (!selectedFile && !editingProduct && !formData.image) { setError('Product image is required'); return; }
 
     try {
-      const url = editingProduct ? `${API_BASE_URL}/api/full-marine-setup/${editingProduct._id}` : `${API_BASE_URL}/api/full-marine-setup`;
+      const url = editingProduct
+        ? `${API_BASE_URL}/api/full-marine-setup/${editingProduct._id}`
+        : `${API_BASE_URL}/api/full-marine-setup`;
       const method = editingProduct ? 'PUT' : 'POST';
 
       const formDataToSend = new FormData();
-
-      // 1. Add all fields from formData (including 'image' path if it exists)
       Object.keys(formData).forEach(key => {
-        // Trim name and description before sending
         if (key === 'name' || key === 'description') {
           formDataToSend.append(key, formData[key].trim());
         } else {
           formDataToSend.append(key, formData[key]);
         }
       });
-
-      // 2. Add the new file using 'images' (plural) field name
-      // Even if it's one file, the backend patterns here use 'images'
       if (selectedFile) {
         formDataToSend.append('images', selectedFile);
       }
 
-      console.log('Submitting FullMarineSetup (Patterns mode):', {
-        url,
-        method,
-        fields: Array.from(formDataToSend.keys()),
-        hasFile: !!selectedFile
-      });
-
       const response = await fetch(url, {
         method,
-        headers: {
-          'Authorization': `Bearer ${user.token}`,
-        },
+        headers: { 'Authorization': `Bearer ${user.token}` },
         body: formDataToSend
       });
 
@@ -117,11 +430,9 @@ const FullMarineSetupManagement = () => {
         resetForm();
         setError('');
       } else {
-        console.error('Server Validation Error:', responseData);
         setError(responseData.message || `Error (${response.status}): Failed to save product`);
       }
     } catch (err) {
-      console.error('Network/Fetch Error:', err);
       setError('Network error: Failed to reach server');
     }
   };
@@ -144,11 +455,8 @@ const FullMarineSetupManagement = () => {
       try {
         const response = await fetch(`${API_BASE_URL}/api/full-marine-setup/${id}`, {
           method: 'DELETE',
-          headers: {
-            'Authorization': `Bearer ${user.token}`,
-          },
+          headers: { 'Authorization': `Bearer ${user.token}` },
         });
-
         if (response.ok) {
           fetchProducts();
         } else {
@@ -162,110 +470,140 @@ const FullMarineSetupManagement = () => {
 
   const resetForm = () => {
     setEditingProduct(null);
-    setFormData({
-      name: '',
-      description: '',
-      price: '',
-      stock: '',
-      image: ''
-    });
+    setFormData({ name: '', description: '', price: '', stock: '', image: '' });
     setSelectedFile(null);
     setPreviewImage('');
   };
 
-  if (loading) return <div className="text-center mt-5">Loading...</div>;
+  if (loading) return <div style={styles.loading}>Loading...</div>;
 
   return (
-    <div className="page-wrapper">
+    <div style={styles.pageWrapper}>
+      <style>{cssString}</style>
       <Header />
-      <main className="main" style={{ paddingTop: '100px' }}>
-        <div className="container">
-          <div className="d-flex justify-content-between align-items-center mb-4">
-            <h1>Full Marine Setup Management</h1>
-            <div>
-              <Link to="/full-marine-setup" className="btn btn-primary me-2">View in Shop</Link>
-              <Link to="/admin" className="btn btn-secondary">Back to Admin Panel</Link>
+      <main style={styles.main}>
+        <div style={styles.container}>
+
+          {/* Top Bar */}
+          <div style={styles.topBar} className="fms-top-bar">
+            <h1 style={styles.heading} className="fms-heading">Full Marine Setup Management</h1>
+            <div style={styles.btnGroup}>
+              <Link to="/full-marine-setup" style={styles.btnPrimaryLink} className="fms-btn-primary-link">
+                View in Shop
+              </Link>
+              <Link to="/admin" style={styles.btnSecondaryLink} className="fms-btn-secondary-link">
+                Back to Admin Panel
+              </Link>
             </div>
           </div>
 
-          {error && <div className="alert alert-danger">{error}</div>}
+          {error && <div style={styles.alert}>{error}</div>}
 
-          <div className="row">
-            <div className="col-md-8">
-              <div className="card">
-                <div className="card-header">
-                  <h5 className="mb-0">Products List</h5>
+          {/* Main Row */}
+          <div style={styles.row} className="fms-row">
+
+            {/* Products List */}
+            <div style={styles.colList} className="fms-col-list">
+              <div style={styles.card}>
+                <div style={styles.cardHeader}>
+                  <h5 style={styles.cardHeaderTitle}>Products List</h5>
                 </div>
-                <div className="card-body">
-                  <div className="table-responsive">
-                    <table className="table table-striped">
+                <div style={styles.cardBody}>
+
+                  {/* Desktop/Tablet: Table */}
+                  <div className="fms-table-view" style={styles.tableWrapper}>
+                    <table style={styles.table}>
                       <thead>
                         <tr>
-                          <th>Image</th>
-                          <th>Name</th>
-                          <th>Price</th>
-                          <th>Stock</th>
-                          <th>Actions</th>
+                          <th style={styles.th}>Image</th>
+                          <th style={styles.th}>Name</th>
+                          <th style={styles.th}>Price</th>
+                          <th style={styles.th}>Stock</th>
+                          <th style={styles.th}>Actions</th>
                         </tr>
                       </thead>
                       <tbody>
                         {products.map(product => (
                           <tr key={product._id}>
-                            <td>
+                            <td style={styles.td}>
                               <img
                                 src={`${API_BASE_URL}${product.image.startsWith('/') ? '' : '/'}${product.image}`}
                                 alt={product.name}
-                                style={{ width: '50px', height: '50px', objectFit: 'cover' }}
+                                style={styles.thumbImg}
                               />
                             </td>
-                            <td>{product.name}</td>
-                            <td>₹{product.price}</td>
-                            <td>{product.stock}</td>
-                            <td>
-                              <button
-                                className="btn btn-sm btn-primary me-2"
-                                onClick={() => handleEdit(product)}
-                              >
-                                Edit
-                              </button>
-                              <button
-                                className="btn btn-sm btn-danger"
-                                onClick={() => handleDelete(product._id)}
-                              >
-                                Delete
-                              </button>
+                            <td style={styles.td}>{product.name}</td>
+                            <td style={styles.td}>₹{product.price}</td>
+                            <td style={styles.td}>{product.stock}</td>
+                            <td style={styles.td}>
+                              <div style={styles.actionCell}>
+                                <button style={styles.btnPrimary} className="fms-btn-primary" onClick={() => handleEdit(product)}>Edit</button>
+                                <button style={styles.btnDanger} className="fms-btn-danger" onClick={() => handleDelete(product._id)}>Delete</button>
+                              </div>
                             </td>
                           </tr>
                         ))}
                       </tbody>
                     </table>
                   </div>
+
+                  {/* Mobile (≤480px): Card List */}
+                  <div className="fms-card-view">
+                    {products.map(product => (
+                      <div key={product._id} className="fms-product-card">
+                        <div className="fms-product-card-top">
+                          <img
+                            src={`${API_BASE_URL}${product.image.startsWith('/') ? '' : '/'}${product.image}`}
+                            alt={product.name}
+                            className="fms-product-card-thumb"
+                          />
+                          <span className="fms-product-card-name">{product.name}</span>
+                        </div>
+                        <div className="fms-product-card-meta">
+                          <span><strong>Price:</strong> ₹{product.price}</span>
+                          <span><strong>Stock:</strong> {product.stock}</span>
+                        </div>
+                        <div className="fms-product-card-actions">
+                          <button style={{ backgroundColor: '#3182ce', color: '#fff' }} onClick={() => handleEdit(product)}>Edit</button>
+                          <button style={{ backgroundColor: '#e53e3e', color: '#fff' }} onClick={() => handleDelete(product._id)}>Delete</button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
                 </div>
               </div>
             </div>
 
-            <div className="col-md-4">
-              <div className="card">
-                <div className="card-header">
-                  <h5 className="mb-0">{editingProduct ? 'Edit Product' : 'Add New Product'}</h5>
+            {/* Add / Edit Form */}
+            <div style={styles.colForm} className="fms-col-form">
+              <div style={styles.card}>
+                <div style={styles.cardHeader}>
+                  <h5 style={styles.cardHeaderTitle}>
+                    {editingProduct ? 'Edit Product' : 'Add New Product'}
+                  </h5>
                 </div>
-                <div className="card-body">
+                <div style={styles.cardBody}>
                   <form onSubmit={handleSubmit}>
-                    <div className="mb-3">
-                      <label className="form-label">Name</label>
+
+                    <div style={styles.formGroup}>
+                      <label style={styles.label}>Name</label>
                       <input
                         type="text"
-                        className="form-control"
+                        style={styles.input}
+                        className="fms-input"
                         name="name"
                         value={formData.name}
                         onChange={handleInputChange}
                         required
                       />
                     </div>
-                    <div className="mb-3">
-                      <label className="form-label">Description</label>
+
+                    <div style={styles.formGroup}>
+                      <label style={styles.label}>Description</label>
                       <textarea
-                        className="form-control"
+                        style={styles.textarea}
+                        className="fms-textarea"
                         name="description"
                         value={formData.description}
                         onChange={handleInputChange}
@@ -273,66 +611,75 @@ const FullMarineSetupManagement = () => {
                         required
                       />
                     </div>
-                    <div className="mb-3">
-                      <label className="form-label">Price</label>
+
+                    <div style={styles.formGroup}>
+                      <label style={styles.label}>Price</label>
                       <input
                         type="number"
-                        className="form-control"
+                        style={styles.input}
+                        className="fms-input"
                         name="price"
                         value={formData.price}
                         onChange={handleInputChange}
                         required
                       />
                     </div>
-                    <div className="mb-3">
-                      <label className="form-label">Product Image</label>
+
+                    <div style={styles.formGroup}>
+                      <label style={styles.label}>Product Image</label>
                       <input
                         type="file"
-                        className="form-control"
+                        style={styles.fileInput}
                         accept="image/*"
                         onChange={handleFileChange}
                       />
                       {previewImage && (
-                        <div className="mt-2">
-                          <img src={previewImage} alt="Preview" className="img-thumbnail" style={{ height: '100px' }} />
-                        </div>
+                        <img src={previewImage} alt="Preview" style={styles.previewImg} />
                       )}
                       {editingProduct && editingProduct.image && !previewImage && (
-                        <div className="mt-2">
-                          <label className="d-block text-muted">Current Image:</label>
-                          <img src={`${API_BASE_URL}${editingProduct.image.startsWith('/') ? '' : '/'}${editingProduct.image}`} alt="Current" className="img-thumbnail" style={{ height: '100px' }} />
+                        <div style={{ marginTop: '8px' }}>
+                          <span style={styles.labelMuted}>Current Image:</span>
+                          <img
+                            src={`${API_BASE_URL}${editingProduct.image.startsWith('/') ? '' : '/'}${editingProduct.image}`}
+                            alt="Current"
+                            style={styles.previewImg}
+                          />
                         </div>
                       )}
                     </div>
-                    <div className="mb-3">
-                      <label className="form-label">Stock</label>
+
+                    <div style={styles.formGroup}>
+                      <label style={styles.label}>Stock</label>
                       <input
                         type="number"
-                        className="form-control"
+                        style={styles.input}
+                        className="fms-input"
                         name="stock"
                         value={formData.stock}
                         onChange={handleInputChange}
                         required
                       />
                     </div>
-                    <div className="d-flex gap-2">
-                      <button type="submit" className="btn btn-primary">
+
+                    <div style={styles.formActions}>
+                      <button type="submit" style={styles.btnSubmit} className="fms-btn-submit">
                         {editingProduct ? 'Update Product' : 'Add Product'}
                       </button>
                       {editingProduct && (
-                        <button type="button" className="btn btn-secondary" onClick={resetForm}>
+                        <button type="button" style={styles.btnCancel} className="fms-btn-cancel" onClick={resetForm}>
                           Cancel
                         </button>
                       )}
                     </div>
+
                   </form>
                 </div>
               </div>
             </div>
+
           </div>
         </div>
       </main>
-      <Footer />
     </div>
   );
 };

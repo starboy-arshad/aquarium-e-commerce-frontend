@@ -5,6 +5,334 @@ import { API_BASE_URL } from '../config';
 import Header from './Header';
 import Footer from './Footer';
 
+const styles = {
+  pageWrapper: {
+    minHeight: '100vh',
+    display: 'flex',
+    flexDirection: 'column',
+    fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
+    backgroundColor: '#f5f7fa',
+    color: '#2d3748',
+  },
+  main: {
+    flex: 1,
+    paddingTop: '100px',
+    paddingBottom: '40px',
+  },
+  container: {
+    maxWidth: '1200px',
+    margin: '0 auto',
+    padding: '0 16px',
+  },
+  topBar: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: '24px',
+    flexWrap: 'wrap',
+    gap: '12px',
+  },
+  heading: {
+    fontSize: '1.6rem',
+    fontWeight: 700,
+    margin: 0,
+    color: '#1a202c',
+  },
+  btnGroup: {
+    display: 'flex',
+    gap: '8px',
+    flexWrap: 'wrap',
+  },
+  btnSecondaryLink: {
+    display: 'inline-block',
+    padding: '8px 16px',
+    backgroundColor: '#718096',
+    color: '#fff',
+    borderRadius: '6px',
+    textDecoration: 'none',
+    fontSize: '0.875rem',
+    fontWeight: 500,
+    border: 'none',
+    cursor: 'pointer',
+    transition: 'background-color 0.2s',
+  },
+  alert: {
+    padding: '12px 16px',
+    backgroundColor: '#fed7d7',
+    color: '#c53030',
+    borderRadius: '6px',
+    marginBottom: '20px',
+    border: '1px solid #fc8181',
+    fontSize: '0.9rem',
+  },
+  row: {
+    display: 'flex',
+    gap: '24px',
+    alignItems: 'flex-start',
+    flexWrap: 'wrap',
+  },
+  colList: {
+    flex: '2 1 500px',
+    minWidth: 0,
+  },
+  colForm: {
+    flex: '1 1 300px',
+    minWidth: 0,
+  },
+  card: {
+    backgroundColor: '#fff',
+    borderRadius: '10px',
+    boxShadow: '0 1px 8px rgba(0,0,0,0.08)',
+    overflow: 'hidden',
+    marginBottom: '24px',
+  },
+  cardHeader: {
+    padding: '14px 20px',
+    backgroundColor: '#edf2f7',
+    borderBottom: '1px solid #e2e8f0',
+  },
+  cardHeaderTitle: {
+    margin: 0,
+    fontSize: '1rem',
+    fontWeight: 600,
+    color: '#2d3748',
+  },
+  cardBody: {
+    padding: '20px',
+  },
+  tableWrapper: {
+    overflowX: 'auto',
+    WebkitOverflowScrolling: 'touch',
+  },
+  table: {
+    width: '100%',
+    borderCollapse: 'collapse',
+    fontSize: '0.875rem',
+  },
+  th: {
+    padding: '10px 12px',
+    backgroundColor: '#f7fafc',
+    borderBottom: '2px solid #e2e8f0',
+    textAlign: 'left',
+    fontWeight: 600,
+    color: '#4a5568',
+    whiteSpace: 'nowrap',
+  },
+  td: {
+    padding: '10px 12px',
+    borderBottom: '1px solid #edf2f7',
+    verticalAlign: 'middle',
+    color: '#4a5568',
+  },
+  actionCell: {
+    display: 'flex',
+    gap: '6px',
+    flexWrap: 'wrap',
+  },
+  btnPrimary: {
+    padding: '5px 12px',
+    backgroundColor: '#3182ce',
+    color: '#fff',
+    border: 'none',
+    borderRadius: '5px',
+    fontSize: '0.8rem',
+    fontWeight: 500,
+    cursor: 'pointer',
+    transition: 'background-color 0.2s',
+  },
+  btnDanger: {
+    padding: '5px 12px',
+    backgroundColor: '#e53e3e',
+    color: '#fff',
+    border: 'none',
+    borderRadius: '5px',
+    fontSize: '0.8rem',
+    fontWeight: 500,
+    cursor: 'pointer',
+    transition: 'background-color 0.2s',
+  },
+  formGroup: {
+    marginBottom: '16px',
+  },
+  label: {
+    display: 'block',
+    marginBottom: '6px',
+    fontSize: '0.875rem',
+    fontWeight: 500,
+    color: '#4a5568',
+  },
+  labelMuted: {
+    display: 'block',
+    marginBottom: '4px',
+    fontSize: '0.8rem',
+    color: '#718096',
+  },
+  input: {
+    width: '100%',
+    padding: '8px 12px',
+    border: '1px solid #cbd5e0',
+    borderRadius: '6px',
+    fontSize: '0.875rem',
+    color: '#2d3748',
+    backgroundColor: '#fff',
+    boxSizing: 'border-box',
+    outline: 'none',
+    transition: 'border-color 0.2s',
+  },
+  textarea: {
+    width: '100%',
+    padding: '8px 12px',
+    border: '1px solid #cbd5e0',
+    borderRadius: '6px',
+    fontSize: '0.875rem',
+    color: '#2d3748',
+    backgroundColor: '#fff',
+    boxSizing: 'border-box',
+    resize: 'vertical',
+    outline: 'none',
+    transition: 'border-color 0.2s',
+    fontFamily: 'inherit',
+  },
+  fileInput: {
+    width: '100%',
+    padding: '6px',
+    border: '1px solid #cbd5e0',
+    borderRadius: '6px',
+    fontSize: '0.875rem',
+    color: '#2d3748',
+    backgroundColor: '#fff',
+    boxSizing: 'border-box',
+    cursor: 'pointer',
+  },
+  helpText: {
+    display: 'block',
+    marginTop: '4px',
+    fontSize: '0.75rem',
+    color: '#718096',
+  },
+  currentImagesGrid: {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(3, 1fr)',
+    gap: '8px',
+    marginTop: '8px',
+  },
+  currentImg: {
+    width: '100%',
+    height: '60px',
+    objectFit: 'cover',
+    borderRadius: '6px',
+    border: '1px solid #e2e8f0',
+  },
+  singleCurrentImg: {
+    width: '80px',
+    height: '80px',
+    objectFit: 'cover',
+    borderRadius: '6px',
+    border: '1px solid #e2e8f0',
+    marginTop: '8px',
+  },
+  formActions: {
+    display: 'flex',
+    gap: '10px',
+    marginTop: '8px',
+    flexWrap: 'wrap',
+  },
+  btnSubmit: {
+    padding: '9px 20px',
+    backgroundColor: '#3182ce',
+    color: '#fff',
+    border: 'none',
+    borderRadius: '6px',
+    fontSize: '0.875rem',
+    fontWeight: 600,
+    cursor: 'pointer',
+    transition: 'background-color 0.2s',
+  },
+  btnCancel: {
+    padding: '9px 20px',
+    backgroundColor: '#718096',
+    color: '#fff',
+    border: 'none',
+    borderRadius: '6px',
+    fontSize: '0.875rem',
+    fontWeight: 600,
+    cursor: 'pointer',
+    transition: 'background-color 0.2s',
+  },
+  loading: {
+    textAlign: 'center',
+    marginTop: '60px',
+    fontSize: '1rem',
+    color: '#718096',
+  },
+};
+
+const cssString = `
+  @media (max-width: 768px) {
+    .am-row { flex-direction: column !important; }
+    .am-col-list, .am-col-form { flex: 1 1 100% !important; }
+    .am-top-bar { flex-direction: column; align-items: flex-start !important; }
+    .am-heading { font-size: 1.2rem !important; }
+  }
+
+  /* Hide table on mobile, show cards */
+  @media (max-width: 480px) {
+    .am-table-view { display: none !important; }
+    .am-card-view { display: block !important; }
+  }
+  @media (min-width: 481px) {
+    .am-card-view { display: none !important; }
+    .am-table-view { display: block !important; }
+  }
+
+  /* Mobile accessory cards */
+  .am-product-card {
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 12px;
+    margin-bottom: 10px;
+    background: #fff;
+  }
+  .am-product-card:last-child { margin-bottom: 0; }
+  .am-product-card-name {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: #1a202c;
+    margin-bottom: 6px;
+    word-break: break-word;
+  }
+  .am-product-card-meta {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    font-size: 0.8rem;
+    color: #4a5568;
+    margin-bottom: 10px;
+  }
+  .am-product-card-meta span { white-space: nowrap; }
+  .am-product-card-actions {
+    display: flex;
+    gap: 8px;
+  }
+  .am-product-card-actions button {
+    flex: 1;
+    padding: 7px 0;
+    font-size: 0.82rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+
+  .am-btn-secondary-link:hover { background-color: #4a5568 !important; }
+  .am-btn-primary:hover { background-color: #2b6cb0 !important; }
+  .am-btn-danger:hover { background-color: #c53030 !important; }
+  .am-btn-submit:hover { background-color: #2b6cb0 !important; }
+  .am-btn-cancel:hover { background-color: #4a5568 !important; }
+  .am-input:focus, .am-textarea:focus { border-color: #3182ce !important; box-shadow: 0 0 0 3px rgba(49,130,206,0.15) !important; }
+  tr:last-child td { border-bottom: none !important; }
+`;
+
 const AccessoriesManagement = () => {
   const { user } = useAuth();
   const location = useLocation();
@@ -25,9 +353,7 @@ const AccessoriesManagement = () => {
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const category = params.get('category');
-    if (category) {
-      setFilteredCategory(category);
-    }
+    if (category) setFilteredCategory(category);
     fetchAccessories();
     fetchCategories();
   }, [location.search]);
@@ -56,10 +382,7 @@ const AccessoriesManagement = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
+    setFormData(prev => ({ ...prev, [name]: value }));
   };
 
   const handleImageChange = (e) => {
@@ -69,29 +392,20 @@ const AccessoriesManagement = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const url = editingAccessory ? `${API_BASE_URL}/api/accessories/${editingAccessory._id}` : `${API_BASE_URL}/api/accessories`;
+      const url = editingAccessory
+        ? `${API_BASE_URL}/api/accessories/${editingAccessory._id}`
+        : `${API_BASE_URL}/api/accessories`;
       const method = editingAccessory ? 'PUT' : 'POST';
 
-      // Create FormData for file upload
       const formDataObj = new FormData();
-
-      // Add form fields
-      Object.keys(formData).forEach(key => {
-        formDataObj.append(key, formData[key]);
-      });
-
-      // Add image files
+      Object.keys(formData).forEach(key => formDataObj.append(key, formData[key]));
       if (imageFiles.length > 0) {
-        imageFiles.forEach((file, index) => {
-          formDataObj.append('images', file);
-        });
+        imageFiles.forEach(file => formDataObj.append('images', file));
       }
 
       const response = await fetch(url, {
         method,
-        headers: {
-          'Authorization': `Bearer ${user.token}`,
-        },
+        headers: { 'Authorization': `Bearer ${user.token}` },
         body: formDataObj
       });
 
@@ -124,11 +438,8 @@ const AccessoriesManagement = () => {
       try {
         const response = await fetch(`${API_BASE_URL}/api/accessories/${id}`, {
           method: 'DELETE',
-          headers: {
-            'Authorization': `Bearer ${user.token}`,
-          },
+          headers: { 'Authorization': `Bearer ${user.token}` },
         });
-
         if (response.ok) {
           fetchAccessories();
         } else {
@@ -142,102 +453,138 @@ const AccessoriesManagement = () => {
 
   const resetForm = () => {
     setEditingAccessory(null);
-    setFormData({
-      name: '',
-      description: '',
-      price: '',
-      stock: ''
-    });
+    setFormData({ name: '', description: '', price: '', stock: '' });
     setImageFiles([]);
   };
 
-  if (loading) return <div className="text-center mt-5">Loading...</div>;
+  if (loading) return <div style={styles.loading}>Loading...</div>;
 
   return (
-    <div className="page-wrapper">
+    <div style={styles.pageWrapper}>
+      <style>{cssString}</style>
       <Header />
-      <main className="main" style={{ paddingTop: '100px' }}>
-        <div className="container">
-          <div className="d-flex justify-content-between align-items-center mb-4">
-            <h1>Accessories Management {filteredCategory && `- ${filteredCategory}`}</h1>
-            <div>
-              <Link to="/admin/accessories" className="btn btn-secondary me-2">All Accessories</Link>
-              <Link to="/admin" className="btn btn-secondary">Back to Admin Panel</Link>
+      <main style={styles.main}>
+        <div style={styles.container}>
+
+          {/* Top Bar */}
+          <div style={styles.topBar} className="am-top-bar">
+            <h1 style={styles.heading} className="am-heading">
+              Accessories Management {filteredCategory && `— ${filteredCategory}`}
+            </h1>
+            <div style={styles.btnGroup}>
+              <Link to="/admin/accessories" style={styles.btnSecondaryLink} className="am-btn-secondary-link">
+                All Accessories
+              </Link>
+              <Link to="/admin" style={styles.btnSecondaryLink} className="am-btn-secondary-link">
+                Back to Admin Panel
+              </Link>
             </div>
           </div>
 
-          {error && <div className="alert alert-danger">{error}</div>}
+          {error && <div style={styles.alert}>{error}</div>}
 
-          <div className="row">
-            <div className="col-md-8">
-              <div className="card">
-                <div className="card-header">
-                  <h5 className="mb-0">Accessories List</h5>
+          {/* Main Row */}
+          <div style={styles.row} className="am-row">
+
+            {/* Accessories List */}
+            <div style={styles.colList} className="am-col-list">
+              <div style={styles.card}>
+                <div style={styles.cardHeader}>
+                  <h5 style={styles.cardHeaderTitle}>Accessories List</h5>
                 </div>
-                <div className="card-body">
-                  <div className="table-responsive">
-                    <table className="table table-striped">
+                <div style={styles.cardBody}>
+
+                  {/* Desktop/Tablet: Table */}
+                  <div className="am-table-view" style={styles.tableWrapper}>
+                    <table style={styles.table}>
                       <thead>
                         <tr>
-                          <th>Name</th>
-                          <th>Category</th>
-                          <th>Price</th>
-                          <th>Stock</th>
-                          <th>Actions</th>
+                          <th style={styles.th}>Name</th>
+                          <th style={styles.th}>Category</th>
+                          <th style={styles.th}>Price</th>
+                          <th style={styles.th}>Stock</th>
+                          <th style={styles.th}>Actions</th>
                         </tr>
                       </thead>
                       <tbody>
                         {accessories.map(accessory => (
                           <tr key={accessory._id}>
-                            <td>{accessory.name}</td>
-                            <td>{typeof accessory.category === 'object' && accessory.category ? accessory.category.name : accessory.category}</td>
-                            <td>₹{accessory.price}</td>
-                            <td>{accessory.stock}</td>
-                            <td>
-                              <button
-                                className="btn btn-sm btn-primary me-2"
-                                onClick={() => handleEdit(accessory)}
-                              >
-                                Edit
-                              </button>
-                              <button
-                                className="btn btn-sm btn-danger"
-                                onClick={() => handleDelete(accessory._id)}
-                              >
-                                Delete
-                              </button>
+                            <td style={styles.td}>{accessory.name}</td>
+                            <td style={styles.td}>
+                              {typeof accessory.category === 'object' && accessory.category
+                                ? accessory.category.name
+                                : accessory.category}
+                            </td>
+                            <td style={styles.td}>₹{accessory.price}</td>
+                            <td style={styles.td}>{accessory.stock}</td>
+                            <td style={styles.td}>
+                              <div style={styles.actionCell}>
+                                <button style={styles.btnPrimary} className="am-btn-primary" onClick={() => handleEdit(accessory)}>Edit</button>
+                                <button style={styles.btnDanger} className="am-btn-danger" onClick={() => handleDelete(accessory._id)}>Delete</button>
+                              </div>
                             </td>
                           </tr>
                         ))}
                       </tbody>
                     </table>
                   </div>
+
+                  {/* Mobile (≤480px): Card List */}
+                  <div className="am-card-view">
+                    {accessories.map(accessory => (
+                      <div key={accessory._id} className="am-product-card">
+                        <div className="am-product-card-name">{accessory.name}</div>
+                        <div className="am-product-card-meta">
+                          <span>
+                            <strong>Category:</strong>{' '}
+                            {typeof accessory.category === 'object' && accessory.category
+                              ? accessory.category.name
+                              : accessory.category}
+                          </span>
+                          <span><strong>Price:</strong> ₹{accessory.price}</span>
+                          <span><strong>Stock:</strong> {accessory.stock}</span>
+                        </div>
+                        <div className="am-product-card-actions">
+                          <button style={{ backgroundColor: '#3182ce', color: '#fff' }} onClick={() => handleEdit(accessory)}>Edit</button>
+                          <button style={{ backgroundColor: '#e53e3e', color: '#fff' }} onClick={() => handleDelete(accessory._id)}>Delete</button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
                 </div>
               </div>
             </div>
 
-            <div className="col-md-4">
-              <div className="card">
-                <div className="card-header">
-                  <h5 className="mb-0">{editingAccessory ? 'Edit Accessory' : 'Add New Accessory'}</h5>
+            {/* Add / Edit Form */}
+            <div style={styles.colForm} className="am-col-form">
+              <div style={styles.card}>
+                <div style={styles.cardHeader}>
+                  <h5 style={styles.cardHeaderTitle}>
+                    {editingAccessory ? 'Edit Accessory' : 'Add New Accessory'}
+                  </h5>
                 </div>
-                <div className="card-body">
+                <div style={styles.cardBody}>
                   <form onSubmit={handleSubmit}>
-                    <div className="mb-3">
-                      <label className="form-label">Name</label>
+
+                    <div style={styles.formGroup}>
+                      <label style={styles.label}>Name</label>
                       <input
                         type="text"
-                        className="form-control"
+                        style={styles.input}
+                        className="am-input"
                         name="name"
                         value={formData.name}
                         onChange={handleInputChange}
                         required
                       />
                     </div>
-                    <div className="mb-3">
-                      <label className="form-label">Description</label>
+
+                    <div style={styles.formGroup}>
+                      <label style={styles.label}>Description</label>
                       <textarea
-                        className="form-control"
+                        style={styles.textarea}
+                        className="am-textarea"
                         name="description"
                         value={formData.description}
                         onChange={handleInputChange}
@@ -245,86 +592,94 @@ const AccessoriesManagement = () => {
                         required
                       />
                     </div>
-                    <div className="mb-3">
-                      <label className="form-label">Price</label>
+
+                    <div style={styles.formGroup}>
+                      <label style={styles.label}>Price</label>
                       <input
                         type="number"
-                        className="form-control"
+                        style={styles.input}
+                        className="am-input"
                         name="price"
                         value={formData.price}
                         onChange={handleInputChange}
                         required
                       />
                     </div>
-                    <div className="mb-3">
-                      <label className="form-label">Images</label>
+
+                    <div style={styles.formGroup}>
+                      <label style={styles.label}>Images</label>
                       <input
                         type="file"
-                        className="form-control"
+                        style={styles.fileInput}
                         name="images"
                         multiple
                         onChange={handleImageChange}
                         accept="image/*"
                       />
                       {imageFiles.length > 0 && (
-                        <div className="mt-2">
-                          <small className="text-muted">Selected files: {imageFiles.length}</small>
-                        </div>
+                        <span style={styles.helpText}>Selected files: {imageFiles.length}</span>
                       )}
+
+                      {/* Current multiple images when editing */}
                       {editingAccessory && editingAccessory.images && editingAccessory.images.length > 0 && (
-                        <div className="mt-2">
-                          <label className="form-label d-block text-muted">Current Images:</label>
-                          <div className="row">
+                        <div style={{ marginTop: '8px' }}>
+                          <span style={styles.labelMuted}>Current Images:</span>
+                          <div style={styles.currentImagesGrid}>
                             {editingAccessory.images.map((img, idx) => (
-                              <div key={idx} className="col-4 mb-2">
-                                <img
-                                  src={`${API_BASE_URL}${img.startsWith('/') ? '' : '/'}${img}`}
-                                  alt="Current"
-                                  className="img-thumbnail"
-                                  style={{ width: '100%', height: '50px', objectFit: 'cover' }}
-                                />
-                              </div>
+                              <img
+                                key={idx}
+                                src={`${API_BASE_URL}${img.startsWith('/') ? '' : '/'}${img}`}
+                                alt="Current"
+                                style={styles.currentImg}
+                              />
                             ))}
                           </div>
                         </div>
                       )}
-                      {editingAccessory && editingAccessory.image && (!editingAccessory.images || editingAccessory.images.length === 0) && (
-                        <div className="mt-2">
-                          <label className="form-label d-block text-muted">Current Image:</label>
-                          <img
-                            src={`${API_BASE_URL}${editingAccessory.image.startsWith('/') ? '' : '/'}${editingAccessory.image}`}
-                            alt="Current"
-                            className="img-thumbnail"
-                            style={{ width: '80px', height: '80px', objectFit: 'cover' }}
-                          />
-                        </div>
-                      )}
+
+                      {/* Current single image fallback when editing */}
+                      {editingAccessory && editingAccessory.image &&
+                        (!editingAccessory.images || editingAccessory.images.length === 0) && (
+                          <div style={{ marginTop: '8px' }}>
+                            <span style={styles.labelMuted}>Current Image:</span>
+                            <img
+                              src={`${API_BASE_URL}${editingAccessory.image.startsWith('/') ? '' : '/'}${editingAccessory.image}`}
+                              alt="Current"
+                              style={styles.singleCurrentImg}
+                            />
+                          </div>
+                        )}
                     </div>
-                    <div className="mb-3">
-                      <label className="form-label">Stock</label>
+
+                    <div style={styles.formGroup}>
+                      <label style={styles.label}>Stock</label>
                       <input
                         type="number"
-                        className="form-control"
+                        style={styles.input}
+                        className="am-input"
                         name="stock"
                         value={formData.stock}
                         onChange={handleInputChange}
                         required
                       />
                     </div>
-                    <div className="d-flex gap-2">
-                      <button type="submit" className="btn btn-primary">
+
+                    <div style={styles.formActions}>
+                      <button type="submit" style={styles.btnSubmit} className="am-btn-submit">
                         {editingAccessory ? 'Update Accessory' : 'Add Accessory'}
                       </button>
                       {editingAccessory && (
-                        <button type="button" className="btn btn-secondary" onClick={resetForm}>
+                        <button type="button" style={styles.btnCancel} className="am-btn-cancel" onClick={resetForm}>
                           Cancel
                         </button>
                       )}
                     </div>
+
                   </form>
                 </div>
               </div>
             </div>
+
           </div>
         </div>
       </main>
