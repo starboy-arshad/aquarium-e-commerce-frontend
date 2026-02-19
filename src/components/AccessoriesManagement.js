@@ -5,6 +5,63 @@ import { API_BASE_URL } from '../config';
 import Header from './Header';
 import Footer from './Footer';
 
+const paginationStyles = {
+  container: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: '16px 20px',
+    backgroundColor: '#fff',
+    borderRadius: '10px',
+    boxShadow: '0 1px 8px rgba(0,0,0,0.08)',
+    marginTop: '16px',
+  },
+  info: {
+    fontSize: '0.9rem',
+    color: '#4a5568',
+    fontWeight: 500,
+  },
+  controls: {
+    display: 'flex',
+    gap: '8px',
+    flexWrap: 'wrap',
+  },
+  button: {
+    padding: '8px 12px',
+    border: '1px solid #cbd5e0',
+    borderRadius: '6px',
+    fontSize: '0.875rem',
+    fontWeight: 500,
+    cursor: 'pointer',
+    transition: 'all 0.2s',
+    backgroundColor: '#fff',
+    color: '#4a5568',
+  },
+  activeButton: {
+    backgroundColor: '#3182ce',
+    color: '#fff',
+    border: '1px solid #3182ce',
+    cursor: 'pointer',
+  },
+  disabledButton: {
+    backgroundColor: '#f7fafc',
+    color: '#a0aec0',
+    border: '1px solid #e2e8f0',
+    cursor: 'not-allowed',
+    opacity: 0.5,
+  },
+  pageButton: {
+    minWidth: '40px',
+    textAlign: 'center',
+  },
+  activePageButton: {
+    backgroundColor: '#3182ce',
+    color: '#fff',
+    border: '1px solid #3182ce',
+    fontWeight: 600,
+  },
+};
+
 const styles = {
   pageWrapper: {
     minHeight: '100vh',
@@ -350,21 +407,63 @@ const AccessoriesManagement = () => {
   const [imageFiles, setImageFiles] = useState([]);
   const [filteredCategory, setFilteredCategory] = useState('');
 
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [pageSize] = useState(10); // Show 10 accessories per page
+
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const category = params.get('category');
     if (category) setFilteredCategory(category);
     fetchAccessories();
     fetchCategories();
-  }, [location.search]);
+  }, [location.search, currentPage]);
 
   const fetchAccessories = async () => {
     try {
-      const response = await fetch(`${API_BASE_URL}/api/accessories`);
+      // Fetch accessories with pagination
+      const response = await fetch(`${API_BASE_URL}/api/accessories?pageNumber=${currentPage}&pageSize=${pageSize}`);
       const data = await response.json();
-      setAccessories(data.accessories);
+      
+      console.log('Accessories API Response:', data);
+      console.log('Accessories:', data.accessories);
+      console.log('Pages:', data.pages);
+      console.log('Current Page:', currentPage);
+      console.log('Accessories Count:', data.accessories ? data.accessories.length : 0);
+      
+      // Handle different response formats
+      let accessories = [];
+      let totalPages = 1;
+      
+      if (data.accessories) {
+        accessories = data.accessories;
+      } else if (Array.isArray(data)) {
+        // If API returns array directly
+        accessories = data;
+      }
+      
+      if (data.pages) {
+        totalPages = data.pages;
+      } else if (data.totalPages) {
+        totalPages = data.totalPages;
+      } else if (data.total) {
+        // If API uses 'total' instead of 'totalPages'
+        totalPages = Math.ceil(data.total / pageSize);
+      } else if (data.accessories && data.accessories.length === 0 && currentPage > 1) {
+        // If we're on a page with no accessories, go back to previous page
+        setCurrentPage(prev => Math.max(1, prev - 1));
+        return;
+      } else {
+        // Calculate totalPages based on accessories length if not provided
+        totalPages = Math.ceil(accessories.length / pageSize) || 1;
+      }
+      
+      setAccessories(accessories);
+      setTotalPages(totalPages);
       setLoading(false);
     } catch (err) {
+      console.error('Error fetching accessories:', err);
       setError('Failed to fetch accessories');
       setLoading(false);
     }
@@ -554,6 +653,95 @@ const AccessoriesManagement = () => {
 
                 </div>
               </div>
+
+              {/* Pagination Controls */}
+              {totalPages > 1 && (
+                <div style={paginationStyles.container}>
+                  <div style={paginationStyles.info}>
+                    Page {currentPage} of {totalPages}
+                  </div>
+                  <div style={paginationStyles.controls}>
+                    <button
+                      style={{
+                        ...paginationStyles.button,
+                        ...(currentPage === 1 ? paginationStyles.disabledButton : paginationStyles.activeButton)
+                      }}
+                      onClick={() => {
+                        setCurrentPage(1);
+                      }}
+                      disabled={currentPage === 1}
+                    >
+                      First
+                    </button>
+                    <button
+                      style={{
+                        ...paginationStyles.button,
+                        ...(currentPage === 1 ? paginationStyles.disabledButton : paginationStyles.activeButton)
+                      }}
+                      onClick={() => {
+                        setCurrentPage(prev => Math.max(1, prev - 1));
+                      }}
+                      disabled={currentPage === 1}
+                    >
+                      Previous
+                    </button>
+                    
+                    {/* Page numbers */}
+                    {(() => {
+                      const pages = [];
+                      const startPage = Math.max(1, currentPage - 2);
+                      const endPage = Math.min(totalPages, currentPage + 2);
+                      
+                      for (let i = startPage; i <= endPage; i++) {
+                        pages.push(
+                          <button
+                            key={i}
+                            style={{
+                              ...paginationStyles.button,
+                              ...paginationStyles.pageButton,
+                              ...(i === currentPage ? paginationStyles.activePageButton : paginationStyles.pageButton)
+                            }}
+                            onClick={() => {
+                              setCurrentPage(i);
+                              fetchAccessories();
+                            }}
+                          >
+                            {i}
+                          </button>
+                        );
+                      }
+                      return pages;
+                    })()}
+                    
+                    <button
+                      style={{
+                        ...paginationStyles.button,
+                        ...(currentPage === totalPages ? paginationStyles.disabledButton : paginationStyles.activeButton)
+                      }}
+                      onClick={() => {
+                        setCurrentPage(prev => Math.min(totalPages, prev + 1));
+                        fetchAccessories();
+                      }}
+                      disabled={currentPage === totalPages}
+                    >
+                      Next
+                    </button>
+                    <button
+                      style={{
+                        ...paginationStyles.button,
+                        ...(currentPage === totalPages ? paginationStyles.disabledButton : paginationStyles.activeButton)
+                      }}
+                      onClick={() => {
+                        setCurrentPage(totalPages);
+                        fetchAccessories();
+                      }}
+                      disabled={currentPage === totalPages}
+                    >
+                      Last
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* Add / Edit Form */}

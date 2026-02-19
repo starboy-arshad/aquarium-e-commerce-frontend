@@ -4,6 +4,63 @@ import { useAuth } from '../contexts/AuthContext';
 import { API_BASE_URL } from '../config';
 import Header from './Header';
 
+const paginationStyles = {
+  container: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: '16px 20px',
+    backgroundColor: '#fff',
+    borderRadius: '10px',
+    boxShadow: '0 1px 8px rgba(0,0,0,0.08)',
+    marginTop: '16px',
+  },
+  info: {
+    fontSize: '0.9rem',
+    color: '#4a5568',
+    fontWeight: 500,
+  },
+  controls: {
+    display: 'flex',
+    gap: '8px',
+    flexWrap: 'wrap',
+  },
+  button: {
+    padding: '8px 12px',
+    border: '1px solid #cbd5e0',
+    borderRadius: '6px',
+    fontSize: '0.875rem',
+    fontWeight: 500,
+    cursor: 'pointer',
+    transition: 'all 0.2s',
+    backgroundColor: '#fff',
+    color: '#4a5568',
+  },
+  activeButton: {
+    backgroundColor: '#3182ce',
+    color: '#fff',
+    border: '1px solid #3182ce',
+    cursor: 'pointer',
+  },
+  disabledButton: {
+    backgroundColor: '#f7fafc',
+    color: '#a0aec0',
+    border: '1px solid #e2e8f0',
+    cursor: 'not-allowed',
+    opacity: 0.5,
+  },
+  pageButton: {
+    minWidth: '40px',
+    textAlign: 'center',
+  },
+  activePageButton: {
+    backgroundColor: '#3182ce',
+    color: '#fff',
+    border: '1px solid #3182ce',
+    fontWeight: 600,
+  },
+};
+
 const styles = {
   pageWrapper: {
     minHeight: '100vh',
@@ -136,11 +193,21 @@ const styles = {
     verticalAlign: 'middle',
     color: '#4a5568',
   },
+  tdFlex: {
+    padding: '10px 12px',
+    borderBottom: '1px solid #edf2f7',
+    verticalAlign: 'middle',
+    color: '#4a5568',
+    display: 'flex',
+    alignItems: 'center',
+    gap: '8px',
+  },
   thumbImg: {
     width: '44px',
     height: '44px',
     objectFit: 'cover',
     borderRadius: '6px',
+    flexShrink: 0,
   },
   actionCell: {
     display: 'flex',
@@ -361,17 +428,59 @@ const FullMarineSetupManagement = () => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [previewImage, setPreviewImage] = useState('');
 
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [pageSize] = useState(10); // Show 10 products per page
+
   useEffect(() => {
     fetchProducts();
-  }, []);
+  }, [currentPage]);
 
   const fetchProducts = async () => {
     try {
-      const response = await fetch(`${API_BASE_URL}/api/full-marine-setup`);
+      // Fetch products with pagination
+      const response = await fetch(`${API_BASE_URL}/api/full-marine-setup?pageNumber=${currentPage}&pageSize=${pageSize}`);
       const data = await response.json();
-      setProducts(data.products);
+      
+      console.log('Full Marine Setup API Response:', data);
+      console.log('Products:', data.products);
+      console.log('Pages:', data.pages);
+      console.log('Current Page:', currentPage);
+      console.log('Products Count:', data.products ? data.products.length : 0);
+      
+      // Handle different response formats
+      let products = [];
+      let totalPages = 1;
+      
+      if (data.products) {
+        products = data.products;
+      } else if (Array.isArray(data)) {
+        // If API returns array directly
+        products = data;
+      }
+      
+      if (data.pages) {
+        totalPages = data.pages;
+      } else if (data.totalPages) {
+        totalPages = data.totalPages;
+      } else if (data.total) {
+        // If API uses 'total' instead of 'totalPages'
+        totalPages = Math.ceil(data.total / pageSize);
+      } else if (data.products && data.products.length === 0 && currentPage > 1) {
+        // If we're on a page with no products, go back to previous page
+        setCurrentPage(prev => Math.max(1, prev - 1));
+        return;
+      } else {
+        // Calculate totalPages based on products length if not provided
+        totalPages = Math.ceil(products.length / pageSize) || 1;
+      }
+      
+      setProducts(products);
+      setTotalPages(totalPages);
       setLoading(false);
     } catch (err) {
+      console.error('Error fetching full marine setup products:', err);
       setError('Failed to fetch products');
       setLoading(false);
     }
@@ -573,6 +682,95 @@ const FullMarineSetupManagement = () => {
 
                 </div>
               </div>
+
+              {/* Pagination Controls */}
+              {totalPages > 1 && (
+                <div style={paginationStyles.container}>
+                  <div style={paginationStyles.info}>
+                    Page {currentPage} of {totalPages}
+                  </div>
+                  <div style={paginationStyles.controls}>
+                    <button
+                      style={{
+                        ...paginationStyles.button,
+                        ...(currentPage === 1 ? paginationStyles.disabledButton : paginationStyles.activeButton)
+                      }}
+                      onClick={() => {
+                        setCurrentPage(1);
+                      }}
+                      disabled={currentPage === 1}
+                    >
+                      First
+                    </button>
+                    <button
+                      style={{
+                        ...paginationStyles.button,
+                        ...(currentPage === 1 ? paginationStyles.disabledButton : paginationStyles.activeButton)
+                      }}
+                      onClick={() => {
+                        setCurrentPage(prev => Math.max(1, prev - 1));
+                      }}
+                      disabled={currentPage === 1}
+                    >
+                      Previous
+                    </button>
+                    
+                    {/* Page numbers */}
+                    {(() => {
+                      const pages = [];
+                      const startPage = Math.max(1, currentPage - 2);
+                      const endPage = Math.min(totalPages, currentPage + 2);
+                      
+                      for (let i = startPage; i <= endPage; i++) {
+                        pages.push(
+                          <button
+                            key={i}
+                            style={{
+                              ...paginationStyles.button,
+                              ...paginationStyles.pageButton,
+                              ...(i === currentPage ? paginationStyles.activePageButton : paginationStyles.pageButton)
+                            }}
+                            onClick={() => {
+                              setCurrentPage(i);
+                              fetchProducts();
+                            }}
+                          >
+                            {i}
+                          </button>
+                        );
+                      }
+                      return pages;
+                    })()}
+                    
+                    <button
+                      style={{
+                        ...paginationStyles.button,
+                        ...(currentPage === totalPages ? paginationStyles.disabledButton : paginationStyles.activeButton)
+                      }}
+                      onClick={() => {
+                        setCurrentPage(prev => Math.min(totalPages, prev + 1));
+                        fetchProducts();
+                      }}
+                      disabled={currentPage === totalPages}
+                    >
+                      Next
+                    </button>
+                    <button
+                      style={{
+                        ...paginationStyles.button,
+                        ...(currentPage === totalPages ? paginationStyles.disabledButton : paginationStyles.activeButton)
+                      }}
+                      onClick={() => {
+                        setCurrentPage(totalPages);
+                        fetchProducts();
+                      }}
+                      disabled={currentPage === totalPages}
+                    >
+                      Last
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* Add / Edit Form */}
