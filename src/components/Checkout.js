@@ -41,6 +41,13 @@ const Checkout = () => {
     e.preventDefault();
     setLoading(true);
 
+    // Check minimum order amount before proceeding
+    if (cartTotal < 3000) {
+      alert('Minimum order amount should be ₹3000');
+      setLoading(false);
+      return;
+    }
+
     if (!user || !user.token) {
       alert('Please log in to place an order.');
       navigate('/login');
@@ -99,11 +106,26 @@ const Checkout = () => {
     }
   };
 
+  const cartTotal = getCartTotal() + 600; // subtotal + shipping
+
   if (cartItems.length === 0) {
     return (
       <div className="container my-5">
         <div className="text-center">
           <h2>Your cart is empty</h2>
+          <a href="/shop" className="btn btn-primary">Continue Shopping</a>
+        </div>
+      </div>
+    );
+  }
+
+  if (cartTotal < 3000) {
+    return (
+      <div className="container my-5">
+        <div className="text-center">
+          <h2>Minimum Order Amount Not Met</h2>
+          <p className="lead">The minimum order amount is ₹3000. Your current total is ₹{cartTotal.toFixed(2)}.</p>
+          <p>Please add more items to your cart to proceed to checkout.</p>
           <a href="/shop" className="btn btn-primary">Continue Shopping</a>
         </div>
       </div>

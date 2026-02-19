@@ -145,7 +145,13 @@ const CartPage = () => {
                       </tr>
                     </tbody>
                   </table>
-                  <Link to="/checkout" className="btn btn-outline-primary-2 btn-order btn-block">
+                  <div className="cart-minimum-notice">
+                    <p className="text-muted small">Minimum order amount: ₹3000</p>
+                  </div>
+                  <Link 
+                    to="/checkout" 
+                    className="btn btn-outline-primary-2 btn-order btn-block"
+                  >
                     PROCEED TO CHECKOUT
                   </Link>
                 </div>

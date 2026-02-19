@@ -17,6 +17,7 @@ const ShopPage = () => {
   const [keyword, setKeyword] = useState('');
 
   const [priceRange, setPriceRange] = useState([0, 200]);
+  const [tempPriceRange, setTempPriceRange] = useState([0, 200]);
   const [gridColumns, setGridColumns] = useState(4);
   const [imageLoadStates, setImageLoadStates] = useState({});
 
@@ -167,7 +168,7 @@ const ShopPage = () => {
       if (priceRange[0] > 0) {
         params.append('minPrice', priceRange[0]);
       }
-      if (priceRange[1] < 200) {
+      if (priceRange[1] > 0 && priceRange[1] !== 200) {
         params.append('maxPrice', priceRange[1]);
       }
 
@@ -221,7 +222,11 @@ const ShopPage = () => {
 
 
   const handlePriceChange = (min, max) => {
-    setPriceRange([min, max]);
+    setTempPriceRange([min, max]);
+  };
+
+  const applyPriceFilter = () => {
+    setPriceRange(tempPriceRange);
     setPage(1);
   };
 
@@ -419,21 +424,45 @@ const ShopPage = () => {
                         <div className="filter-price-text">
                           Price Range: <span>₹{priceRange[0]} - ₹{priceRange[1]}</span>
                         </div>
-                        <div className="price-slider">
-                          <input
-                            type="range"
-                            min="0"
-                            max="200"
-                            value={priceRange[0]}
-                            onChange={(e) => handlePriceChange(parseInt(e.target.value), priceRange[1])}
-                          />
-                          <input
-                            type="range"
-                            min="0"
-                            max="200"
-                            value={priceRange[1]}
-                            onChange={(e) => handlePriceChange(priceRange[0], parseInt(e.target.value))}
-                          />
+                        <div className="price-inputs">
+                          <div className="input-group">
+                            <div className="input-group-prepend">
+                              <span className="input-group-text">Min</span>
+                            </div>
+                            <input
+                              type="number"
+                              className="form-control"
+                              min="0"
+                              max="10000"
+                              value={tempPriceRange[0]}
+                              onChange={(e) => handlePriceChange(parseInt(e.target.value), tempPriceRange[1])}
+                            />
+                          </div><br/>
+                          <div className="input-group">
+                            <div className="input-group-prepend">
+                              <span className="input-group-text">Max</span>
+                            </div>
+                            <input
+                              type="number"
+                              className="form-control"
+                              min="0"
+                              max="10000"
+                              value={tempPriceRange[1]}
+                              onChange={(e) => handlePriceChange(tempPriceRange[0], parseInt(e.target.value))}
+                            />
+                          </div>
+                        </div><br/>
+                        <div className="apply-filter-container">
+                          <button className="btn btn-primary btn-block" onClick={applyPriceFilter}>
+                            Apply Filter
+                          </button>
+                          <button className="btn btn-secondary btn-block mt-2" onClick={() => {
+                            setTempPriceRange([0, 200]);
+                            setPriceRange([0, 200]);
+                            setPage(1);
+                          }}>
+                            Reset Filter
+                          </button>
                         </div>
                       </div>
                     </div>
