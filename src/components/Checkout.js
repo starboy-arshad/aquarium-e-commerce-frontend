@@ -83,10 +83,15 @@ const Checkout = () => {
       }));
 
       const shippingAddress = {
+        name: `${billingDetails.firstName} ${billingDetails.lastName}`,
         address: billingDetails.streetAddress,
+        apartment: billingDetails.apartment,
         city: billingDetails.townCity,
+        state: billingDetails.stateCounty,
         postalCode: billingDetails.postcode,
-        country: billingDetails.country
+        country: billingDetails.country,
+        phone: billingDetails.phone,
+        email: billingDetails.email
       };
 
       const shippingPrice = 600.00;
@@ -97,7 +102,8 @@ const Checkout = () => {
         itemsPrice: getCartTotal(),
         taxPrice: 0,
         shippingPrice,
-        totalPrice: getCartTotal() + shippingPrice
+        totalPrice: getCartTotal() + shippingPrice,
+        orderNotes: billingDetails.orderNotes
       };
 
       const response = await fetch(`${API_BASE_URL}/api/orders`, {

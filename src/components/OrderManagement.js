@@ -8,10 +8,19 @@ const OrderManagement = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [selectedOrder, setSelectedOrder] = useState(null);
+  const [openDropdownId, setOpenDropdownId] = useState(null);
 
   useEffect(() => {
     fetchOrders();
   }, []);
+
+  useEffect(() => {
+    const handleClickOutside = () => setOpenDropdownId(null);
+    if (openDropdownId) {
+      document.addEventListener('click', handleClickOutside);
+    }
+    return () => document.removeEventListener('click', handleClickOutside);
+  }, [openDropdownId]);
 
   const fetchOrders = async () => {
     try {
@@ -139,20 +148,33 @@ const OrderManagement = () => {
                         >
                           Details
                         </button>
-                        <div className="dropdown">
+                        <div className="dropdown position-relative">
                           <button
                             className="btn btn-sm btn-outline-secondary dropdown-toggle"
                             type="button"
-                            data-bs-toggle="dropdown"
-                            aria-expanded="false"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setOpenDropdownId(openDropdownId === order._id ? null : order._id);
+                            }}
                           >
                             {order.status || 'Pending'}
                           </button>
-                          <ul className="dropdown-menu">
+                          <ul
+                            className={`dropdown-menu ${openDropdownId === order._id ? 'show' : ''}`}
+                            style={{
+                              display: openDropdownId === order._id ? 'block' : 'none',
+                              position: 'absolute',
+                              right: 0,
+                              zIndex: 1000
+                            }}
+                          >
                             <li>
                               <button
                                 className="dropdown-item"
-                                onClick={() => handleUpdateStatus(order._id, 'pending')}
+                                onClick={() => {
+                                  handleUpdateStatus(order._id, 'pending');
+                                  setOpenDropdownId(null);
+                                }}
                               >
                                 Pending
                               </button>
@@ -160,7 +182,10 @@ const OrderManagement = () => {
                             <li>
                               <button
                                 className="dropdown-item"
-                                onClick={() => handleUpdateStatus(order._id, 'confirmed')}
+                                onClick={() => {
+                                  handleUpdateStatus(order._id, 'confirmed');
+                                  setOpenDropdownId(null);
+                                }}
                               >
                                 Confirmed
                               </button>
@@ -168,7 +193,10 @@ const OrderManagement = () => {
                             <li>
                               <button
                                 className="dropdown-item"
-                                onClick={() => handleUpdateStatus(order._id, 'delivered')}
+                                onClick={() => {
+                                  handleUpdateStatus(order._id, 'delivered');
+                                  setOpenDropdownId(null);
+                                }}
                               >
                                 Delivered
                               </button>
@@ -176,7 +204,10 @@ const OrderManagement = () => {
                             <li>
                               <button
                                 className="dropdown-item"
-                                onClick={() => handleUpdateStatus(order._id, 'cancelled')}
+                                onClick={() => {
+                                  handleUpdateStatus(order._id, 'cancelled');
+                                  setOpenDropdownId(null);
+                                }}
                               >
                                 Cancelled
                               </button>
@@ -203,14 +234,24 @@ const OrderManagement = () => {
                 <div className="modal-body" style={{ maxHeight: '60vh', overflowY: 'auto' }}>
                   <div className="row">
                     <div className="col-md-6">
-                      <h6>Shipping Address</h6>
+                      <h6>Customer Information</h6>
                       <p>
-                        {selectedOrder.shippingAddress.address}<br />
-                        {selectedOrder.shippingAddress.city}, {selectedOrder.shippingAddress.postalCode}<br />
-                        {selectedOrder.shippingAddress.country}
+                        <strong>Name:</strong> {selectedOrder.shippingAddress?.name || selectedOrder.user?.name || 'N/A'}<br />
+                        <strong>Address:</strong> {selectedOrder.shippingAddress.address}
+                        {selectedOrder.shippingAddress.apartment && `, ${selectedOrder.shippingAddress.apartment}`}<br />
+                        {selectedOrder.shippingAddress.city}, {selectedOrder.shippingAddress.state && `${selectedOrder.shippingAddress.state}, `} {selectedOrder.shippingAddress.postalCode}<br />
+                        {selectedOrder.shippingAddress.country}<br />
+                        <strong>Phone:</strong> {selectedOrder.shippingAddress.phone || 'N/A'}<br />
+                        <strong>Email:</strong> {selectedOrder.shippingAddress.email || selectedOrder.user?.email || 'N/A'}
                       </p>
                       <h6>Payment Method</h6>
                       <p>{selectedOrder.paymentMethod}</p>
+                      {selectedOrder.orderNotes && (
+                        <div className="mt-3">
+                          <h6>Order Notes</h6>
+                          <p className="bg-light p-2 border rounded">{selectedOrder.orderNotes}</p>
+                        </div>
+                      )}
                     </div>
                     <div className="col-md-6">
                       <h6>Order Items</h6>

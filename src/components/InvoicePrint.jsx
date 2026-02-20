@@ -57,8 +57,8 @@ const InvoicePrint = () => {
         <div>
           <h2>Erode Marine Aquarium</h2>
           <p>
-             1/65, Periya Valasu Naal Rd, <br />   
-             Muncipal Colony, Veerappanchatram, <br />
+            1/65, Periya Valasu Naal Rd, <br />
+            Muncipal Colony, Veerappanchatram, <br />
             Erode, Tamil Nadu <br />
             GSTIN: 33ABCDE1234F1Z5
           </p>
@@ -75,12 +75,13 @@ const InvoicePrint = () => {
 
       <h4>Bill To:</h4>
       <p>
-        {order.shippingAddress.name || user.name}<br />
-        {order.shippingAddress.street || user.shippingAddress?.street || ''}<br />
-        {order.shippingAddress.city || user.shippingAddress?.city || ''}, {order.shippingAddress.state || user.shippingAddress?.state || ''} {order.shippingAddress.zip || user.shippingAddress?.zip || ''}<br />
-        {order.shippingAddress.country || user.shippingAddress?.country || ''}<br />
-        Phone: {order.shippingAddress.phone || user.phone || user.shippingAddress?.phone || ''}<br />
-        Email: {order.shippingAddress.email || user.email || user.shippingAddress?.email || ''}
+        {(order.shippingAddress && order.shippingAddress.name) || (order.user && order.user.name) || user.name}<br />
+        {order.shippingAddress && order.shippingAddress.address}
+        {order.shippingAddress && order.shippingAddress.apartment && `, ${order.shippingAddress.apartment}`}<br />
+        {order.shippingAddress && order.shippingAddress.city}, {order.shippingAddress && order.shippingAddress.state && `${order.shippingAddress.state}, `} {order.shippingAddress && (order.shippingAddress.postalCode || order.shippingAddress.zip || '')}<br />
+        {order.shippingAddress && order.shippingAddress.country}<br />
+        Phone: {order.shippingAddress && order.shippingAddress.phone || user.phone || ''}<br />
+        Email: {order.shippingAddress && order.shippingAddress.email || (order.user && order.user.email) || user.email || ''}
       </p>
 
       <table className="invoice-table">

@@ -54,7 +54,7 @@ const OrderDetails = () => {
     }
 
     try {
-        const response = await fetch(`${API_BASE_URL}/api/orders/${orderId}/status`, {
+      const response = await fetch(`${API_BASE_URL}/api/orders/${orderId}/status`, {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${user.token}`,
@@ -154,19 +154,26 @@ const OrderDetails = () => {
               <div className="card-body">
                 <div className="row">
                   <div className="col-md-6">
-                    <h6>Shipping Address</h6>
+                    <h6>Customer Information</h6>
                     <p className="mb-0">
-                      {order.shippingAddress.name || user.name}<br />
-                      {order.shippingAddress.street || user.shippingAddress?.street || ''}<br />
-                      {order.shippingAddress.city || user.shippingAddress?.city || ''}, {order.shippingAddress.state || user.shippingAddress?.state || ''} {order.shippingAddress.zip || user.shippingAddress?.zip || ''}<br />
-                      {order.shippingAddress.country || user.shippingAddress?.country || ''}<br />
-                      <strong>Phone:</strong> {order.shippingAddress.phone || user.phone || user.shippingAddress?.phone || ''}<br />
-                      <strong>Email:</strong> {order.shippingAddress.email || user.email || user.shippingAddress?.email || ''}
+                      <strong>Name:</strong> {order.shippingAddress.name || order.user?.name || user.name}<br />
+                      <strong>Address:</strong> {order.shippingAddress.address}
+                      {order.shippingAddress.apartment && `, ${order.shippingAddress.apartment}`}<br />
+                      {order.shippingAddress.city}, {order.shippingAddress.state && `${order.shippingAddress.state}, `} {order.shippingAddress.zip || order.shippingAddress.postalCode || ''}<br />
+                      {order.shippingAddress.country || ''}<br />
+                      <strong>Phone:</strong> {order.shippingAddress.phone || user.phone || ''}<br />
+                      <strong>Email:</strong> {order.shippingAddress.email || order.user?.email || user.email || ''}
                     </p>
                   </div>
                   <div className="col-md-6">
                     <h6>Payment Method</h6>
                     <p className="mb-0">{order.paymentMethod}</p>
+                    {order.orderNotes && (
+                      <div className="mt-3">
+                        <h6>Order Notes</h6>
+                        <p className="bg-light p-2 border rounded mb-0 text-muted" style={{ fontSize: '0.9rem' }}>{order.orderNotes}</p>
+                      </div>
+                    )}
                     {order.isPaid && (
                       <div className="mt-2">
                         <h6>Payment Details</h6>
@@ -258,23 +265,23 @@ const OrderDetails = () => {
               </div>
               <div className="card-body">
                 <div className="d-grid gap-2">
-                  <button 
+                  <button
                     className="btn btn-primary"
                     onClick={() => navigate('/shop')}
                   >
                     Continue Shopping
                   </button>
-                  &nbsp; 
+                  &nbsp;
                   {order.status !== 'cancelled' && !order.isDelivered && (
-                    <button 
+                    <button
                       className="btn btn-danger"
                       onClick={handleCancelOrder}
                     >
                       Cancel Order
                     </button>
                   )}
-                  
-                  <button 
+
+                  <button
                     className="btn btn-outline-secondary"
                     onClick={() => navigate(`/invoice/${orderId}`)}
                   >
@@ -287,7 +294,7 @@ const OrderDetails = () => {
             {/* Order Status Timeline */}
             <div className="card">
               <div className="card-header">
-                <h4 className="mb-0">Order Status</h4> <br/>
+                <h4 className="mb-0">Order Status</h4> <br />
               </div>
               <div className="card-body">
                 <div className="timeline">
@@ -300,7 +307,7 @@ const OrderDetails = () => {
                       <p className="text-muted mb-0">{formatDate(order.createdAt)}</p>
                     </div>
                   </div>
-                  
+
                   <div className="timeline-item">
                     <div className="timeline-marker">
                       <i className="bi bi-credit-card"></i>
@@ -312,7 +319,7 @@ const OrderDetails = () => {
                       </p>
                     </div>
                   </div>
-                  
+
                   <div className="timeline-item">
                     <div className="timeline-marker">
                       <i className="bi bi-truck"></i>
@@ -320,8 +327,8 @@ const OrderDetails = () => {
                     <div className="timeline-content">
                       <h6>Order {order.status === 'delivered' ? 'Delivered' : 'In Progress'}</h6>
                       <p className="text-muted mb-0">
-                        {order.status === 'delivered' && order.deliveredAt 
-                          ? formatDate(order.deliveredAt) 
+                        {order.status === 'delivered' && order.deliveredAt
+                          ? formatDate(order.deliveredAt)
                           : 'Your order is being processed'}
                       </p>
                     </div>
