@@ -425,24 +425,24 @@ const AccessoriesManagement = () => {
       // Fetch accessories with pagination
       const response = await fetch(`${API_BASE_URL}/api/accessories?pageNumber=${currentPage}&pageSize=${pageSize}`);
       const data = await response.json();
-      
+
       console.log('Accessories API Response:', data);
       console.log('Accessories:', data.accessories);
       console.log('Pages:', data.pages);
       console.log('Current Page:', currentPage);
       console.log('Accessories Count:', data.accessories ? data.accessories.length : 0);
-      
+
       // Handle different response formats
       let accessories = [];
       let totalPages = 1;
-      
+
       if (data.accessories) {
         accessories = data.accessories;
       } else if (Array.isArray(data)) {
         // If API returns array directly
         accessories = data;
       }
-      
+
       if (data.pages) {
         totalPages = data.pages;
       } else if (data.totalPages) {
@@ -458,7 +458,7 @@ const AccessoriesManagement = () => {
         // Calculate totalPages based on accessories length if not provided
         totalPages = Math.ceil(accessories.length / pageSize) || 1;
       }
-      
+
       setAccessories(accessories);
       setTotalPages(totalPages);
       setLoading(false);
@@ -598,6 +598,7 @@ const AccessoriesManagement = () => {
                     <table style={styles.table}>
                       <thead>
                         <tr>
+                          <th style={styles.th}>Thumbnail</th>
                           <th style={styles.th}>Name</th>
                           <th style={styles.th}>Category</th>
                           <th style={styles.th}>Price</th>
@@ -608,6 +609,20 @@ const AccessoriesManagement = () => {
                       <tbody>
                         {accessories.map(accessory => (
                           <tr key={accessory._id}>
+                            <td style={styles.td}>
+                              {(() => {
+                                const rawImage = accessory.images && accessory.images.length > 0 ? accessory.images[0] : accessory.image;
+                                const imageSrc = rawImage ? (rawImage.startsWith('http') ? rawImage : `${API_BASE_URL}/${rawImage.startsWith('/') ? rawImage.substring(1) : (rawImage.startsWith('uploads/') ? rawImage : `uploads/${rawImage}`)}`) : '/assets/images/products/product-1.jpg';
+                                return (
+                                  <img
+                                    src={imageSrc}
+                                    alt={accessory.name}
+                                    style={{ ...styles.thumbImg, width: '44px', height: '44px', objectFit: 'cover', borderRadius: '6px' }}
+                                    onError={(e) => { e.target.src = '/assets/images/products/product-1.jpg'; }}
+                                  />
+                                );
+                              })()}
+                            </td>
                             <td style={styles.td}>{accessory.name}</td>
                             <td style={styles.td}>
                               {typeof accessory.category === 'object' && accessory.category
@@ -685,13 +700,13 @@ const AccessoriesManagement = () => {
                     >
                       Previous
                     </button>
-                    
+
                     {/* Page numbers */}
                     {(() => {
                       const pages = [];
                       const startPage = Math.max(1, currentPage - 2);
                       const endPage = Math.min(totalPages, currentPage + 2);
-                      
+
                       for (let i = startPage; i <= endPage; i++) {
                         pages.push(
                           <button
@@ -712,7 +727,7 @@ const AccessoriesManagement = () => {
                       }
                       return pages;
                     })()}
-                    
+
                     <button
                       style={{
                         ...paginationStyles.button,

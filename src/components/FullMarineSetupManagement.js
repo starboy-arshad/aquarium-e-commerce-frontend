@@ -442,24 +442,24 @@ const FullMarineSetupManagement = () => {
       // Fetch products with pagination
       const response = await fetch(`${API_BASE_URL}/api/full-marine-setup?pageNumber=${currentPage}&pageSize=${pageSize}`);
       const data = await response.json();
-      
+
       console.log('Full Marine Setup API Response:', data);
       console.log('Products:', data.products);
       console.log('Pages:', data.pages);
       console.log('Current Page:', currentPage);
       console.log('Products Count:', data.products ? data.products.length : 0);
-      
+
       // Handle different response formats
       let products = [];
       let totalPages = 1;
-      
+
       if (data.products) {
         products = data.products;
       } else if (Array.isArray(data)) {
         // If API returns array directly
         products = data;
       }
-      
+
       if (data.pages) {
         totalPages = data.pages;
       } else if (data.totalPages) {
@@ -475,7 +475,7 @@ const FullMarineSetupManagement = () => {
         // Calculate totalPages based on products length if not provided
         totalPages = Math.ceil(products.length / pageSize) || 1;
       }
-      
+
       setProducts(products);
       setTotalPages(totalPages);
       setLoading(false);
@@ -635,11 +635,18 @@ const FullMarineSetupManagement = () => {
                         {products.map(product => (
                           <tr key={product._id}>
                             <td style={styles.td}>
-                              <img
-                                src={`${API_BASE_URL}${product.image.startsWith('/') ? '' : '/'}${product.image}`}
-                                alt={product.name}
-                                style={styles.thumbImg}
-                              />
+                              {(() => {
+                                const rawImage = product.image || (product.images && product.images.length > 0 ? product.images[0] : null);
+                                const imageSrc = rawImage ? (rawImage.startsWith('http') ? rawImage : `${API_BASE_URL}/${rawImage.startsWith('/') ? rawImage.substring(1) : (rawImage.startsWith('uploads/') ? rawImage : `uploads/${rawImage}`)}`) : '/assets/images/products/product-1.jpg';
+                                return (
+                                  <img
+                                    src={imageSrc}
+                                    alt={product.name}
+                                    style={styles.thumbImg}
+                                    onError={(e) => { e.target.src = '/assets/images/products/product-1.jpg'; }}
+                                  />
+                                );
+                              })()}
                             </td>
                             <td style={styles.td}>{product.name}</td>
                             <td style={styles.td}>₹{product.price}</td>
@@ -661,11 +668,18 @@ const FullMarineSetupManagement = () => {
                     {products.map(product => (
                       <div key={product._id} className="fms-product-card">
                         <div className="fms-product-card-top">
-                          <img
-                            src={`${API_BASE_URL}${product.image.startsWith('/') ? '' : '/'}${product.image}`}
-                            alt={product.name}
-                            className="fms-product-card-thumb"
-                          />
+                          {(() => {
+                            const rawImage = product.image || (product.images && product.images.length > 0 ? product.images[0] : null);
+                            const imageSrc = rawImage ? (rawImage.startsWith('http') ? rawImage : `${API_BASE_URL}/${rawImage.startsWith('/') ? rawImage.substring(1) : (rawImage.startsWith('uploads/') ? rawImage : `uploads/${rawImage}`)}`) : '/assets/images/products/product-1.jpg';
+                            return (
+                              <img
+                                src={imageSrc}
+                                alt={product.name}
+                                className="fms-product-card-thumb"
+                                onError={(e) => { e.target.src = '/assets/images/products/product-1.jpg'; }}
+                              />
+                            );
+                          })()}
                           <span className="fms-product-card-name">{product.name}</span>
                         </div>
                         <div className="fms-product-card-meta">
@@ -714,13 +728,13 @@ const FullMarineSetupManagement = () => {
                     >
                       Previous
                     </button>
-                    
+
                     {/* Page numbers */}
                     {(() => {
                       const pages = [];
                       const startPage = Math.max(1, currentPage - 2);
                       const endPage = Math.min(totalPages, currentPage + 2);
-                      
+
                       for (let i = startPage; i <= endPage; i++) {
                         pages.push(
                           <button
@@ -741,7 +755,7 @@ const FullMarineSetupManagement = () => {
                       }
                       return pages;
                     })()}
-                    
+
                     <button
                       style={{
                         ...paginationStyles.button,

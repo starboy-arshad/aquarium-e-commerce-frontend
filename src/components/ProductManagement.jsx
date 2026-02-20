@@ -437,7 +437,7 @@ const ProductManagement = () => {
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [previewImages, setPreviewImages] = useState([]);
   const [filteredCategory, setFilteredCategory] = useState('');
-  
+
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -458,24 +458,24 @@ const ProductManagement = () => {
       // Fetch products with pagination
       const response = await fetch(`${API_BASE_URL}/api/products?pageNumber=${currentPage}&pageSize=${pageSize}`);
       const data = await response.json();
-      
+
       console.log('API Response:', data);
       console.log('Products:', data.products);
       console.log('Pages:', data.pages);
       console.log('Current Page:', currentPage);
       console.log('Products Count:', data.products ? data.products.length : 0);
-      
+
       // Handle different response formats
       let products = [];
       let totalPages = 1;
-      
+
       if (data.products) {
         products = data.products;
       } else if (Array.isArray(data)) {
         // If API returns array directly
         products = data;
       }
-      
+
       if (data.pages) {
         totalPages = data.pages;
       } else if (data.totalPages) {
@@ -491,7 +491,7 @@ const ProductManagement = () => {
         // Calculate totalPages based on products length if not provided
         totalPages = Math.ceil(products.length / pageSize) || 1;
       }
-      
+
       setProducts(products);
       setTotalPages(totalPages);
       setLoading(false);
@@ -658,13 +658,18 @@ const ProductManagement = () => {
                         {products.map(product => (
                           <tr key={product._id}>
                             <td style={{ ...styles.td, display: 'flex', alignItems: 'center', gap: '10px' }}>
-                              {product.images && product.images.length > 0 && (
-                                <img
-                                  src={`${API_BASE_URL}${product.images[0].startsWith('/') ? '' : '/'}${product.images[0]}`}
-                                  alt={product.name}
-                                  style={styles.thumbImg}
-                                />
-                              )}
+                              {(() => {
+                                const rawImage = product.images && product.images.length > 0 ? product.images[0] : product.image;
+                                const imageSrc = rawImage ? (rawImage.startsWith('http') ? rawImage : `${API_BASE_URL}/${rawImage.startsWith('/') ? rawImage.substring(1) : (rawImage.startsWith('uploads/') ? rawImage : `uploads/${rawImage}`)}`) : '/assets/images/products/product-1.jpg';
+                                return (
+                                  <img
+                                    src={imageSrc}
+                                    alt={product.name}
+                                    style={styles.thumbImg}
+                                    onError={(e) => { e.target.src = '/assets/images/products/product-1.jpg'; }}
+                                  />
+                                );
+                              })()}
                               <span style={{ fontWeight: 500 }}>{product.name}</span>
                             </td>
                             <td style={styles.td}>
@@ -691,13 +696,18 @@ const ProductManagement = () => {
                     {products.map(product => (
                       <div key={product._id} className="pm-product-card">
                         <div className="pm-product-card-top">
-                          {product.images && product.images.length > 0 && (
-                            <img
-                              src={`${API_BASE_URL}${product.images[0].startsWith('/') ? '' : '/'}${product.images[0]}`}
-                              alt={product.name}
-                              className="pm-product-card-thumb"
-                            />
-                          )}
+                          {(() => {
+                            const rawImage = product.images && product.images.length > 0 ? product.images[0] : product.image;
+                            const imageSrc = rawImage ? (rawImage.startsWith('http') ? rawImage : `${API_BASE_URL}/${rawImage.startsWith('/') ? rawImage.substring(1) : (rawImage.startsWith('uploads/') ? rawImage : `uploads/${rawImage}`)}`) : '/assets/images/products/product-1.jpg';
+                            return (
+                              <img
+                                src={imageSrc}
+                                alt={product.name}
+                                className="pm-product-card-thumb"
+                                onError={(e) => { e.target.src = '/assets/images/products/product-1.jpg'; }}
+                              />
+                            );
+                          })()}
                           <span className="pm-product-card-name">{product.name}</span>
                         </div>
                         <div className="pm-product-card-meta">
@@ -747,13 +757,13 @@ const ProductManagement = () => {
                     >
                       Previous
                     </button>
-                    
+
                     {/* Page numbers */}
                     {(() => {
                       const pages = [];
                       const startPage = Math.max(1, currentPage - 2);
                       const endPage = Math.min(totalPages, currentPage + 2);
-                      
+
                       for (let i = startPage; i <= endPage; i++) {
                         pages.push(
                           <button
@@ -774,7 +784,7 @@ const ProductManagement = () => {
                       }
                       return pages;
                     })()}
-                    
+
                     <button
                       style={{
                         ...paginationStyles.button,

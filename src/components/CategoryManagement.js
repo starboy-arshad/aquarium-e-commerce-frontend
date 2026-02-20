@@ -162,32 +162,45 @@ const CategoryManagement = () => {
                 <div className="table-responsive">
                   <table className="table table-striped">
                     <thead>
-      <tr>
-        <th>Name</th>
-        <th>Actions</th>
-      </tr>
-                    </thead>
-                  <tbody>
-                    {categories.map(category => (
-                      <tr key={category._id}>
-                        <td>{category.name}</td>
-                        <td>
-                          <button
-                            className="btn btn-sm btn-primary me-2"
-                            onClick={() => handleEdit(category)}
-                          >
-                            Edit
-                          </button>
-                          <button
-                            className="btn btn-sm btn-danger"
-                            onClick={() => handleDelete(category._id)}
-                          >
-                            Delete
-                          </button>
-                        </td>
+                      <tr>
+                        <th>Thumbnail</th>
+                        <th>Name</th>
+                        <th>Actions</th>
                       </tr>
-                    ))}
-                  </tbody>
+                    </thead>
+                    <tbody>
+                      {categories.map(category => (
+                        <tr key={category._id}>
+                          <td>
+                            {category.image ? (
+                              <img
+                                src={category.image.startsWith('http') ? category.image : `${API_BASE_URL}/${category.image.startsWith('/') ? category.image.substring(1) : (category.image.startsWith('uploads/') ? category.image : `uploads/${category.image}`)}`}
+                                alt={category.name}
+                                style={{ width: '44px', height: '44px', objectFit: 'cover', borderRadius: '6px' }}
+                                onError={(e) => { e.target.src = '/assets/images/products/product-1.jpg'; }}
+                              />
+                            ) : (
+                              <div style={{ width: '44px', height: '44px', backgroundColor: '#f7fafc', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '10px' }}>No Img</div>
+                            )}
+                          </td>
+                          <td>{category.name}</td>
+                          <td>
+                            <button
+                              className="btn btn-sm btn-primary me-2"
+                              onClick={() => handleEdit(category)}
+                            >
+                              Edit
+                            </button>
+                            <button
+                              className="btn btn-sm btn-danger"
+                              onClick={() => handleDelete(category._id)}
+                            >
+                              Delete
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
                   </table>
                 </div>
               </div>
@@ -225,10 +238,11 @@ const CategoryManagement = () => {
                       <div className="mt-2 text-center">
                         <label className="form-label d-block text-muted">Current Image:</label>
                         <img
-                          src={`${API_BASE_URL}${editingCategory.image.startsWith('/') ? '' : '/'}${editingCategory.image.includes('uploads') ? '' : 'uploads/'}${editingCategory.image}`}
+                          src={editingCategory.image.startsWith('http') ? editingCategory.image : `${API_BASE_URL}/${editingCategory.image.startsWith('/') ? editingCategory.image.substring(1) : (editingCategory.image.startsWith('uploads/') ? editingCategory.image : `uploads/${editingCategory.image}`)}`}
                           alt="Current"
                           className="img-thumbnail"
                           style={{ width: '150px', height: '150px', objectFit: 'cover' }}
+                          onError={(e) => { e.target.src = '/assets/images/products/product-1.jpg'; }}
                         />
                       </div>
                     )}
