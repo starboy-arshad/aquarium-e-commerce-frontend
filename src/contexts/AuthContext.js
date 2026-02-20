@@ -56,7 +56,7 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const register = async (name, email, password) => {
+  const register = async (name, email, password, phone) => {
     try {
       dispatch({ type: 'LOGIN_START' });
       const response = await fetch(`${API_BASE_URL}/api/users`, {
@@ -64,7 +64,33 @@ export const AuthProvider = ({ children }) => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ name, email, password }),
+        body: JSON.stringify({ name, email, password, phone }),
+      });
+      const data = await response.json();
+      if (response.ok) {
+        localStorage.setItem('userInfo', JSON.stringify(data));
+        dispatch({ type: 'LOGIN_SUCCESS', payload: data });
+      } else if (data.verificationRequired) {
+        dispatch({ type: 'LOGIN_FAIL', payload: null });
+        return data;
+      } else {
+        dispatch({ type: 'LOGIN_FAIL', payload: data.message });
+      }
+      return data;
+    } catch (error) {
+      dispatch({ type: 'LOGIN_FAIL', payload: 'Network error' });
+    }
+  };
+
+  const verifyEmail = async (email, otp) => {
+    try {
+      dispatch({ type: 'LOGIN_START' });
+      const response = await fetch(`${API_BASE_URL}/api/users/verify-email`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, otp }),
       });
       const data = await response.json();
       if (response.ok) {
@@ -73,12 +99,13 @@ export const AuthProvider = ({ children }) => {
       } else {
         dispatch({ type: 'LOGIN_FAIL', payload: data.message });
       }
+      return data;
     } catch (error) {
       dispatch({ type: 'LOGIN_FAIL', payload: 'Network error' });
     }
   };
 
-  const updateProfile = async (name, email, password, currentPassword, billingAddress, shippingAddress) => {
+  const updateProfile = async (name, email, password, currentPassword, phone, billingAddress, shippingAddress) => {
     try {
       dispatch({ type: 'LOGIN_START' });
       const userInfo = JSON.parse(localStorage.getItem('userInfo'));
@@ -88,7 +115,7 @@ export const AuthProvider = ({ children }) => {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${userInfo.token}`,
         },
-        body: JSON.stringify({ name, email, password, currentPassword, billingAddress, shippingAddress }),
+        body: JSON.stringify({ name, email, password, currentPassword, phone, billingAddress, shippingAddress }),
       });
       const data = await response.json();
       if (response.ok) {
@@ -137,8 +164,69 @@ export const AuthProvider = ({ children }) => {
     dispatch({ type: 'LOGOUT' });
   };
 
+  const signupInit = async (name, email, phone) => {
+    try {
+      dispatch({ type: 'LOGIN_START' });
+      const response = await fetch(`${API_BASE_URL}/api/users/signup-init`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email, phone }),
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        dispatch({ type: 'LOGIN_FAIL', payload: data.message });
+      } else {
+        dispatch({ type: 'LOGIN_FAIL', payload: null });
+      }
+      return data;
+    } catch (error) {
+      dispatch({ type: 'LOGIN_FAIL', payload: 'Network error' });
+    }
+  };
+
+  const verifySignupOTP = async (email, otp) => {
+    try {
+      dispatch({ type: 'LOGIN_START' });
+      const response = await fetch(`${API_BASE_URL}/api/users/verify-signup-otp`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, otp }),
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        dispatch({ type: 'LOGIN_FAIL', payload: data.message });
+      } else {
+        dispatch({ type: 'LOGIN_FAIL', payload: null });
+      }
+      return data;
+    } catch (error) {
+      dispatch({ type: 'LOGIN_FAIL', payload: 'Network error' });
+    }
+  };
+
+  const signupComplete = async (email, password, otp) => {
+    try {
+      dispatch({ type: 'LOGIN_START' });
+      const response = await fetch(`${API_BASE_URL}/api/users/signup-complete`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password, otp }),
+      });
+      const data = await response.json();
+      if (response.ok) {
+        localStorage.setItem('userInfo', JSON.stringify(data));
+        dispatch({ type: 'LOGIN_SUCCESS', payload: data });
+      } else {
+        dispatch({ type: 'LOGIN_FAIL', payload: data.message });
+      }
+      return data;
+    } catch (error) {
+      dispatch({ type: 'LOGIN_FAIL', payload: 'Network error' });
+    }
+  };
+
   return (
-    <AuthContext.Provider value={{ ...state, login, register, updateProfile, forgotPassword, resetPassword, logout }}>
+    <AuthContext.Provider value={{ ...state, login, register, verifyEmail, signupInit, verifySignupOTP, signupComplete, updateProfile, forgotPassword, resetPassword, logout }}>
       {children}
     </AuthContext.Provider>
   );

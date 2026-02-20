@@ -10,6 +10,7 @@ const AccountPage = () => {
   const [activeTab, setActiveTab] = useState('account');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
+  const [phone, setPhone] = useState('');
   const [billingAddress, setBillingAddress] = useState({});
   const [shippingAddress, setShippingAddress] = useState({});
   const [showBillingForm, setShowBillingForm] = useState(false);
@@ -65,6 +66,7 @@ const AccountPage = () => {
       const nameParts = user.name.split(' ');
       setFirstName(nameParts[0] || '');
       setLastName(nameParts.slice(1).join(' ') || '');
+      setPhone(user.phone || '');
     }
     if (user && user.billingAddress) {
       setBillingAddress(user.billingAddress);
@@ -90,7 +92,7 @@ const AccountPage = () => {
     }
     const fullName = `${firstName} ${lastName}`.trim();
     const email = user.email; // assuming email doesn't change, but we can allow it
-    await updateProfile(fullName, email, newPassword || undefined, currentPassword || undefined, billingAddress, shippingAddress);
+    await updateProfile(fullName, email, newPassword || undefined, currentPassword || undefined, phone, billingAddress, shippingAddress);
     if (!error) {
       setCurrentPassword('');
       setNewPassword('');
@@ -99,12 +101,12 @@ const AccountPage = () => {
   };
 
   const handleSaveBilling = async () => {
-    await updateProfile(user.name, user.email, undefined, undefined, billingAddress, undefined);
+    await updateProfile(user.name, user.email, undefined, undefined, user.phone, billingAddress, undefined);
     setShowBillingForm(false);
   };
 
   const handleSaveShipping = async () => {
-    await updateProfile(user.name, user.email, undefined, undefined, undefined, shippingAddress);
+    await updateProfile(user.name, user.email, undefined, undefined, user.phone, undefined, shippingAddress);
     setShowShippingForm(false);
   };
 
@@ -409,6 +411,8 @@ const AccountPage = () => {
 
                           <label>Email address *</label>
                           <input type="email" className="form-control" value={user?.email || ''} readOnly required />
+                          <label>Phone Number *</label>
+                          <input type="tel" className="form-control" value={phone} onChange={(e) => setPhone(e.target.value)} required />
                           <label>Current password (leave blank to leave unchanged)</label>
                           <div className="password-input-container">
                             <input type={showCurrentPassword ? "text" : "password"} className="form-control" value={currentPassword} onChange={(e) => setCurrentPassword(e.target.value)} />

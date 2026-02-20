@@ -29,6 +29,7 @@ const Login = () => {
         <div className="login-form-container">
           <h2>Sign In</h2>
           {error && <div className="error-message">{error}</div>}
+
           <form onSubmit={handleSubmit} className="login-form">
             <div className="form-group">
               <label htmlFor="email">Email Address</label>
@@ -56,6 +57,7 @@ const Login = () => {
               {loading ? 'Signing In...' : 'Sign In'}
             </button>
           </form>
+
           <div className="login-links">
             <p>Don't have an account? <Link to="/register">Register here</Link></p>
             <Link to="/forgot-password">Forgot Password?</Link>

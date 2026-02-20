@@ -80,6 +80,8 @@ const UserManagement = () => {
                     <th>ID</th>
                     <th>Name</th>
                     <th>Email</th>
+                    <th>Phone</th>
+                    <th>Verified</th>
                     <th>Admin</th>
                     <th>Created</th>
                     <th>Actions</th>
@@ -91,6 +93,14 @@ const UserManagement = () => {
                       <td>{u._id.substring(0, 8)}...</td>
                       <td>{u.name}</td>
                       <td>{u.email}</td>
+                      <td>{u.phone || 'N/A'}</td>
+                      <td>
+                        {u.isVerified ? (
+                          <span className="badge bg-success">Yes</span>
+                        ) : (
+                          <span className="badge bg-danger">No</span>
+                        )}
+                      </td>
                       <td>
                         {u.isAdmin ? (
                           <span className="badge bg-success">Admin</span>

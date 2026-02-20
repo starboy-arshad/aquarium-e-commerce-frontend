@@ -29,6 +29,24 @@ const Checkout = () => {
   const [paymentMethod, setPaymentMethod] = useState('bank-transfer');
   const [loading, setLoading] = useState(false);
 
+  React.useEffect(() => {
+    if (user) {
+      const nameParts = user.name.split(' ');
+      setBillingDetails(prev => ({
+        ...prev,
+        firstName: nameParts[0] || '',
+        lastName: nameParts.slice(1).join(' ') || '',
+        email: user.email || '',
+        phone: user.phone || '',
+        streetAddress: user.billingAddress?.street || '',
+        townCity: user.billingAddress?.city || '',
+        stateCounty: user.billingAddress?.state || '',
+        postcode: user.billingAddress?.zip || '',
+        company: user.billingAddress?.company || '',
+      }));
+    }
+  }, [user]);
+
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
     setBillingDetails(prev => ({
@@ -135,7 +153,7 @@ const Checkout = () => {
   return (
     <div className="page-wrapper">
       <main className="main">
-        <div className="page-header text-center" style={{backgroundImage: `url(${process.env.PUBLIC_URL}/assets/shop_card.jpg)`}}>
+        <div className="page-header text-center" style={{ backgroundImage: `url(${process.env.PUBLIC_URL}/assets/shop_card.jpg)` }}>
           <div className="container">
             <h1 className="page-title">Checkout<span>Shop</span></h1>
           </div>
@@ -290,7 +308,7 @@ const Checkout = () => {
                         checked={billingDetails.createAccount}
                         onChange={handleInputChange}
                       />
-                     
+
                     </div>
 
                     <div className="custom-control custom-checkbox">
@@ -302,7 +320,7 @@ const Checkout = () => {
                         checked={billingDetails.shipToDifferentAddress}
                         onChange={handleInputChange}
                       />
-                      
+
                     </div>
 
                     <label>Order notes (optional)</label>
