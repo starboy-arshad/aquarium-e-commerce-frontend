@@ -37,6 +37,8 @@ import AboutUs from './components/AboutUs';
 import PoliciesPage from './components/PoliciesPage';
 import Loading from './components/Loading';
 import InvoicePrint from './components/InvoicePrint';
+import ContactInbox from './components/ContactInbox';
+import ScrollToTop from './components/ScrollToTop';
 
 import './App.css';
 
@@ -78,175 +80,181 @@ function App() {
       <CartProvider>
         {isLoading && <Loading />}
         <Router>
+          <ScrollToTop />
           <Routes>
-          <Route path="/" element={
-            <div className="page-wrapper">
-              <Header />
-              <HomePage />
-              <Footer />
-            </div>
-          } />
-          <Route path="/shop" element={
-            <div className="page-wrapper">
-              <Header />
-              <main className="main" style={{ paddingTop: '100px' }}>
-                <ShopPage />
-              </main>
-              <Footer />
-            </div>
-          } />
-          <Route path="/product/:id" element={
-            <div className="page-wrapper">
-              <Header />
-              <main className="main" style={{ paddingTop: '20px' }}>
-                <ProductPage />
-              </main>
-              <Footer />
-            </div>
-          } />
-          <Route path="/cart" element={
-            <div className="page-wrapper">
-              <Header />
-              <main className="main" style={{ paddingTop: '100px' }}>
-                <CartPage />
-              </main>
-              <Footer />
-            </div>
-          } />
-          <Route path="/checkout" element={
-            <div className="page-wrapper">
-              <Header />
-              <main className="main" style={{ paddingTop: '100px' }}>
-                <Checkout />
-              </main>
-              <Footer />
-            </div>
-          } />
-          <Route path="/order-success" element={
-            <div className="page-wrapper">
-              <Header />
-              <main className="main" style={{ paddingTop: '100px' }}>
-                <OrderSuccess />
-              </main>
-              <Footer />
-            </div>
-          } />
-          <Route path="/order/:orderId" element={
-            <div className="page-wrapper">
-              <Header />
-              <main className="main" style={{ paddingTop: '100px' }}>
-                <OrderDetails />
-              </main>
-              <Footer />
-            </div>
-          } />
-          <Route path="/full-marine-setup" element={
-            <div className="page-wrapper">
-              <Header />
-              <main className="main" style={{ paddingTop: '100px' }}>
-                <FullMarineSetupPage />
-              </main>
-              <Footer />
-            </div>
-          } />
-          <Route path="/accessories" element={
-            <div className="page-wrapper">
-              <Header />
-              <main className="main" style={{ paddingTop: '100px' }}>
-                <AccessoriesPage />
-              </main>
-              <Footer />
-            </div>
-          } />
-          <Route path="/accessory/:id" element={
-            <div className="page-wrapper">
-              <Header />
-              <main className="main" style={{ paddingTop: '100px' }}>
-                <AccessoryPage />
-              </main>
-              <Footer />
-            </div>
-          } />
-          <Route path="/contact" element={
-            <div className="page-wrapper">
-              <Header />
-              <main className="main" style={{ paddingTop: '0px' }}>
-                <ContactPage />
-              </main>
-              <Footer />
-            </div>
-          } />
-          <Route path="/about" element={
-            <div className="page-wrapper">
-              <Header />
-              <main className="main" style={{ paddingTop: '100px' }}>
-                <AboutUs />
-              </main>
-              <Footer />
-            </div>
-          } />
-          <Route path="/policies" element={
-            <div className="page-wrapper">
-              <Header />
-              <main className="main" style={{ paddingTop: '100px' }}>
-                <PoliciesPage />
-              </main>
-              <Footer />
-            </div>
-          } />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/forgot-password" element={<ForgotPassword />} />
-          <Route path="/reset-password" element={<ResetPassword />} />
-          <Route path="/account" element={<AccountPage />} />
-          <Route path="/admin" element={
-            <AdminLayout>
-              <AdminPanel />
-            </AdminLayout>
-          } />
-          <Route path="/admin/products" element={
-            <AdminLayout>
-              <ProductManagement />
-            </AdminLayout>
-          } />
-          <Route path="/admin/categories" element={
-            <AdminLayout>
-              <CategoryManagement />
-            </AdminLayout>
-          } />
-          <Route path="/admin/full-marine-setup" element={
-            <AdminLayout>
-              <FullMarineSetupManagement />
-            </AdminLayout>
-          } />
-          <Route path="/admin/accessories" element={
-            <AdminLayout>
-              <AccessoriesManagement />
-            </AdminLayout>
-          } />
-          <Route path="/admin/orders" element={
-            <AdminLayout>
-              <OrderManagement />
-            </AdminLayout>
-          } />
-          <Route path="/admin/users" element={
-            <AdminLayout>
-              <UserManagement />
-            </AdminLayout>
-          } />
-          <Route path="/admin/reports" element={
-            <AdminLayout>
-              <Reports />
-            </AdminLayout>
-          } />
-          <Route path="/admin/policies" element={
-            <AdminLayout>
-              <PolicyManagement />
-            </AdminLayout>
-          } />
-          <Route path="/invoice/:orderId" element={<InvoicePrint />} />
+            <Route path="/" element={
+              <div className="page-wrapper">
+                <Header />
+                <HomePage />
+                <Footer />
+              </div>
+            } />
+            <Route path="/shop" element={
+              <div className="page-wrapper">
+                <Header />
+                <main className="main" style={{ paddingTop: '100px' }}>
+                  <ShopPage />
+                </main>
+                <Footer />
+              </div>
+            } />
+            <Route path="/product/:id" element={
+              <div className="page-wrapper">
+                <Header />
+                <main className="main" style={{ paddingTop: '20px' }}>
+                  <ProductPage />
+                </main>
+                <Footer />
+              </div>
+            } />
+            <Route path="/cart" element={
+              <div className="page-wrapper">
+                <Header />
+                <main className="main" style={{ paddingTop: '100px' }}>
+                  <CartPage />
+                </main>
+                <Footer />
+              </div>
+            } />
+            <Route path="/checkout" element={
+              <div className="page-wrapper">
+                <Header />
+                <main className="main" style={{ paddingTop: '100px' }}>
+                  <Checkout />
+                </main>
+                <Footer />
+              </div>
+            } />
+            <Route path="/order-success" element={
+              <div className="page-wrapper">
+                <Header />
+                <main className="main" style={{ paddingTop: '100px' }}>
+                  <OrderSuccess />
+                </main>
+                <Footer />
+              </div>
+            } />
+            <Route path="/order/:orderId" element={
+              <div className="page-wrapper">
+                <Header />
+                <main className="main" style={{ paddingTop: '100px' }}>
+                  <OrderDetails />
+                </main>
+                <Footer />
+              </div>
+            } />
+            <Route path="/full-marine-setup" element={
+              <div className="page-wrapper">
+                <Header />
+                <main className="main" style={{ paddingTop: '100px' }}>
+                  <FullMarineSetupPage />
+                </main>
+                <Footer />
+              </div>
+            } />
+            <Route path="/accessories" element={
+              <div className="page-wrapper">
+                <Header />
+                <main className="main" style={{ paddingTop: '100px' }}>
+                  <AccessoriesPage />
+                </main>
+                <Footer />
+              </div>
+            } />
+            <Route path="/accessory/:id" element={
+              <div className="page-wrapper">
+                <Header />
+                <main className="main" style={{ paddingTop: '100px' }}>
+                  <AccessoryPage />
+                </main>
+                <Footer />
+              </div>
+            } />
+            <Route path="/contact" element={
+              <div className="page-wrapper">
+                <Header />
+                <main className="main" style={{ paddingTop: '0px' }}>
+                  <ContactPage />
+                </main>
+                <Footer />
+              </div>
+            } />
+            <Route path="/about" element={
+              <div className="page-wrapper">
+                <Header />
+                <main className="main" style={{ paddingTop: '100px' }}>
+                  <AboutUs />
+                </main>
+                <Footer />
+              </div>
+            } />
+            <Route path="/policies" element={
+              <div className="page-wrapper">
+                <Header />
+                <main className="main" style={{ paddingTop: '100px' }}>
+                  <PoliciesPage />
+                </main>
+                <Footer />
+              </div>
+            } />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/reset-password" element={<ResetPassword />} />
+            <Route path="/account" element={<AccountPage />} />
+            <Route path="/admin" element={
+              <AdminLayout>
+                <AdminPanel />
+              </AdminLayout>
+            } />
+            <Route path="/admin/products" element={
+              <AdminLayout>
+                <ProductManagement />
+              </AdminLayout>
+            } />
+            <Route path="/admin/categories" element={
+              <AdminLayout>
+                <CategoryManagement />
+              </AdminLayout>
+            } />
+            <Route path="/admin/full-marine-setup" element={
+              <AdminLayout>
+                <FullMarineSetupManagement />
+              </AdminLayout>
+            } />
+            <Route path="/admin/accessories" element={
+              <AdminLayout>
+                <AccessoriesManagement />
+              </AdminLayout>
+            } />
+            <Route path="/admin/orders" element={
+              <AdminLayout>
+                <OrderManagement />
+              </AdminLayout>
+            } />
+            <Route path="/admin/users" element={
+              <AdminLayout>
+                <UserManagement />
+              </AdminLayout>
+            } />
+            <Route path="/admin/reports" element={
+              <AdminLayout>
+                <Reports />
+              </AdminLayout>
+            } />
+            <Route path="/admin/policies" element={
+              <AdminLayout>
+                <PolicyManagement />
+              </AdminLayout>
+            } />
+            <Route path="/admin/inbox" element={
+              <AdminLayout>
+                <ContactInbox />
+              </AdminLayout>
+            } />
+            <Route path="/invoice/:orderId" element={<InvoicePrint />} />
 
-        </Routes>
+          </Routes>
         </Router>
       </CartProvider>
     </AuthProvider>

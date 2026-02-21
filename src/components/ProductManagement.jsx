@@ -436,6 +436,7 @@ const ProductManagement = () => {
   });
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [previewImages, setPreviewImages] = useState([]);
+  const [selectedProductIds, setSelectedProductIds] = useState([]);
   const [filteredCategory, setFilteredCategory] = useState('');
 
   // Pagination state
@@ -581,11 +582,47 @@ const ProductManagement = () => {
         });
         if (response.ok) {
           fetchProducts();
+          setSelectedProductIds(prev => prev.filter(pid => pid !== id));
         } else {
           setError('Failed to delete product');
         }
       } catch (err) {
         setError('Failed to delete product');
+      }
+    }
+  };
+
+  const handleSelectAll = (e) => {
+    if (e.target.checked) {
+      setSelectedProductIds(products.map(p => p._id));
+    } else {
+      setSelectedProductIds([]);
+    }
+  };
+
+  const handleSelectProduct = (id) => {
+    setSelectedProductIds(prev =>
+      prev.includes(id) ? prev.filter(pid => pid !== id) : [...prev, id]
+    );
+  };
+
+  const handleBulkDelete = async () => {
+    if (selectedProductIds.length === 0) return;
+    if (window.confirm(`Are you sure you want to delete ${selectedProductIds.length} products?`)) {
+      try {
+        let successCount = 0;
+        for (const id of selectedProductIds) {
+          const response = await fetch(`${API_BASE_URL}/api/products/${id}`, {
+            method: 'DELETE',
+            headers: { 'Authorization': `Bearer ${user.token}` },
+          });
+          if (response.ok) successCount++;
+        }
+        alert(`Successfully deleted ${successCount} products`);
+        fetchProducts();
+        setSelectedProductIds([]);
+      } catch (err) {
+        setError('Failed to complete bulk deletion');
       }
     }
   };
@@ -637,8 +674,20 @@ const ProductManagement = () => {
             {/* Products List */}
             <div style={styles.colList} className="pm-col-list">
               <div style={styles.card}>
-                <div style={styles.cardHeader}>
+                <div style={styles.cardHeader} className="d-flex justify-content-between align-items-center">
                   <h5 style={styles.cardHeaderTitle}>Products List</h5>
+                  {selectedProductIds.length > 0 && (
+                    <div className="animate__animated animate__fadeIn">
+                      <span className="me-3 small text-primary fw-bold">{selectedProductIds.length} selected</span>
+                      <button
+                        className="btn btn-danger btn-sm"
+                        onClick={handleBulkDelete}
+                        style={{ padding: '4px 12px', fontSize: '0.75rem' }}
+                      >
+                        Bulk Delete
+                      </button>
+                    </div>
+                  )}
                 </div>
                 <div style={styles.cardBody}>
 
@@ -647,6 +696,13 @@ const ProductManagement = () => {
                     <table style={styles.table}>
                       <thead>
                         <tr>
+                          <th style={styles.th}>
+                            <input
+                              type="checkbox"
+                              onChange={handleSelectAll}
+                              checked={products.length > 0 && selectedProductIds.length === products.length}
+                            />
+                          </th>
                           <th style={styles.th}>Name</th>
                           <th style={styles.th}>Category</th>
                           <th style={styles.th}>Price</th>
@@ -656,7 +712,14 @@ const ProductManagement = () => {
                       </thead>
                       <tbody>
                         {products.map(product => (
-                          <tr key={product._id}>
+                          <tr key={product._id} style={{ backgroundColor: selectedProductIds.includes(product._id) ? '#f0f7ff' : 'transparent' }}>
+                            <td style={styles.td}>
+                              <input
+                                type="checkbox"
+                                checked={selectedProductIds.includes(product._id)}
+                                onChange={() => handleSelectProduct(product._id)}
+                              />
+                            </td>
                             <td style={{ ...styles.td, display: 'flex', alignItems: 'center', gap: '10px' }}>
                               {(() => {
                                 const rawImage = product.images && product.images.length > 0 ? product.images[0] : product.image;

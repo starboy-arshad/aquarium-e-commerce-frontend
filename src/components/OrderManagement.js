@@ -1,7 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { API_BASE_URL } from '../config';
-import './OrderManagement.css';
+import {
+  Search,
+  Eye,
+  CheckCircle,
+  Truck,
+  Clock,
+  XCircle,
+  ChevronDown,
+  Filter,
+  Download,
+  ShoppingBag,
+  CreditCard,
+  MapPin,
+  Calendar
+} from 'lucide-react';
+
 const OrderManagement = () => {
   const { user } = useAuth();
   const [orders, setOrders] = useState([]);
@@ -9,6 +24,7 @@ const OrderManagement = () => {
   const [error, setError] = useState('');
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [openDropdownId, setOpenDropdownId] = useState(null);
+  const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
     fetchOrders();
@@ -42,27 +58,6 @@ const OrderManagement = () => {
     }
   };
 
-  const handleMarkAsDelivered = async (orderId) => {
-    if (window.confirm('Are you sure you want to mark this order as delivered?')) {
-      try {
-        const response = await fetch(`${API_BASE_URL}/api/orders/${orderId}/deliver`, {
-          method: 'PUT',
-          headers: {
-            'Authorization': `Bearer ${user.token}`,
-          },
-        });
-        if (response.ok) {
-          fetchOrders(); // Refresh orders
-        } else {
-          const errorData = await response.json();
-          setError(errorData.message || 'Failed to update order');
-        }
-      } catch (err) {
-        setError('Failed to update order');
-      }
-    }
-  };
-
   const handleUpdateStatus = async (orderId, status) => {
     if (window.confirm(`Are you sure you want to mark this order as ${status}?`)) {
       try {
@@ -75,7 +70,7 @@ const OrderManagement = () => {
           body: JSON.stringify({ status }),
         });
         if (response.ok) {
-          fetchOrders(); // Refresh orders
+          fetchOrders();
         } else {
           const errorData = await response.json();
           setError(errorData.message || 'Failed to update order status');
@@ -86,213 +81,288 @@ const OrderManagement = () => {
     }
   };
 
-  const formatDate = (dateString) => {
-    return new Date(dateString).toLocaleDateString();
+  const filteredOrders = orders.filter(order =>
+    order._id.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    (order.user?.name || '').toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const getStatusBadge = (status) => {
+    switch (status?.toLowerCase()) {
+      case 'delivered':
+        return <span className="badge rounded-pill bg-success-subtle text-success px-3 py-2"><CheckCircle size={12} className="me-1" /> Delivered</span>;
+      case 'confirmed':
+        return <span className="badge rounded-pill bg-info-subtle text-info px-3 py-2"><Truck size={12} className="me-1" /> Confirmed</span>;
+      case 'cancelled':
+        return <span className="badge rounded-pill bg-danger-subtle text-danger px-3 py-2"><XCircle size={12} className="me-1" /> Cancelled</span>;
+      default:
+        return <span className="badge rounded-pill bg-warning-subtle text-warning px-3 py-2"><Clock size={12} className="me-1" /> Pending</span>;
+    }
   };
 
-  if (loading) return <div className="text-center mt-5">Loading orders...</div>;
+  if (loading) return (
+    <div className="d-flex justify-content-center align-items-center" style={{ minHeight: '400px' }}>
+      <div className="spinner-border text-primary" role="status"><span className="sr-only">Loading...</span></div>
+    </div>
+  );
 
   return (
-    <main className="main" style={{ paddingTop: '100px' }}>
-      <div className="container">
-        <div className="d-flex justify-content-between align-items-center mb-4">
-          <h1>Order Management</h1>
-          <a href="/admin" className="btn btn-secondary">Back to Admin Panel</a>
+    <div className="pb-5">
+      {/* Header & Stats Section */}
+      <div className="row mb-4 align-items-end">
+        <div className="col-lg-6 mb-3">
+          <h2 className="fw-bold mb-1">Order Management</h2>
+          <p className="text-muted mb-0">Track and manage all customer purchases</p>
         </div>
-
-        {error && <div className="alert alert-danger">{error}</div>}
-
-        <div className="card">
-          <div className="card-header">
-            <h5 className="mb-0">All Orders</h5>
+        <div className="col-lg-6 mb-3 text-lg-end">
+          <div className="d-inline-flex gap-2">
+            <button className="btn btn-outline-secondary btn-sm rounded-pill px-3">
+              <Download size={14} className="me-1" /> Export PDF
+            </button>
+            <div className="position-relative search-container">
+              <Search className="position-absolute translate-middle-y top-50 start-0 ms-3 text-muted" size={16} />
+              <input
+                type="text"
+                className="form-control form-control-sm rounded-pill ps-5 border-0 shadow-sm"
+                placeholder="Search Orders..."
+                style={{ height: '40px' }}
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+            </div>
           </div>
-          <div className="card-body">
-            <div className="table-responsive">
-              <table className="table table-striped">
-                <thead>
-                  <tr>
-                    <th>ID</th>
-                    <th>User</th>
-                    <th>Date</th>
-                    <th>Total</th>
-                    <th>Paid</th>
-                    <th>Delivered</th>
-                    <th>Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {orders.map(order => (
-                    <tr key={order._id}>
-                      <td>{order._id.substring(0, 8)}...</td>
-                      <td>{order.user?.name || 'N/A'}</td>
-                      <td>{formatDate(order.createdAt)}</td>
-                      <td>₹{order.totalPrice}</td>
-                      <td>
-                        {order.isPaid ? (
-                          <span className="badge bg-success">Paid</span>
-                        ) : (
-                          <span className="badge bg-warning">Pending</span>
-                        )}
-                      </td>
-                      <td>
-                        {order.status === 'delivered' ? (
-                          <span className="badge bg-success">Delivered</span>
-                        ) : (
-                          <span className="badge bg-warning">Pending</span>
-                        )}
-                      </td>
-                      <td>
+        </div>
+      </div>
+
+      {/* Summary Stats */}
+      <div className="row mb-4 summary-card-row">
+        {[
+          { label: 'Total Orders', count: orders.length, color: '#3182ce', icon: ShoppingBag },
+          { label: 'Pending', count: orders.filter(o => !o.isDelivered).length, color: '#f6ad55', icon: Clock },
+          { label: 'Delivered', count: orders.filter(o => o.status === 'delivered').length, color: '#48bb78', icon: CheckCircle },
+          { label: 'Total Sales', count: `₹${orders.reduce((acc, o) => acc + o.totalPrice, 0).toLocaleString()}`, color: '#805ad5', icon: CreditCard },
+        ].map((stat, idx) => (
+          <div className="col-md-3 mb-3 summary-card-col" key={idx}>
+            <div className="card border-0 shadow-sm p-3 h-100">
+              <div className="d-flex align-items-center">
+                <div style={{ backgroundColor: `${stat.color}15`, color: stat.color, padding: '10px', borderRadius: '10px' }} className="me-3">
+                  <stat.icon size={20} />
+                </div>
+                <div>
+                  <small className="text-muted text-uppercase fw-bold" style={{ fontSize: '0.7rem' }}>{stat.label}</small>
+                  <h4 className="fw-bold mb-0">{stat.count}</h4>
+                </div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Orders Table Card */}
+      <div className="card border-0 shadow-sm rounded-4 overflow-hidden">
+        <div className="table-responsive">
+          <table className="table table-hover align-middle mb-0">
+            <thead className="bg-light">
+              <tr className="text-muted small text-uppercase fw-bold">
+                <th className="px-4 py-3 border-0">Order ID</th>
+                <th className="border-0">Customer</th>
+                <th className="border-0">Date</th>
+                <th className="border-0">Total</th>
+                <th className="border-0">Payment</th>
+                <th className="border-0">Status</th>
+                <th className="border-0 text-end px-4">Action</th>
+              </tr>
+            </thead>
+            <tbody className="pm-table-body">
+              {filteredOrders.length > 0 ? (
+                filteredOrders.map(order => (
+                  <tr key={order._id}>
+                    <td className="px-4 py-3 fw-bold text-primary" data-label="Order ID">#{order._id.substring(0, 8)}</td>
+                    <td data-label="Customer">
+                      <div className="fw-bold">{order.user?.name || 'Guest'}</div>
+                      <small className="text-muted">{order.user?.email || 'No Email'}</small>
+                    </td>
+                    <td data-label="Date">{new Date(order.createdAt).toLocaleDateString()}</td>
+                    <td className="fw-bold" data-label="Total">₹{order.totalPrice.toLocaleString()}</td>
+                    <td data-label="Payment">
+                      {order.isPaid ? (
+                        <span className="text-success small fw-bold">● Paid</span>
+                      ) : (
+                        <span className="text-warning small fw-bold">○ Unpaid</span>
+                      )}
+                    </td>
+                    <td data-label="Status">{getStatusBadge(order.status)}</td>
+                    <td className="text-end px-4 mobile-actions">
+                      <div className="d-inline-flex gap-2">
                         <button
-                          className="btn btn-sm btn-info me-2"
+                          className="btn btn-light btn-sm border"
                           onClick={() => setSelectedOrder(order)}
+                          title="View Details"
                         >
-                          Details
+                          <Eye size={16} />
                         </button>
                         <div className="dropdown position-relative">
                           <button
-                            className="btn btn-sm btn-outline-secondary dropdown-toggle"
-                            type="button"
+                            className="btn btn-white btn-sm border d-flex align-items-center gap-1 dropdown-toggle"
                             onClick={(e) => {
                               e.stopPropagation();
                               setOpenDropdownId(openDropdownId === order._id ? null : order._id);
                             }}
                           >
-                            {order.status || 'Pending'}
+                            Update <ChevronDown size={14} />
                           </button>
-                          <ul
-                            className={`dropdown-menu ${openDropdownId === order._id ? 'show' : ''}`}
-                            style={{
-                              display: openDropdownId === order._id ? 'block' : 'none',
-                              position: 'absolute',
-                              right: 0,
-                              zIndex: 1000
-                            }}
-                          >
-                            <li>
-                              <button
-                                className="dropdown-item"
-                                onClick={() => {
-                                  handleUpdateStatus(order._id, 'pending');
-                                  setOpenDropdownId(null);
-                                }}
-                              >
-                                Pending
-                              </button>
-                            </li>
-                            <li>
-                              <button
-                                className="dropdown-item"
-                                onClick={() => {
-                                  handleUpdateStatus(order._id, 'confirmed');
-                                  setOpenDropdownId(null);
-                                }}
-                              >
-                                Confirmed
-                              </button>
-                            </li>
-                            <li>
-                              <button
-                                className="dropdown-item"
-                                onClick={() => {
-                                  handleUpdateStatus(order._id, 'delivered');
-                                  setOpenDropdownId(null);
-                                }}
-                              >
-                                Delivered
-                              </button>
-                            </li>
-                            <li>
-                              <button
-                                className="dropdown-item"
-                                onClick={() => {
-                                  handleUpdateStatus(order._id, 'cancelled');
-                                  setOpenDropdownId(null);
-                                }}
-                              >
-                                Cancelled
-                              </button>
-                            </li>
-                          </ul>
+                          {openDropdownId === order._id && (
+                            <div className="dropdown-menu show" style={{ position: 'absolute', right: 0, zIndex: 1000, boxShadow: '0 10px 15px rgba(0,0,0,0.1)' }}>
+                              {['pending', 'confirmed', 'delivered', 'cancelled'].map(status => (
+                                <button
+                                  key={status}
+                                  className="dropdown-item py-2 text-capitalize"
+                                  onClick={() => {
+                                    handleUpdateStatus(order._id, status);
+                                    setOpenDropdownId(null);
+                                  }}
+                                >
+                                  Mark as {status}
+                                </button>
+                              ))}
+                            </div>
+                          )}
                         </div>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="7" className="text-center py-5">
+                    <ShoppingBag size={48} className="text-muted mb-3 opacity-25 d-block mx-auto" />
+                    <p className="text-muted">No orders found matching your search</p>
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
         </div>
+      </div>
 
-        {/* Order Details Modal */}
-        {selectedOrder && (
-          <div className="modal fade show d-block" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
-            <div className="modal-dialog modal-lg">
-              <div className="modal-content">
-                <div className="modal-header">
-                  <h5 className="modal-title">Order Details - {selectedOrder._id}</h5>
+      {/* Order Details Modal */}
+      {selectedOrder && (
+        <div className="modal fade show d-block" style={{ backgroundColor: 'rgba(0,0,0,0.4)', backdropFilter: 'blur(4px)' }}>
+          <div className="modal-dialog modal-lg modal-dialog-centered">
+            <div className="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
+              <div className="modal-header border-0 bg-primary text-white p-4">
+                <div>
+                  <h5 className="modal-title fw-bold mb-0">Order Details</h5>
+                  <small className="opacity-75">#{selectedOrder._id}</small>
                 </div>
-                <div className="modal-body" style={{ maxHeight: '60vh', overflowY: 'auto' }}>
-                  <div className="row">
-                    <div className="col-md-6">
-                      <h6>Customer Information</h6>
-                      <p>
-                        <strong>Name:</strong> {selectedOrder.shippingAddress?.name || selectedOrder.user?.name || 'N/A'}<br />
-                        <strong>Address:</strong> {selectedOrder.shippingAddress.address}
-                        {selectedOrder.shippingAddress.apartment && `, ${selectedOrder.shippingAddress.apartment}`}<br />
-                        {selectedOrder.shippingAddress.city}, {selectedOrder.shippingAddress.state && `${selectedOrder.shippingAddress.state}, `} {selectedOrder.shippingAddress.postalCode}<br />
-                        {selectedOrder.shippingAddress.country}<br />
-                        <strong>Phone:</strong> {selectedOrder.shippingAddress.phone || 'N/A'}<br />
-                        <strong>Email:</strong> {selectedOrder.shippingAddress.email || selectedOrder.user?.email || 'N/A'}
-                      </p>
-                      <h6>Payment Method</h6>
-                      <p>{selectedOrder.paymentMethod}</p>
-                      {selectedOrder.orderNotes && (
-                        <div className="mt-3">
-                          <h6>Order Notes</h6>
-                          <p className="bg-light p-2 border rounded">{selectedOrder.orderNotes}</p>
-                        </div>
-                      )}
+                <button type="button" className="btn-close btn-close-white" onClick={() => setSelectedOrder(null)}></button>
+              </div>
+              <div className="modal-body p-4" style={{ maxHeight: '70vh', overflowY: 'auto' }}>
+                <div className="row g-4">
+                  {/* Left Column: Info */}
+                  <div className="col-md-7">
+                    <div className="mb-4">
+                      <h6 className="fw-bold mb-3 d-flex align-items-center"><MapPin size={18} className="me-2 text-primary" /> Shipping Information</h6>
+                      <div className="card bg-light border-0 p-3 rounded-3">
+                        <div className="fw-bold">{selectedOrder.shippingAddress?.name || selectedOrder.user?.name}</div>
+                        <div className="small text-muted mb-2">{selectedOrder.shippingAddress?.address}, {selectedOrder.shippingAddress?.city}</div>
+                        <div className="small">{selectedOrder.shippingAddress?.phone}</div>
+                        <div className="small">{selectedOrder.shippingAddress?.email || selectedOrder.user?.email}</div>
+                      </div>
                     </div>
-                    <div className="col-md-6">
-                      <h6>Order Items</h6>
-                      {selectedOrder.orderItems.map((item, index) => (
-                        <div key={index} className="d-flex justify-content-between mb-2">
-                          <span>{item.name} (x{item.qty})</span>
-                          <span>₹{item.price * item.qty}</span>
-                        </div>
-                      ))}
-                      <hr />
-                      <div className="d-flex justify-content-between mb-2">
-                        <span>Subtotal:</span>
-                        <span>₹{selectedOrder.itemsPrice}</span>
-                      </div>
-                      <div className="d-flex justify-content-between mb-2">
-                        <span>Shipping:</span>
-                        <span>₹{selectedOrder.shippingPrice}</span>
-                      </div>
-                      <hr />
-                      <div className="d-flex justify-content-between">
-                        <strong>Total:</strong>
-                        <strong>₹{selectedOrder.totalPrice}</strong>
+                    <div>
+                      <h6 className="fw-bold mb-3 d-flex align-items-center"><ShoppingBag size={18} className="me-2 text-primary" /> Order Items</h6>
+                      <div className="list-group list-group-flush">
+                        {selectedOrder.orderItems.map((item, idx) => (
+                          <div key={idx} className="list-group-item d-flex justify-content-between align-items-center px-0 py-2 border-0 border-bottom">
+                            <div>
+                              <div className="fw-bold small">{item.name}</div>
+                              <small className="text-muted">Qty: {item.qty} × ₹{item.price}</small>
+                            </div>
+                            <span className="fw-bold">₹{item.price * item.qty}</span>
+                          </div>
+                        ))}
                       </div>
                     </div>
                   </div>
+                  {/* Right Column: Pricing */}
+                  <div className="col-md-5">
+                    <div className="card shadow-sm border-0 p-3 rounded-4 bg-white mb-3">
+                      <h6 className="fw-bold mb-3 d-flex align-items-center"><CreditCard size={18} className="me-2 text-primary" /> Payment & Summary</h6>
+                      <div className="mb-3">
+                        <small className="text-muted d-block">Method</small>
+                        <span className="fw-bold">{selectedOrder.paymentMethod}</span>
+                      </div>
+                      <div className="d-flex justify-content-between mb-2 small">
+                        <span>Subtotal</span>
+                        <span>₹{selectedOrder.itemsPrice}</span>
+                      </div>
+                      <div className="d-flex justify-content-between mb-2 small">
+                        <span>Shipping</span>
+                        <span>₹{selectedOrder.shippingPrice}</span>
+                      </div>
+                      <hr className="my-2" />
+                      <div className="d-flex justify-content-between mb-0">
+                        <span className="fw-bold h5">Total</span>
+                        <span className="fw-bold h5 text-primary">₹{selectedOrder.totalPrice}</span>
+                      </div>
+                    </div>
+                    <div className="card bg-light border-0 p-3 rounded-4">
+                      <h6 className="fw-bold mb-2 small">Status</h6>
+                      <div className="mb-2">{getStatusBadge(selectedOrder.status)}</div>
+                      <small className="text-muted d-block mt-2"><Calendar size={12} className="me-1" /> Placed on {new Date(selectedOrder.createdAt).toLocaleString()}</small>
+                    </div>
+                  </div>
                 </div>
-                <div className="modal-footer">
-                  <button
-                    type="button"
-                    className="btn btn-secondary"
-                    onClick={() => setSelectedOrder(null)}
-                  >
-                    Close
-                  </button>
-                </div>
+              </div>
+              <div className="modal-footer border-0 p-4 pt-0">
+                <button className="btn btn-secondary rounded-pill px-4" onClick={() => setSelectedOrder(null)}>Close</button>
+                <button
+                  className="btn btn-primary rounded-pill px-4"
+                  onClick={() => window.open(`/invoice/${selectedOrder._id}`, '_blank')}
+                >
+                  Download Invoice
+                </button>
               </div>
             </div>
           </div>
-        )}
-      </div>
-    </main>
+        </div>
+      )}
+
+      <style>{`
+        .bg-success-subtle { background-color: #d1fae5; }
+        .bg-info-subtle { background-color: #e0f2fe; }
+        .bg-danger-subtle { background-color: #fee2e2; }
+        .bg-warning-subtle { background-color: #fef3c7; }
+        .text-success { color: #059669; }
+        .text-info { color: #0284c7; }
+        .text-danger { color: #dc2626; }
+        .text-warning { color: #d97706; }
+        .btn-white { background-color: #fff; }
+        .rounded-4 { border-radius: 1rem !important; }
+        .modal { z-index: 1050; }
+        .dropdown-item:hover { background-color: #f8fafc; color: #3182ce; }
+
+        @media (max-width: 991px) {
+          .summary-card-row { overflow-x: auto; flex-wrap: nowrap; padding-bottom: 15px; }
+          .summary-card-col { min-width: 250px; }
+        }
+
+        @media (max-width: 767px) {
+          .table thead { display: none; }
+          .table tbody tr { display: block; padding: 15px; border-bottom: 8px solid #f8fafc; position: relative; }
+          .table tbody td { display: flex; justify-content: flex-start; align-items: center; border: none; padding: 5px 0; font-size: 0.9rem; }
+          .table tbody td::before { content: attr(data-label); width: 100px; font-weight: bold; color: #718096; flex-shrink: 0; font-size: 0.8rem; text-transform: uppercase; }
+          .table tbody td.text-end { justify-content: flex-start; border-top: 1px solid #eee; margin-top: 10px; padding-top: 15px; }
+          .table tbody td.text-end::before { content: 'Actions'; }
+          
+          .search-container { width: 100% !important; margin-top: 15px; }
+          .header-actions { flex-direction: column; align-items: flex-start !important; }
+          
+          .modal-dialog { margin: 10px; }
+          .modal-body { padding: 15px !important; }
+        }
+      `}</style>
+    </div>
   );
 };
 

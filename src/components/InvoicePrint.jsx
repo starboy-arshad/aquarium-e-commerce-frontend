@@ -8,20 +8,26 @@ import './InvoicePrint.css';
 
 const InvoicePrint = () => {
   const { orderId } = useParams();
-  const { user } = useAuth();
+  const { user, loading: authLoading } = useAuth();
   const [order, setOrder] = useState(null);
   const invoiceRef = useRef();
 
   const fetchOrder = useCallback(async () => {
-    const response = await fetch(`${API_BASE_URL}/api/orders/${orderId}`, {
-      headers: {
-        Authorization: `Bearer ${user.token}`,
-      },
-    });
+    if (!user || !user.token) return;
 
-    const data = await response.json();
-    setOrder(data);
-  }, [orderId, user.token]);
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/orders/${orderId}`, {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      });
+
+      const data = await response.json();
+      setOrder(data);
+    } catch (err) {
+      console.error('Failed to fetch order for invoice:', err);
+    }
+  }, [orderId, user]);
 
   const generatePDF = useCallback(async () => {
     const element = invoiceRef.current;
@@ -49,7 +55,9 @@ const InvoicePrint = () => {
     }
   }, [order, generatePDF]);
 
-  if (!order) return <div>Generating Invoice...</div>;
+  if (authLoading) return <div className="p-5 text-center">Verifying session...</div>;
+  if (!user) return <div className="p-5 text-center text-danger">Unauthorized access. Please log in.</div>;
+  if (!order) return <div className="p-5 text-center">Generating Invoice...</div>;
 
   return (
     <div className="invoice-container" ref={invoiceRef}>
