@@ -264,8 +264,14 @@ const OrderManagement = () => {
                       <h6 className="fw-bold mb-3 d-flex align-items-center"><MapPin size={18} className="me-2 text-primary" /> Shipping Information</h6>
                       <div className="card bg-light border-0 p-3 rounded-3">
                         <div className="fw-bold">{selectedOrder.shippingAddress?.name || selectedOrder.user?.name}</div>
-                        <div className="small text-muted mb-2">{selectedOrder.shippingAddress?.address}, {selectedOrder.shippingAddress?.city}</div>
-                        <div className="small">{selectedOrder.shippingAddress?.phone}</div>
+                        <div className="small text-muted mb-1">
+                          {selectedOrder.shippingAddress?.address}
+                          {selectedOrder.shippingAddress?.apartment && `, ${selectedOrder.shippingAddress.apartment}`}
+                        </div>
+                        <div className="small text-muted mb-2">
+                          {selectedOrder.shippingAddress?.city}, {selectedOrder.shippingAddress?.state && `${selectedOrder.shippingAddress.state}, `} {selectedOrder.shippingAddress?.postalCode || selectedOrder.shippingAddress?.zip}
+                        </div>
+                        <div className="small fw-bold text-dark">{selectedOrder.shippingAddress?.phone}</div>
                         <div className="small">{selectedOrder.shippingAddress?.email || selectedOrder.user?.email}</div>
                       </div>
                     </div>
