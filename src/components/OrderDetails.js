@@ -16,6 +16,13 @@ const OrderDetails = () => {
     fetchOrderDetails();
   }, [orderId]);
 
+  useEffect(() => {
+    if (order && order.paymentMethod === 'PhonePe' && !order.isPaid) {
+      const interval = setInterval(checkPaymentStatus, 5000); // Check every 5 seconds
+      return () => clearInterval(interval);
+    }
+  }, [order]);
+
   const fetchOrderDetails = async () => {
     try {
       setLoading(true);
@@ -35,6 +42,22 @@ const OrderDetails = () => {
       setError('Failed to fetch order details');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const checkPaymentStatus = async () => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/phonepe/status/${orderId}`, {
+        headers: {
+          'Authorization': `Bearer ${user.token}`,
+        },
+      });
+      const data = await response.json();
+      if (data.success) {
+        fetchOrderDetails();
+      }
+    } catch (err) {
+      console.error('Error checking payment status:', err);
     }
   };
 

@@ -26,7 +26,7 @@ const Checkout = () => {
     orderNotes: ''
   });
 
-  const [paymentMethod, setPaymentMethod] = useState('bank-transfer');
+  const [paymentMethod, setPaymentMethod] = useState('phonepe');
   const [loading, setLoading] = useState(false);
 
   React.useEffect(() => {
@@ -105,6 +105,25 @@ const Checkout = () => {
         totalPrice: getCartTotal() + shippingPrice,
         orderNotes: billingDetails.orderNotes
       };
+
+      if (paymentMethod === 'phonepe') {
+        const phonePeResponse = await fetch(`${API_BASE_URL}/api/phonepe/pay`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${user.token}`,
+          },
+          body: JSON.stringify(orderData)
+        });
+        const data = await phonePeResponse.json();
+        if (data.url) {
+          clearCart();
+          window.location.href = data.url;
+          return;
+        } else {
+          throw new Error('PhonePe initiation failed');
+        }
+      }
 
       const response = await fetch(`${API_BASE_URL}/api/orders`, {
         method: 'POST',
@@ -378,46 +397,24 @@ const Checkout = () => {
 
                       <div className="accordion-summary" id="accordion-payment">
                         <div className="card">
-                          <div className="card-header" id="heading-1">
+                          <div className="card-header" id="heading-phonepe">
                             <h2 className="card-title">
                               <a
                                 role="button"
                                 data-toggle="collapse"
-                                href="#collapse-1"
-                                aria-expanded={paymentMethod === 'bank-transfer'}
-                                aria-controls="collapse-1"
-                                onClick={() => setPaymentMethod('bank-transfer')}
+                                href="#collapse-phonepe"
+                                aria-expanded={paymentMethod === 'phonepe'}
+                                aria-controls="collapse-phonepe"
+                                onClick={() => setPaymentMethod('phonepe')}
                               >
-                                Direct bank transfer
+                                PhonePe (UPI, Cards, NetBanking)
+                                <img src="https://www.logo.wine/a/logo/PhonePe/PhonePe-Logo.wine.svg" alt="PhonePe" style={{ height: '30px', marginLeft: '10px', verticalAlign: 'middle' }} />
                               </a>
                             </h2>
                           </div>
-                          <div id="collapse-1" className={`collapse ${paymentMethod === 'bank-transfer' ? 'show' : ''}`} aria-labelledby="heading-1" data-parent="#accordion-payment">
+                          <div id="collapse-phonepe" className={`collapse ${paymentMethod === 'phonepe' ? 'show' : ''}`} aria-labelledby="heading-phonepe" data-parent="#accordion-payment">
                             <div className="card-body">
-                              Make your payment directly into our bank account. Please use your Order ID as the payment reference. Your order will not be shipped until the funds have cleared in our account.
-                            </div>
-                          </div>
-                        </div>
-
-                        <div className="card">
-                          <div className="card-header" id="heading-2">
-                            <h2 className="card-title">
-                              <a
-                                className="collapsed"
-                                role="button"
-                                data-toggle="collapse"
-                                href="#collapse-2"
-                                aria-expanded={paymentMethod === 'check'}
-                                aria-controls="collapse-2"
-                                onClick={() => setPaymentMethod('check')}
-                              >
-                                Check payments
-                              </a>
-                            </h2>
-                          </div>
-                          <div id="collapse-2" className={`collapse ${paymentMethod === 'check' ? 'show' : ''}`} aria-labelledby="heading-2" data-parent="#accordion-payment">
-                            <div className="card-body">
-                              Ipsum dolor sit amet, consectetuer adipiscing elit. Donec odio. Quisque volutpat mattis eros. Nullam malesuada erat ut turpis.
+                              Pay securely using PhonePe. Supports UPI, Debit/Credit Cards, and NetBanking.
                             </div>
                           </div>
                         </div>
@@ -440,54 +437,30 @@ const Checkout = () => {
                           </div>
                           <div id="collapse-3" className={`collapse ${paymentMethod === 'cod' ? 'show' : ''}`} aria-labelledby="heading-3" data-parent="#accordion-payment">
                             <div className="card-body">
-                              Quisque volutpat mattis eros. Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec odio. Quisque volutpat mattis eros.
+                              Pay with cash upon delivery.
                             </div>
                           </div>
                         </div>
 
                         <div className="card">
-                          <div className="card-header" id="heading-4">
+                          <div className="card-header" id="heading-1">
                             <h2 className="card-title">
                               <a
                                 className="collapsed"
                                 role="button"
                                 data-toggle="collapse"
-                                href="#collapse-4"
-                                aria-expanded={paymentMethod === 'paypal'}
-                                aria-controls="collapse-4"
-                                onClick={() => setPaymentMethod('paypal')}
+                                href="#collapse-1"
+                                aria-expanded={paymentMethod === 'bank-transfer'}
+                                aria-controls="collapse-1"
+                                onClick={() => setPaymentMethod('bank-transfer')}
                               >
-                                PayPal <small className="float-right paypal-link">What is PayPal?</small>
+                                Direct bank transfer
                               </a>
                             </h2>
                           </div>
-                          <div id="collapse-4" className={`collapse ${paymentMethod === 'paypal' ? 'show' : ''}`} aria-labelledby="heading-4" data-parent="#accordion-payment">
+                          <div id="collapse-1" className={`collapse ${paymentMethod === 'bank-transfer' ? 'show' : ''}`} aria-labelledby="heading-1" data-parent="#accordion-payment">
                             <div className="card-body">
-                              Nullam malesuada erat ut turpis. Suspendisse urna nibh, viverra non, semper suscipit, posuere a, pede. Donec nec justo eget felis facilisis fermentum.
-                            </div>
-                          </div>
-                        </div>
-
-                        <div className="card">
-                          <div className="card-header" id="heading-5">
-                            <h2 className="card-title">
-                              <a
-                                className="collapsed"
-                                role="button"
-                                data-toggle="collapse"
-                                href="#collapse-5"
-                                aria-expanded={paymentMethod === 'stripe'}
-                                aria-controls="collapse-5"
-                                onClick={() => setPaymentMethod('stripe')}
-                              >
-                                Credit Card (Stripe)
-                                <img src={`${process.env.PUBLIC_URL}/assets/images/payments-summary.png`} alt="payments cards" />
-                              </a>
-                            </h2>
-                          </div>
-                          <div id="collapse-5" className={`collapse ${paymentMethod === 'stripe' ? 'show' : ''}`} aria-labelledby="heading-5" data-parent="#accordion-payment">
-                            <div className="card-body">
-                              Donec nec justo eget felis facilisis fermentum.Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec odio. Quisque volutpat mattis eros. Lorem ipsum dolor sit ame.
+                              Make your payment directly into our bank account. Please use your Order ID as the payment reference. Your order will not be shipped until the funds have cleared in our account.
                             </div>
                           </div>
                         </div>
