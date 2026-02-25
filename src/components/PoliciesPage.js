@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { API_BASE_URL } from '../config';
+import DOMPurify from 'dompurify';
 
 const PoliciesPage = () => {
   const [policies, setPolicies] = useState({
@@ -108,22 +109,22 @@ const PoliciesPage = () => {
                 <div className="tab-content mt-4">
                   {activeTab === 'shipping' && (
                     <div className="tab-pane active">
-                      <div dangerouslySetInnerHTML={{ __html: policies.shippingPolicy }} />
+                      <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(policies.shippingPolicy) }} />
                     </div>
                   )}
                   {activeTab === 'returns' && (
                     <div className="tab-pane active">
-                      <div dangerouslySetInnerHTML={{ __html: policies.refundPolicy }} />
+                      <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(policies.refundPolicy) }} />
                     </div>
                   )}
                   {activeTab === 'terms' && (
                     <div className="tab-pane active">
-                      <div dangerouslySetInnerHTML={{ __html: policies.termsAndConditions }} />
+                      <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(policies.termsAndConditions) }} />
                     </div>
                   )}
                   {activeTab === 'privacy' && (
                     <div className="tab-pane active">
-                      <div dangerouslySetInnerHTML={{ __html: policies.privacyPolicy }} />
+                      <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(policies.privacyPolicy) }} />
                     </div>
                   )}
                 </div>

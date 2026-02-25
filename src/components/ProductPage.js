@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import { useCart } from '../contexts/CartContext';
 import { API_BASE_URL } from '../config';
+import DOMPurify from 'dompurify';
 
 const ProductPage = () => {
   const { id } = useParams();
@@ -387,8 +388,8 @@ const ProductPage = () => {
               </div>
               <div className="tab-pane fade" id="product-shipping-tab" role="tabpanel" aria-labelledby="product-shipping-link">
                 <div className="product-desc-content">
-                  <div dangerouslySetInnerHTML={{ __html: policies.shippingPolicy }} />
-                  <div dangerouslySetInnerHTML={{ __html: policies.refundPolicy }} />
+                  <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(policies.shippingPolicy) }} />
+                  <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(policies.refundPolicy) }} />
                 </div>
               </div>
             </div>

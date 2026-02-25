@@ -42,6 +42,7 @@ export const AuthProvider = ({ children }) => {
         headers: {
           'Content-Type': 'application/json',
         },
+        credentials: 'include',
         body: JSON.stringify({ email, password }),
       });
       const data = await response.json();
@@ -64,6 +65,7 @@ export const AuthProvider = ({ children }) => {
         headers: {
           'Content-Type': 'application/json',
         },
+        credentials: 'include',
         body: JSON.stringify({ name, email, password, phone }),
       });
       const data = await response.json();
@@ -108,13 +110,12 @@ export const AuthProvider = ({ children }) => {
   const updateProfile = async (name, email, password, currentPassword, phone, billingAddress, shippingAddress) => {
     try {
       dispatch({ type: 'LOGIN_START' });
-      const userInfo = JSON.parse(localStorage.getItem('userInfo'));
       const response = await fetch(`${API_BASE_URL}/api/users/profile`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${userInfo.token}`,
         },
+        credentials: 'include',
         body: JSON.stringify({ name, email, password, currentPassword, phone, billingAddress, shippingAddress }),
       });
       const data = await response.json();
@@ -210,6 +211,7 @@ export const AuthProvider = ({ children }) => {
       const response = await fetch(`${API_BASE_URL}/api/users/signup-complete`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
         body: JSON.stringify({ email, password, otp }),
       });
       const data = await response.json();

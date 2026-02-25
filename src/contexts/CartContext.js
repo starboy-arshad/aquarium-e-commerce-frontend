@@ -17,13 +17,9 @@ export const CartProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(false);
   const { user } = useAuth();
 
-  // Helper function to get auth headers
-  const getAuthHeaders = () => {
-    const userInfo = JSON.parse(localStorage.getItem('userInfo'));
-    return userInfo?.token ? {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${userInfo.token}`,
-    } : {
+  // Helper function to get base headers
+  const getBaseHeaders = () => {
+    return {
       'Content-Type': 'application/json',
     };
   };
@@ -37,7 +33,8 @@ export const CartProvider = ({ children }) => {
         try {
           setIsLoading(true);
           const response = await fetch(`${API_BASE_URL}/api/cart`, {
-            headers: getAuthHeaders(),
+            headers: getBaseHeaders(),
+            credentials: 'include',
           });
 
           if (response.ok) {
@@ -121,7 +118,8 @@ export const CartProvider = ({ children }) => {
         console.log('Adding to cart for logged-in user');
         const response = await fetch(`${API_BASE_URL}/api/cart`, {
           method: 'POST',
-          headers: getAuthHeaders(),
+          headers: getBaseHeaders(),
+          credentials: 'include',
           body: JSON.stringify({
             productId: product._id,
             name: product.name,
@@ -180,7 +178,8 @@ export const CartProvider = ({ children }) => {
       try {
         const deleteResponse = await fetch(`${API_BASE_URL}/api/cart/${id}`, {
           method: 'DELETE',
-          headers: getAuthHeaders(),
+          headers: getBaseHeaders(),
+          credentials: 'include',
         });
         if (deleteResponse.ok) {
           // Update local state only if delete was successful
@@ -207,7 +206,8 @@ export const CartProvider = ({ children }) => {
       try {
         const updateResponse = await fetch(`${API_BASE_URL}/api/cart/${id}`, {
           method: 'PUT',
-          headers: getAuthHeaders(),
+          headers: getBaseHeaders(),
+          credentials: 'include',
           body: JSON.stringify({ quantity }),
         });
         if (updateResponse.ok) {
@@ -241,14 +241,16 @@ export const CartProvider = ({ children }) => {
       // Clear existing cart and add all items
       await fetch(`${API_BASE_URL}/api/cart`, {
         method: 'DELETE',
-        headers: getAuthHeaders(),
+        headers: getBaseHeaders(),
+        credentials: 'include',
       });
 
       // Add each item to database
       for (const item of items) {
         await fetch(`${API_BASE_URL}/api/cart`, {
           method: 'POST',
-          headers: getAuthHeaders(),
+          headers: getBaseHeaders(),
+          credentials: 'include',
           body: JSON.stringify({
             productId: item.id,
             name: item.name,
@@ -268,7 +270,8 @@ export const CartProvider = ({ children }) => {
       try {
         await fetch(`${API_BASE_URL}/api/cart`, {
           method: 'DELETE',
-          headers: getAuthHeaders(),
+          headers: getBaseHeaders(),
+          credentials: 'include',
         });
       } catch (error) {
         console.error('Error clearing cart:', error);
