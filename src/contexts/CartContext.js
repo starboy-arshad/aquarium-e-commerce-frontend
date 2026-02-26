@@ -19,9 +19,13 @@ export const CartProvider = ({ children }) => {
 
   // Helper function to get base headers
   const getBaseHeaders = () => {
-    return {
+    const headers = {
       'Content-Type': 'application/json',
     };
+    if (user && user.token) {
+      headers['Authorization'] = `Bearer ${user.token}`;
+    }
+    return headers;
   };
 
 
@@ -63,8 +67,13 @@ export const CartProvider = ({ children }) => {
             await syncCartItemsToDatabase(mergedItems);
           } else if (response.status === 401) {
             console.error('Session expired or unauthorized. Clearing user info.');
-            localStorage.removeItem('userInfo');
-            localStorage.removeItem('cart');
+            // Only clear if we actually had a user
+            if (user) {
+              localStorage.removeItem('userInfo');
+              // We don't necessarily want to reload the whole page, 
+              // but we should probably trigger a logout in AuthContext if possible.
+              // For now, just clear local state to stop the 401 loop.
+            }
             setCartItems([]);
           } else {
             // No database cart exists or other error, sync local cart to database
