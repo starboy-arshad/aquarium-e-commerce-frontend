@@ -51,7 +51,7 @@ const BannerGroup = () => {
           }
         }'>
           <div className="banner mb-0">
-            <a href="#">
+            <a href="/shop">
               <img src={`${process.env.PUBLIC_URL}/assets/card1.jpg`} width="460" height="210" alt="Fresh Fruit" />
             </a>
             <div className="banner-content p-3">
@@ -61,7 +61,7 @@ const BannerGroup = () => {
             </div>
           </div>
           <div className="banner mb-0">
-            <a href="#">
+            <a href="/accessories">
               <img src={`${process.env.PUBLIC_URL}/assets/card2.jpg`} width="460" height="210" alt="Our Standards" />
             </a>
             <div className="banner-content p-3">
@@ -71,7 +71,7 @@ const BannerGroup = () => {
             </div>
           </div>
           <div className="banner mb-0">
-            <a href="#">
+            <a href="/full-marine-setup">
               <img src={`${process.env.PUBLIC_URL}/assets/card3.png`} width="460" height="210" alt="Diet Products" />
             </a>
             <div className="banner-content p-3">
