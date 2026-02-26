@@ -73,7 +73,7 @@ const HeroSlider = () => {
           <div className="overlay"></div>
           <div className="container">
             <div className="intro-content intro-content-left">
-              <h6 className="font-weight-normal text-primary my-2 mt-0">Aquarium Sale</h6>
+              <h6 className="font-weight-normal text-primary my-2 mt-0">Aquarium 's Sale</h6>
               <h3 className="intro-title font-weight-bold text-white mb-0">Erode Marine<br />Aquarium</h3>
               <h3 className="intro-desc mb-2 font-weight-light text-secondary">"Bring the Ocean Home"</h3>
               <Link to="/shop" className="btn btn-primary text-uppercase">Shop now</Link>
