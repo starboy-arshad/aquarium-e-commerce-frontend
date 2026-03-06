@@ -65,10 +65,10 @@ const Footer = () => {
           <div className="social-icons social-icons-color justify-content-center">
             <span className="social-label">Social Media</span>
             <a href="#" className="social-icon social-facebook" title="Facebook" target="_blank"><i className="icon-facebook-f"></i></a>
-            <a href="#" className="social-icon social-twitter" title="Twitter" target="_blank"><i className="icon-twitter"></i></a>
-            <a href="#" className="social-icon social-instagram" title="Instagram" target="_blank"><i className="icon-instagram"></i></a>
-            <a href="#" className="social-icon social-youtube" title="Youtube" target="_blank"><i className="icon-youtube"></i></a>
-            <a href="#" className="social-icon social-pinterest" title="Pinterest" target="_blank"><i className="icon-pinterest"></i></a>
+            
+            <a href="https://www.instagram.com/erode_marine_aquarium?igsh=MTh0ZHRyd3RpbmxlMQ==" className="social-icon social-instagram" title="Instagram" target="_blank"><i className="icon-instagram"></i></a>
+            <a href="https://www.youtube.com/@Erode_marine_aquarium_07" className="social-icon social-youtube" title="Youtube" target="_blank"><i className="icon-youtube"></i></a>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
           </div>
         </div>
       </div>
