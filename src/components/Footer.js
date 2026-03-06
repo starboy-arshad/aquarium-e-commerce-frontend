@@ -18,7 +18,7 @@ const Footer = () => {
                   <div className="row">
                     <div className="col-sm-6 col-md-4">
                       <span className="widget-about-title text-white">Got Question? Call us </span>
-                      <a href="tel:123456789" className="text-primary">+91 7010934029</a>
+                      <a href="tel:7010934029" className="text-primary">+91 7010934029</a>
                     </div>
                   </div>
                 </div>
@@ -58,8 +58,8 @@ const Footer = () => {
         <div className="container">
           <p className="footer-copyright font-weight-light text-light">Copyright © 2024 Aquarium Shop. All Rights Reserved.</p>
           <ul className="footer-menu justify-content-center">
-            <li><a href="#">Terms Of Use</a></li>
-            <li><a href="#">Privacy Policy</a></li>
+            <li><a href="Policies#terms">Terms Of Use</a></li>
+            <li><a href="Policies#privacy">Privacy Policy</a></li>
           </ul>
 
           <div className="social-icons social-icons-color justify-content-center">
