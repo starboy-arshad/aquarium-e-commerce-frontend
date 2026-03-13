@@ -25,6 +25,8 @@ const OrderManagement = () => {
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [openDropdownId, setOpenDropdownId] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
+  const [statusFilter, setStatusFilter] = useState('all');
+
 
   useEffect(() => {
     fetchOrders();
@@ -81,10 +83,18 @@ const OrderManagement = () => {
     }
   };
 
-  const filteredOrders = orders.filter(order =>
-    order._id.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    (order.user?.name || '').toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredOrders = orders.filter(order => {
+    const matchesSearch = order._id.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (order.user?.name || '').toLowerCase().includes(searchTerm.toLowerCase());
+    
+    const matchesStatus = statusFilter === 'all' || 
+      (statusFilter === 'pending' && (!order.isDelivered && order.status !== 'cancelled' && order.status !== 'cancel_requested')) ||
+      (statusFilter === 'delivered' && order.status === 'delivered') ||
+      (statusFilter === 'cancel_requested' && order.status === 'cancel_requested');
+      
+    return matchesSearch && matchesStatus;
+  });
+
 
   const getStatusBadge = (status) => {
     switch (status?.toLowerCase()) {
@@ -136,15 +146,26 @@ const OrderManagement = () => {
       </div>
 
       {/* Summary Stats */}
-      <div className="row mb-4 summary-card-row">
+      <div className="row row-cols-1 row-cols-md-3 row-cols-lg-5 mb-4 summary-card-row">
         {[
-          { label: 'Total Orders', count: orders.length, color: '#3182ce', icon: ShoppingBag },
-          { label: 'Pending', count: orders.filter(o => !o.isDelivered).length, color: '#f6ad55', icon: Clock },
-          { label: 'Delivered', count: orders.filter(o => o.status === 'delivered').length, color: '#48bb78', icon: CheckCircle },
-          { label: 'Total Sales', count: `₹${orders.reduce((acc, o) => acc + o.totalPrice, 0).toLocaleString()}`, color: '#805ad5', icon: CreditCard },
+          { id: 'all', label: 'Total Orders', count: orders.length, color: '#3182ce', icon: ShoppingBag },
+          { id: 'pending', label: 'Pending', count: orders.filter(o => !o.isDelivered && o.status !== 'cancelled' && o.status !== 'cancel_requested').length, color: '#f6ad55', icon: Clock },
+          { id: 'cancel_requested', label: 'Cancellation Requested', count: orders.filter(o => o.status === 'cancel_requested').length, color: '#e53e3e', icon: XCircle },
+          { id: 'delivered', label: 'Delivered', count: orders.filter(o => o.status === 'delivered').length, color: '#48bb78', icon: CheckCircle },
+          { id: 'sales', label: 'Total Sales', count: `₹${orders.reduce((acc, o) => acc + o.totalPrice, 0).toLocaleString()}`, color: '#805ad5', icon: CreditCard, noFilter: true },
         ].map((stat, idx) => (
-          <div className="col-md-3 mb-3 summary-card-col" key={idx}>
-            <div className="card border-0 shadow-sm p-3 h-100">
+          <div 
+            className="col mb-3 summary-card-col" 
+            key={idx} 
+            style={{ cursor: stat.noFilter ? 'default' : 'pointer' }}
+            onClick={() => !stat.noFilter && setStatusFilter(stat.id)}
+          >
+            <div className={`card border-0 shadow-sm p-3 h-100 transition-all`}
+                 style={{ 
+                   border: statusFilter === stat.id ? `2px solid ${stat.color}` : 'none',
+                   transform: statusFilter === stat.id ? 'translateY(-5px)' : 'none',
+                   transition: 'all 0.3s ease'
+                 }}>
               <div className="d-flex align-items-center">
                 <div style={{ backgroundColor: `${stat.color}15`, color: stat.color, padding: '10px', borderRadius: '10px' }} className="me-3">
                   <stat.icon size={20} />
@@ -158,6 +179,7 @@ const OrderManagement = () => {
           </div>
         ))}
       </div>
+
 
       {/* Orders Table Card */}
       <div className="card border-0 shadow-sm rounded-4 overflow-hidden">

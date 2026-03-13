@@ -71,6 +71,21 @@ const OrderDetails = () => {
     });
   };
 
+  const getStatusConfig = (status) => {
+    switch (status?.toLowerCase()) {
+      case 'delivered':
+        return { color: '#059669', bg: '#d1fae5', icon: 'bi-check-circle-fill', label: 'Delivered' };
+      case 'confirmed':
+        return { color: '#0284c7', bg: '#e0f2fe', icon: 'bi-truck', label: 'Confirmed' };
+      case 'cancelled':
+        return { color: '#dc2626', bg: '#fee2e2', icon: 'bi-x-circle-fill', label: 'Cancelled' };
+      case 'cancel_requested':
+        return { color: '#dc2626', bg: '#fee2e2', icon: 'bi-exclamation-triangle-fill', label: 'Cancellation Requested' };
+      default:
+        return { color: '#d97706', bg: '#fef3c7', icon: 'bi-clock-fill', label: 'Pending' };
+    }
+  };
+
   const handleCancelOrder = async () => {
     if (!window.confirm('Are you sure you want to cancel this order?')) {
       return;
@@ -156,24 +171,39 @@ const OrderDetails = () => {
           <div className="col-lg-8">
             {/* Order Summary */}
             <div className="card mb-4">
-              <div className="card-header">
-                <h5 className="mb-0">Order #{order._id.substring(0, 8)}...</h5>
-                <div className="order-meta d-flex justify-content-between align-items-center mt-2">
+              <div className="card-header bg-white border-bottom-0 pt-4 px-4">
+                <div className="d-flex justify-content-between align-items-start">
                   <div>
-                    <span className="badge bg-primary me-2">Order Date: {formatDate(order.createdAt)}</span> &nbsp; &nbsp;
-                    <span className={`badge ${order.status === 'delivered' ? 'bg-success' : (order.status === 'cancelled' || order.status === 'cancel_requested') ? 'bg-danger' : 'bg-warning'}`}>
-                      Status: {order.status === 'cancel_requested' ? 'Cancellation Requested' : (order.status || 'Pending')}
-                    </span>
+                    <h5 className="fw-bold mb-1">Order #{order._id.substring(0, 8)}</h5>
+                    <p className="text-muted small mb-0">Placed on {formatDate(order.createdAt)}</p>
                   </div>
-                  <div>
-                    {order.isPaid ? (
-                      <span className="badge bg-success">Paid</span>
-                    ) : (
-                      <span className="badge bg-warning">Pending Payment</span>
-                    )}
+                  <div className="text-end">
+                    {(() => {
+                      const config = getStatusConfig(order.status);
+                      return (
+                        <span 
+                          className="badge rounded-pill px-3 py-2 d-inline-flex align-items-center gap-1"
+                          style={{ backgroundColor: config.bg, color: config.color, fontSize: '0.85rem' }}
+                        >
+                          <i className={`bi ${config.icon}`}></i> {config.label}
+                        </span>
+                      );
+                    })()}
+                    <div className="mt-2">
+                      {order.isPaid ? (
+                        <span className="badge rounded-pill bg-success-subtle text-success px-3 py-1 small">
+                          <i className="bi bi-patch-check-fill me-1"></i> Paid
+                        </span>
+                      ) : (
+                        <span className="badge rounded-pill bg-warning-subtle text-warning px-3 py-1 small">
+                          <i className="bi bi-hourglass-split me-1"></i> Payment Pending
+                        </span>
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>
+
               <div className="card-body">
                 <div className="row">
                   <div className="col-md-6">
@@ -320,47 +350,94 @@ const OrderDetails = () => {
             </div>
 
             {/* Order Status Timeline */}
-            <div className="card">
-              <div className="card-header">
-                <h4 className="mb-0">Order Status</h4> <br />
+            <div className="card border-0 shadow-sm overflow-hidden">
+              <div className="card-header bg-white border-bottom py-3">
+                <h5 className="fw-bold mb-0">Track Order</h5>
               </div>
-              <div className="card-body">
-                <div className="timeline">
-                  <div className="timeline-item">
-                    <div className="timeline-marker">
-                      <i className="bi bi-cart-check"></i>
+              <div className="card-body p-4">
+                <div className="modern-timeline">
+                  {/* Step 1: Placed */}
+                  <div className={`timeline-step completed`}>
+                    <div className="step-icon">
+                      <i className="bi bi-bag-check"></i>
                     </div>
-                    <div className="timeline-content">
-                      <h6>Order Placed</h6>
-                      <p className="text-muted mb-0">{formatDate(order.createdAt)}</p>
+                    <div className="step-content">
+                      <h6 className="fw-bold mb-0">Order Placed</h6>
+                      <p className="text-muted small">{formatDate(order.createdAt)}</p>
                     </div>
                   </div>
 
-                  <div className="timeline-item">
-                    <div className="timeline-marker">
-                      <i className="bi bi-credit-card"></i>
+                  {/* Step 2: Payment */}
+                  <div className={`timeline-step ${order.isPaid ? 'completed' : 'active'}`}>
+                    <div className="step-icon">
+                      <i className={`bi ${order.isPaid ? 'bi-credit-card-2-front-fill' : 'bi-credit-card'}`}></i>
                     </div>
-                    <div className="timeline-content">
-                      <h6>Payment {order.isPaid ? 'Completed' : 'Pending'}</h6>
-                      <p className="text-muted mb-0">
-                        {order.isPaid ? formatDate(order.paidAt) : 'Awaiting payment'}
+                    <div className="step-content">
+                      <h6 className="fw-bold mb-0">Payment {order.isPaid ? 'Confirmed' : 'Pending'}</h6>
+                      <p className="text-muted small">
+                        {order.isPaid ? `Processed on ${formatDate(order.paidAt)}` : 'Awaiting payment confirmation'}
                       </p>
                     </div>
                   </div>
 
-                  <div className="timeline-item">
-                    <div className="timeline-marker">
-                      <i className="bi bi-truck"></i>
+                  {/* Step 3: Status Progression */}
+                  {order.status === 'cancelled' || order.status === 'cancel_requested' ? (
+                    <div className="timeline-step active danger">
+                      <div className="step-icon">
+                        <i className={`bi ${order.status === 'cancelled' ? 'bi-x-circle-fill' : 'bi-exclamation-octagon'}`}></i>
+                      </div>
+                      <div className="step-content">
+                        <h6 className="fw-bold mb-0">{order.status === 'cancelled' ? 'Order Cancelled' : 'Cancellation Request'}</h6>
+                        <p className="text-muted small">
+                          {order.status === 'cancelled' 
+                            ? 'Your order has been cancelled and refund is initiated if applicable.' 
+                            : 'We have received your cancellation request.'}
+                        </p>
+                      </div>
                     </div>
-                    <div className="timeline-content">
-                      <h6>Order {order.status === 'delivered' ? 'Delivered' : 'In Progress'}</h6>
-                      <p className="text-muted mb-0">
-                        {order.status === 'delivered' && order.deliveredAt
-                          ? formatDate(order.deliveredAt)
-                          : 'Your order is being processed'}
-                      </p>
-                    </div>
-                  </div>
+                  ) : (
+                    <>
+                      <div className={`timeline-step ${order.status === 'confirmed' || order.status === 'delivered' ? 'completed' : 'active'}`}>
+                        <div className="step-icon">
+                          <i className="bi bi-box-seam"></i>
+                        </div>
+                        <div className="step-content">
+                          <h6 className="fw-bold mb-0">Processing</h6>
+                          <p className="text-muted small">
+                            {order.status === 'confirmed' || order.status === 'delivered'
+                              ? 'Order confirmed and packed'
+                              : 'Your order is being prepared'}
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className={`timeline-step ${order.status === 'delivered' ? 'completed' : ''}`}>
+                        <div className="step-icon">
+                          <i className="bi bi-truck"></i>
+                        </div>
+                        <div className="step-content">
+                          <h6 className="fw-bold mb-0">Out for Delivery</h6>
+                          <p className="text-muted small">
+                            {order.status === 'delivered' ? 'Package handed over to courier' : 'Expected soon'}
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className={`timeline-step ${order.status === 'delivered' ? 'completed success' : ''}`}>
+                        <div className="step-icon">
+                          <i className="bi bi-house-check-fill"></i>
+                        </div>
+                        <div className="step-content">
+                          <h6 className="fw-bold mb-0">Delivered</h6>
+                          <p className="text-muted small">
+                            {order.status === 'delivered' && order.deliveredAt
+                              ? `Delivered on ${formatDate(order.deliveredAt)}`
+                              : 'Waiting for delivery'}
+                          </p>
+                        </div>
+                      </div>
+                    </>
+                  )}
                 </div>
               </div>
             </div>
