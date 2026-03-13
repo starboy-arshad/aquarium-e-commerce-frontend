@@ -94,6 +94,8 @@ const OrderManagement = () => {
         return <span className="badge rounded-pill bg-info-subtle text-info px-3 py-2"><Truck size={12} className="me-1" /> Confirmed</span>;
       case 'cancelled':
         return <span className="badge rounded-pill bg-danger-subtle text-danger px-3 py-2"><XCircle size={12} className="me-1" /> Cancelled</span>;
+      case 'cancel_requested':
+        return <span className="badge rounded-pill bg-danger-subtle text-danger px-3 py-2 animation-pulse"><Clock size={12} className="me-1" /> Cancellation Requested</span>;
       default:
         return <span className="badge rounded-pill bg-warning-subtle text-warning px-3 py-2"><Clock size={12} className="me-1" /> Pending</span>;
     }
@@ -212,6 +214,17 @@ const OrderManagement = () => {
                           </button>
                           {openDropdownId === order._id && (
                             <div className="dropdown-menu show" style={{ position: 'absolute', right: 0, zIndex: 1000, boxShadow: '0 10px 15px rgba(0,0,0,0.1)' }}>
+                              {order.status === 'cancel_requested' && (
+                                <button
+                                  className="dropdown-item py-2 text-danger fw-bold"
+                                  onClick={() => {
+                                    handleUpdateStatus(order._id, 'cancelled');
+                                    setOpenDropdownId(null);
+                                  }}
+                                >
+                                  Approve Cancellation
+                                </button>
+                              )}
                               {['pending', 'confirmed', 'delivered', 'cancelled'].map(status => (
                                 <button
                                   key={status}
@@ -347,6 +360,12 @@ const OrderManagement = () => {
         .rounded-4 { border-radius: 1rem !important; }
         .modal { z-index: 1050; }
         .dropdown-item:hover { background-color: #f8fafc; color: #3182ce; }
+        .animation-pulse { animation: pulse 2s infinite; }
+        @keyframes pulse {
+          0% { opacity: 1; }
+          50% { opacity: 0.6; }
+          100% { opacity: 1; }
+        }
 
         @media (max-width: 991px) {
           .summary-card-row { overflow-x: auto; flex-wrap: nowrap; padding-bottom: 15px; }

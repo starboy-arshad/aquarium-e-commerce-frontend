@@ -83,7 +83,7 @@ const OrderDetails = () => {
           'Authorization': `Bearer ${user.token}`,
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ status: 'cancelled' }),
+        body: JSON.stringify({ status: 'cancel_requested' }),
       });
 
       if (response.ok) {
@@ -161,8 +161,8 @@ const OrderDetails = () => {
                 <div className="order-meta d-flex justify-content-between align-items-center mt-2">
                   <div>
                     <span className="badge bg-primary me-2">Order Date: {formatDate(order.createdAt)}</span> &nbsp; &nbsp;
-                    <span className={`badge ${order.status === 'delivered' ? 'bg-success' : order.status === 'cancelled' ? 'bg-danger' : 'bg-warning'}`}>
-                      Status: {order.status || 'Pending'}
+                    <span className={`badge ${order.status === 'delivered' ? 'bg-success' : (order.status === 'cancelled' || order.status === 'cancel_requested') ? 'bg-danger' : 'bg-warning'}`}>
+                      Status: {order.status === 'cancel_requested' ? 'Cancellation Requested' : (order.status || 'Pending')}
                     </span>
                   </div>
                   <div>
@@ -295,13 +295,18 @@ const OrderDetails = () => {
                     Continue Shopping
                   </button>
                   &nbsp;
-                  {order.status !== 'cancelled' && !order.isDelivered && (
+                  {order.status !== 'cancelled' && order.status !== 'cancel_requested' && !order.isDelivered && (
                     <button
                       className="btn btn-danger"
                       onClick={handleCancelOrder}
                     >
-                      Cancel Order
+                      Request Cancellation
                     </button>
+                  )}
+                  {order.status === 'cancel_requested' && (
+                    <div className="alert alert-info py-2 mb-0 text-center" style={{ fontSize: '0.9rem' }}>
+                      Cancellation request is pending admin approval.
+                    </div>
                   )}
 
                   <button

@@ -236,8 +236,8 @@ const AccountPage = () => {
                                     <td>{new Date(order.createdAt).toLocaleDateString()}</td>
                                     <td>₹{order.totalPrice}</td>
                                     <td>
-                                      <span className={`badge ${order.status === 'delivered' ? 'bg-success' : 'bg-warning'}`}>
-                                        {order.status || 'Pending'}
+                                      <span className={`badge ${order.status === 'delivered' ? 'bg-success' : (order.status === 'cancelled' || order.status === 'cancel_requested') ? 'bg-danger' : 'bg-warning'}`}>
+                                        {order.status === 'cancel_requested' ? 'Cancellation Requested' : (order.status || 'Pending')}
                                       </span>
                                     </td>
                                     <td>
