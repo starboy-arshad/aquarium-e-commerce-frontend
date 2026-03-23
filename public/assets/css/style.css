@@ -5180,8 +5180,8 @@ a:focus {
     margin-left: 5.6rem; }
   .header-28 .menu > li + li {
     margin-left: 1rem; }
-  .header-28 .menu.sf-arrows .sf-with-ul::after {
-    right: 10px; }
+  /* .header-28 .menu.sf-arrows .sf-with-ul::after {
+    right: 10px; } */
   .header-28 .cart-txt {
     margin-left: 1.3rem;
     font-size: 1.3rem; }

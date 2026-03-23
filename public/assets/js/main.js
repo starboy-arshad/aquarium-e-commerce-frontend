@@ -82,10 +82,10 @@ $(document).ready(function () {
     });
 
 	// Add Mobile menu icon arrows to items with children
-    $('.mobile-menu').find('li').each(function () {
+    $('.mobile-menu').find('li').not('.megamenu-list').each(function () {
         var $this = $(this);
 
-        if ( $this.find('ul').length ) {
+        if ( $this.find('ul').length && $this.children('a').find('.mmenu-btn').length === 0 ) {
             $('<span/>', {
                 'class': 'mmenu-btn'
             }).appendTo($this.children('a'));

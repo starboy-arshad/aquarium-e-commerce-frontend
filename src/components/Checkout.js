@@ -26,7 +26,7 @@ const Checkout = () => {
     orderNotes: ''
   });
 
-  const [paymentMethod, setPaymentMethod] = useState('phonepe');
+  const [paymentMethod, setPaymentMethod] = useState('cod');
   const [loading, setLoading] = useState(false);
 
   React.useEffect(() => {
@@ -397,33 +397,9 @@ const Checkout = () => {
 
                       <div className="accordion-summary" id="accordion-payment">
                         <div className="card">
-                          <div className="card-header" id="heading-phonepe">
-                            <h2 className="card-title">
-                              <a
-                                role="button"
-                                data-toggle="collapse"
-                                href="#collapse-phonepe"
-                                aria-expanded={paymentMethod === 'phonepe'}
-                                aria-controls="collapse-phonepe"
-                                onClick={() => setPaymentMethod('phonepe')}
-                              >
-                                PhonePe (UPI, Cards, NetBanking)
-                                <img src="https://www.logo.wine/a/logo/PhonePe/PhonePe-Logo.wine.svg" alt="PhonePe" style={{ height: '30px', marginLeft: '10px', verticalAlign: 'middle' }} />
-                              </a>
-                            </h2>
-                          </div>
-                          <div id="collapse-phonepe" className={`collapse ${paymentMethod === 'phonepe' ? 'show' : ''}`} aria-labelledby="heading-phonepe" data-parent="#accordion-payment">
-                            <div className="card-body">
-                              Pay securely using PhonePe. Supports UPI, Debit/Credit Cards, and NetBanking.
-                            </div>
-                          </div>
-                        </div>
-
-                        <div className="card">
                           <div className="card-header" id="heading-3">
                             <h2 className="card-title">
                               <a
-                                className="collapsed"
                                 role="button"
                                 data-toggle="collapse"
                                 href="#collapse-3"
@@ -438,29 +414,6 @@ const Checkout = () => {
                           <div id="collapse-3" className={`collapse ${paymentMethod === 'cod' ? 'show' : ''}`} aria-labelledby="heading-3" data-parent="#accordion-payment">
                             <div className="card-body">
                               Pay with cash upon delivery.
-                            </div>
-                          </div>
-                        </div>
-
-                        <div className="card">
-                          <div className="card-header" id="heading-1">
-                            <h2 className="card-title">
-                              <a
-                                className="collapsed"
-                                role="button"
-                                data-toggle="collapse"
-                                href="#collapse-1"
-                                aria-expanded={paymentMethod === 'bank-transfer'}
-                                aria-controls="collapse-1"
-                                onClick={() => setPaymentMethod('bank-transfer')}
-                              >
-                                Direct bank transfer
-                              </a>
-                            </h2>
-                          </div>
-                          <div id="collapse-1" className={`collapse ${paymentMethod === 'bank-transfer' ? 'show' : ''}`} aria-labelledby="heading-1" data-parent="#accordion-payment">
-                            <div className="card-body">
-                              Make your payment directly into our bank account. Please use your Order ID as the payment reference. Your order will not be shipped until the funds have cleared in our account.
                             </div>
                           </div>
                         </div>
