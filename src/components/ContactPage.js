@@ -176,8 +176,8 @@ const ContactPage = () => {
 
                 <p>
                   📞 <a href="tel:+917010934029">+91 7010934029</a><br />
-                  ✉ <a href="mailto:info@aquariumshop.com">
-                    info@aquariumshop.com
+                  ✉ <a href="mailto:erodemarineaquarium@gmail.com">
+                    erodemarineaquarium@gmail.com
                   </a>
                 </p>
 
