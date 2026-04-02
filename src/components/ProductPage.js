@@ -258,7 +258,15 @@ const ProductPage = () => {
                 <div className="product-gallery product-gallery-vertical">
                   <div className="row">
                     <figure className="product-main-image">
-                      <img id="product-zoom" src={getProductImage(mainImage || (product.images && product.images.length > 0 ? product.images[0] : product.image))} data-zoom-image={getProductImage(mainImage || (product.images && product.images.length > 0 ? product.images[0] : product.image))} alt="product image" />
+                      {(() => {
+                        const src = getProductImage(mainImage || (product.images && product.images.length > 0 ? product.images[0] : product.image));
+                        const isVid = src.match(/\.(mp4|webm|mov)$/i);
+                        return isVid ? (
+                          <video id="product-zoom" src={src} style={{ width: '100%' }} controls autoPlay muted loop playsInline />
+                        ) : (
+                          <img id="product-zoom" src={src} data-zoom-image={src} alt="product image" />
+                        );
+                      })()}
                       <a href="#" id="btn-product-gallery" className="btn-product-gallery" onClick={(e) => {
                         e.preventDefault();
                         console.log('Opening product gallery for:', product.name);
@@ -268,21 +276,29 @@ const ProductPage = () => {
                     </figure>
                     <div id="product-zoom-gallery" className="product-image-gallery">
                       {product.images && product.images.length > 0 ? (
-                        product.images.map((img, index) => (
-                          <a
-                            key={index}
-                            className={`product-gallery-item ${index === 0 ? 'active' : ''}`}
-                            href="#"
-                            data-image={getProductImage(img)}
-                            data-zoom-image={getProductImage(img)}
-                            onClick={(e) => {
-                              e.preventDefault();
-                              handleImageClick(img);
-                            }}
-                          >
-                            <img src={getProductImage(img)} alt={`product image ${index + 1}`} />
-                          </a>
-                        ))
+                        product.images.map((img, index) => {
+                          const src = getProductImage(img);
+                          const isVid = src.match(/\.(mp4|webm|mov)$/i);
+                          return (
+                            <a
+                              key={index}
+                              className={`product-gallery-item ${index === 0 ? 'active' : ''}`}
+                              href="#"
+                              data-image={src}
+                              data-zoom-image={src}
+                              onClick={(e) => {
+                                e.preventDefault();
+                                handleImageClick(img);
+                              }}
+                            >
+                              {isVid ? (
+                                <video src={src} style={{ width: '100%', height: '100%', objectFit: 'cover' }} muted playsInline />
+                              ) : (
+                                <img src={src} alt={`product image ${index + 1}`} />
+                              )}
+                            </a>
+                          );
+                        })
                       ) : (
                         <a
                           className="product-gallery-item active"
@@ -294,7 +310,15 @@ const ProductPage = () => {
                             handleImageClick(product.image);
                           }}
                         >
-                          <img src={getProductImage(product.image)} alt="product side" />
+                          {(() => {
+                            const src = getProductImage(product.image);
+                            const isVid = src.match(/\.(mp4|webm|mov)$/i);
+                            return isVid ? (
+                              <video src={src} style={{ width: '100%', height: '100%', objectFit: 'cover' }} muted playsInline />
+                            ) : (
+                              <img src={src} alt="product side" />
+                            );
+                          })()}
                         </a>
                       )}
                     </div>
@@ -424,14 +448,21 @@ const ProductPage = () => {
                     }
                   }
                 }'>
-                {relatedProducts.map(p => (
-                  <div key={p._id} className="product product-7 text-center">
-                    <figure className="product-media">
-                      <a href={`/product/${p._id}`}>
-                        <img src={getProductImage(p.images && p.images.length > 0 ? p.images[0] : p.image)} alt="Product image" className="product-image" />
-                      </a>
-                      <div className="product-action">
-                        <a href="#" className="btn-product btn-cart" onClick={(e) => {
+                {relatedProducts.map(p => {
+                  const src = getProductImage(p.images && p.images.length > 0 ? p.images[0] : p.image);
+                  const isVid = src.match(/\.(mp4|webm|mov)$/i);
+                  return (
+                    <div key={p._id} className="product product-7 text-center">
+                      <figure className="product-media">
+                        <a href={`/product/${p._id}`}>
+                          {isVid ? (
+                            <video src={src} className="product-image" autoPlay muted loop playsInline style={{ objectFit: 'cover' }} />
+                          ) : (
+                            <img src={src} alt="Product image" className="product-image" />
+                          )}
+                        </a>
+                        <div className="product-action">
+                          <a href="#" className="btn-product btn-cart" onClick={(e) => {
                           e.preventDefault();
                           // Create a cart-compatible product object for related products
                           const cartProduct = {
@@ -452,7 +483,8 @@ const ProductPage = () => {
                       </div>
                     </div>
                   </div>
-                ))}
+                  );
+                })}
               </div>
             </>
           )}
