@@ -16,8 +16,7 @@ const ShopPage = () => {
   const [selectedCategory, setSelectedCategory] = useState([]);
   const [keyword, setKeyword] = useState('');
 
-  const [priceRange, setPriceRange] = useState([0, 200]);
-  const [tempPriceRange, setTempPriceRange] = useState([0, 200]);
+
   const [gridColumns, setGridColumns] = useState(4);
   const [imageLoadStates, setImageLoadStates] = useState({});
 
@@ -150,7 +149,7 @@ const ShopPage = () => {
 
   useEffect(() => {
     fetchProducts();
-  }, [page, sortBy, selectedCategory, priceRange, keyword]);
+  }, [page, sortBy, selectedCategory, keyword]);
 
   const fetchProducts = async () => {
     try {
@@ -164,12 +163,6 @@ const ShopPage = () => {
       }
       if (selectedCategory.length > 0) {
         selectedCategory.forEach(cat => params.append('category', cat));
-      }
-      if (priceRange[0] > 0) {
-        params.append('minPrice', priceRange[0]);
-      }
-      if (priceRange[1] > 0 && priceRange[1] !== 200) {
-        params.append('maxPrice', priceRange[1]);
       }
 
       const response = await fetch(`${API_BASE_URL}/api/products?${params}`);
@@ -221,18 +214,10 @@ const ShopPage = () => {
 
 
 
-  const handlePriceChange = (min, max) => {
-    setTempPriceRange([min, max]);
-  };
 
-  const applyPriceFilter = () => {
-    setPriceRange(tempPriceRange);
-    setPage(1);
-  };
 
   const clearAllFilters = () => {
     setSelectedCategory([]);
-    setPriceRange([0, 200]);
     setKeyword('');
     setPage(1);
   };
@@ -412,62 +397,6 @@ const ShopPage = () => {
 
 
 
-                <div className="widget widget-collapsible">
-                  <h3 className="widget-title">
-                    <a data-toggle="collapse" href="#widget-2" role="button" aria-expanded="true" aria-controls="widget-2">
-                      Price
-                    </a>
-                  </h3>
-                  <div className="collapse show" id="widget-2">
-                    <div className="widget-body">
-                      <div className="filter-price">
-                        <div className="filter-price-text">
-                          Price Range: <span>₹{priceRange[0]} - ₹{priceRange[1]}</span>
-                        </div>
-                        <div className="price-inputs">
-                          <div className="input-group">
-                            <div className="input-group-prepend">
-                              <span className="input-group-text">Min</span>
-                            </div>
-                            <input
-                              type="number"
-                              className="form-control"
-                              min="0"
-                              max="10000"
-                              value={tempPriceRange[0]}
-                              onChange={(e) => handlePriceChange(parseInt(e.target.value), tempPriceRange[1])}
-                            />
-                          </div><br/>
-                          <div className="input-group">
-                            <div className="input-group-prepend">
-                              <span className="input-group-text">Max</span>
-                            </div>
-                            <input
-                              type="number"
-                              className="form-control"
-                              min="0"
-                              max="10000"
-                              value={tempPriceRange[1]}
-                              onChange={(e) => handlePriceChange(tempPriceRange[0], parseInt(e.target.value))}
-                            />
-                          </div>
-                        </div><br/>
-                        <div className="apply-filter-container">
-                          <button className="btn btn-primary btn-block" onClick={applyPriceFilter}>
-                            Apply Filter
-                          </button>
-                          <button className="btn btn-secondary btn-block mt-2" onClick={() => {
-                            setTempPriceRange([0, 200]);
-                            setPriceRange([0, 200]);
-                            setPage(1);
-                          }}>
-                            Reset Filter
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
               </div>
             </aside>
           </div>
