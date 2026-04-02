@@ -163,16 +163,24 @@ const FullMarineSetupPage = () => {
                     <div className="product product-7 text-center">
                       <figure className="product-media">
                         <Link to={`/product/${product._id}`}>
-                          <img
-                            src={getProductImage(product)}
-                            alt={product.name}
-                            className="product-image"
-                            onError={(e) => {
-                              if (e.target.src !== '/assets/images/products/product-1.jpg') {
-                                e.target.src = '/assets/images/products/product-1.jpg';
-                              }
-                            }}
-                          />
+                          {(() => {
+                            const src = getProductImage(product);
+                            const isVid = src.match(/\.(mp4|webm|mov)$/i);
+                            return isVid ? (
+                              <video src={src} className="product-image" style={{ opacity: 1, objectFit: 'cover', width: '100%', aspectRatio: '1/1' }} autoPlay muted loop playsInline />
+                            ) : (
+                              <img
+                                src={src}
+                                alt={product.name}
+                                className="product-image"
+                                onError={(e) => {
+                                  if (e.target.src !== '/assets/images/products/product-1.jpg') {
+                                    e.target.src = '/assets/images/products/product-1.jpg';
+                                  }
+                                }}
+                              />
+                            );
+                          })()}
                         </Link>
 
                         <div className="product-action">

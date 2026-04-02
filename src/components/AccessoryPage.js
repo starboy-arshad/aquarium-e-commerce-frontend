@@ -79,6 +79,15 @@ const AccessoryPage = () => {
     return accessory.images && accessory.images.length > 0 ? accessory.images[0] : accessory.image;
   };
 
+  const getProductImage = (img) => {
+    if (!img) return '/assets/images/products/product-1.jpg';
+    if (img.startsWith('http')) return img;
+
+    const cleanImg = img.startsWith('/') ? img.substring(1) : img;
+    const finalPath = cleanImg.startsWith('uploads/') ? cleanImg : `uploads/${cleanImg}`;
+    return `${API_BASE_URL}/${finalPath}`;
+  };
+
 
   if (error) {
     return (
@@ -112,7 +121,17 @@ const AccessoryPage = () => {
                 <div className="product-gallery product-gallery-vertical">
                   <div className="row">
                     <figure className="product-main-image">
-                      <img id="product-zoom" src={mainImage ? (mainImage.startsWith('http') ? mainImage : `${API_BASE_URL}${mainImage.startsWith('/') ? '' : '/'}${mainImage.includes('uploads') ? '' : 'uploads/'}${mainImage}`) : '/assets/images/products/product-1.jpg'} data-zoom-image={mainImage ? (mainImage.startsWith('http') ? mainImage : `${API_BASE_URL}${mainImage.startsWith('/') ? '' : '/'}${mainImage.includes('uploads') ? '' : 'uploads/'}${mainImage}`) : '/assets/images/products/product-1.jpg'} alt="product image" />
+                      {(() => {
+                        const src = getProductImage(mainImage || (accessory.images && accessory.images.length > 0 ? accessory.images[0] : accessory.image));
+                        const isVid = src.match(/\.(mp4|webm|mov)$/i);
+                        return isVid ? (
+                          <div style={{ backgroundColor: '#000', borderRadius: '8px', overflow: 'hidden', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                            <video id="product-zoom" src={src} style={{ width: '100%', maxWidth: '100%', height: 'auto', maxHeight: '550px', objectFit: 'contain', display: 'block' }} controls autoPlay muted loop playsInline />
+                          </div>
+                        ) : (
+                          <img id="product-zoom" src={src} data-zoom-image={src} alt="product image" style={{ maxHeight: '550px', objectFit: 'contain', width: '100%' }} />
+                        );
+                      })()}
                       <a href="#" id="btn-product-gallery" className="btn-product-gallery" onClick={(e) => {
                         e.preventDefault();
                         // Open gallery modal or zoom functionality
@@ -123,33 +142,53 @@ const AccessoryPage = () => {
                     </figure>
                     <div id="product-zoom-gallery" className="product-image-gallery">
                       {accessory.images && accessory.images.length > 0 ? (
-                        accessory.images.map((img, index) => (
-                          <a
-                            key={index}
-                            className={`product-gallery-item ${index === 0 ? 'active' : ''}`}
-                            href="#"
-                            data-image={img.startsWith('http') ? img : `${API_BASE_URL}${img.startsWith('/') ? '' : '/'}${img.includes('uploads') ? '' : 'uploads/'}${img}`}
-                            data-zoom-image={img.startsWith('http') ? img : `${API_BASE_URL}${img.startsWith('/') ? '' : '/'}${img.includes('uploads') ? '' : 'uploads/'}${img}`}
-                            onClick={(e) => {
-                              e.preventDefault();
-                              handleImageClick(img);
-                            }}
-                          >
-                            <img src={img.startsWith('http') ? img : `${API_BASE_URL}${img.startsWith('/') ? '' : '/'}${img.includes('uploads') ? '' : 'uploads/'}${img}`} alt={`accessory image ${index + 1}`} />
-                          </a>
-                        ))
+                        accessory.images.map((img, index) => {
+                          const src = getProductImage(img);
+                          const isVid = src.match(/\.(mp4|webm|mov)$/i);
+                          return (
+                            <a
+                              key={index}
+                              className={`product-gallery-item ${index === 0 ? 'active' : ''}`}
+                              href="#"
+                              data-image={src}
+                              data-zoom-image={src}
+                              onClick={(e) => {
+                                e.preventDefault();
+                                handleImageClick(img);
+                              }}
+                            >
+                              {isVid ? (
+                                <div style={{ backgroundColor: '#000', width: '100%', height: '100%', aspectRatio: '1/1', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                                  <video src={src} style={{ width: '100%', height: '100%', objectFit: 'contain' }} muted playsInline />
+                                </div>
+                              ) : (
+                                <img src={src} alt={`accessory image ${index + 1}`} style={{ height: '100px', objectFit: 'cover' }} />
+                              )}
+                            </a>
+                          );
+                        })
                       ) : (
                         <a
                           className="product-gallery-item active"
                           href="#"
-                          data-image={accessory.image ? (accessory.image.startsWith('http') ? accessory.image : `${API_BASE_URL}${accessory.image.startsWith('/') ? '' : '/'}${accessory.image.includes('uploads') ? '' : 'uploads/'}${accessory.image}`) : '/assets/images/products/product-1.jpg'}
-                          data-zoom-image={accessory.image ? (accessory.image.startsWith('http') ? accessory.image : `${API_BASE_URL}${accessory.image.startsWith('/') ? '' : '/'}${accessory.image.includes('uploads') ? '' : 'uploads/'}${accessory.image}`) : '/assets/images/products/product-1.jpg'}
+                          data-image={getProductImage(accessory.image)}
+                          data-zoom-image={getProductImage(accessory.image)}
                           onClick={(e) => {
                             e.preventDefault();
                             handleImageClick(accessory.image);
                           }}
                         >
-                          <img src={accessory.image ? (accessory.image.startsWith('http') ? accessory.image : `${API_BASE_URL}${accessory.image.startsWith('/') ? '' : '/'}${accessory.image.includes('uploads') ? '' : 'uploads/'}${accessory.image}`) : '/assets/images/products/product-1.jpg'} alt="accessory side" />
+                          {(() => {
+                            const src = getProductImage(accessory.image);
+                            const isVid = src.match(/\.(mp4|webm|mov)$/i);
+                            return isVid ? (
+                              <div style={{ backgroundColor: '#000', width: '100%', height: '100%', aspectRatio: '1/1', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                                <video src={src} style={{ width: '100%', height: '100%', objectFit: 'contain' }} muted playsInline />
+                              </div>
+                            ) : (
+                              <img src={src} alt="accessory side" style={{ height: '100px', objectFit: 'cover' }} />
+                            );
+                          })()}
                         </a>
                       )}
                     </div>
@@ -271,12 +310,19 @@ const AccessoryPage = () => {
                     }
                   }
                 }'>
-                {relatedAccessories.map(a => (
-                  <div key={a._id} className="product product-7 text-center">
-                    <figure className="product-media">
-                      <a href={`/accessory/${a._id}`}>
-                        <img src={a.images && a.images.length > 0 ? `${API_BASE_URL}${a.images[0]}` : (a.image ? `${API_BASE_URL}${a.image}` : '')} alt="Product image" className="product-image" />
-                      </a>
+                {relatedAccessories.map(a => {
+                  const src = getProductImage(a.images && a.images.length > 0 ? a.images[0] : a.image);
+                  const isVid = src.match(/\.(mp4|webm|mov)$/i);
+                  return (
+                    <div key={a._id} className="product product-7 text-center">
+                      <figure className="product-media">
+                        <a href={`/accessory/${a._id}`}>
+                          {isVid ? (
+                            <video src={src} className="product-image" autoPlay muted loop playsInline style={{ objectFit: 'cover' }} />
+                          ) : (
+                            <img src={src} alt="Product image" className="product-image" />
+                          )}
+                        </a>
                       <div className="product-action">
                         <a href="#" className="btn-product btn-cart" onClick={(e) => {
                           e.preventDefault();
@@ -298,8 +344,9 @@ const AccessoryPage = () => {
                         ₹{a.price}
                       </div>
                     </div>
-                  </div>
-                ))}
+                    </div>
+                  );
+                })}
               </div>
             </>
           )}

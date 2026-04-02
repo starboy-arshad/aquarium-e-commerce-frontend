@@ -215,7 +215,15 @@ const AccessoriesPage = () => {
                         <div className="product product-7 text-center">
                           <figure className="product-media">
                             <Link to={`/accessory/${accessory._id}`}>
-                              <img src={getProductImage(accessory)} alt={accessory.name} className="product-image" />
+                              {(() => {
+                                const src = getProductImage(accessory);
+                                const isVid = src.match(/\.(mp4|webm|mov)$/i);
+                                return isVid ? (
+                                  <video src={src} className="product-image" style={{ opacity: 1, objectFit: 'cover', width: '100%', aspectRatio: '1/1' }} autoPlay muted loop playsInline />
+                                ) : (
+                                  <img src={src} alt={accessory.name} className="product-image" />
+                                );
+                              })()}
                             </Link>
                             <div className="product-action-vertical">
                               <a href="#" className="btn-product-icon btn-wishlist btn-expandable"><span>add to wishlist</span></a>

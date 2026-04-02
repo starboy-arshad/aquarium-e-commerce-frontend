@@ -64,7 +64,24 @@ const CartPage = () => {
                           <div className="product">
                             <figure className="product-media">
                               <Link to={`/product/${item.id}`}>
-                                <img src={item.image ? (item.image.startsWith('http') ? item.image : `${API_BASE_URL}/${(item.image.startsWith('/') ? item.image.substring(1) : item.image).startsWith('uploads/') ? (item.image.startsWith('/') ? item.image.substring(1) : item.image) : `uploads/${(item.image.startsWith('/') ? item.image.substring(1) : item.image)}`}`) : (item.images && item.images.length > 0 ? `${API_BASE_URL}/${(item.images[0].startsWith('/') ? item.images[0].substring(1) : item.images[0]).startsWith('uploads/') ? (item.images[0].startsWith('/') ? item.images[0].substring(1) : item.images[0]) : `uploads/${(item.images[0].startsWith('/') ? item.images[0].substring(1) : item.images[0])}`}` : '/assets/images/products/product-1.jpg')} alt="Product image" />
+                                {(() => {
+                                  const getProductImage = (item) => {
+                                    const img = item.image || (item.images && item.images.length > 0 ? item.images[0] : null);
+                                    if (!img) return '/assets/images/products/product-1.jpg';
+                                    if (img.startsWith('http')) return img;
+
+                                    const cleanImg = img.startsWith('/') ? img.substring(1) : img;
+                                    const finalPath = cleanImg.startsWith('uploads/') ? cleanImg : `uploads/${cleanImg}`;
+                                    return `${API_BASE_URL}/${finalPath}`;
+                                  };
+                                  const src = getProductImage(item);
+                                  const isVid = src.match(/\.(mp4|webm|mov)$/i);
+                                  return isVid ? (
+                                    <video src={src} style={{ width: '100%', aspectRatio: '1/1', objectFit: 'cover' }} muted playsInline />
+                                  ) : (
+                                    <img src={src} alt="Product image" />
+                                  );
+                                })()}
                               </Link>
                             </figure>
                             <h3 className="product-title">

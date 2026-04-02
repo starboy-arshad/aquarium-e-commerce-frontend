@@ -262,9 +262,11 @@ const ProductPage = () => {
                         const src = getProductImage(mainImage || (product.images && product.images.length > 0 ? product.images[0] : product.image));
                         const isVid = src.match(/\.(mp4|webm|mov)$/i);
                         return isVid ? (
-                          <video id="product-zoom" src={src} style={{ width: '100%' }} controls autoPlay muted loop playsInline />
+                          <div style={{ backgroundColor: '#000', borderRadius: '8px', overflow: 'hidden', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                            <video id="product-zoom" src={src} style={{ width: '100%', maxWidth: '100%', height: 'auto', maxHeight: '550px', objectFit: 'contain', display: 'block' }} controls autoPlay muted loop playsInline />
+                          </div>
                         ) : (
-                          <img id="product-zoom" src={src} data-zoom-image={src} alt="product image" />
+                          <img id="product-zoom" src={src} data-zoom-image={src} alt="product image" style={{ maxHeight: '550px', objectFit: 'contain', width: '100%' }} />
                         );
                       })()}
                       <a href="#" id="btn-product-gallery" className="btn-product-gallery" onClick={(e) => {
@@ -292,9 +294,11 @@ const ProductPage = () => {
                               }}
                             >
                               {isVid ? (
-                                <video src={src} style={{ width: '100%', height: '100%', objectFit: 'cover' }} muted playsInline />
+                                <div style={{ backgroundColor: '#000', width: '100%', height: '100%', aspectRatio: '1/1', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                                  <video src={src} style={{ width: '100%', height: '100%', objectFit: 'contain' }} muted playsInline />
+                                </div>
                               ) : (
-                                <img src={src} alt={`product image ${index + 1}`} />
+                                <img src={src} alt={`product image ${index + 1}`} style={{ height: '100px', objectFit: 'cover' }} />
                               )}
                             </a>
                           );
@@ -314,9 +318,11 @@ const ProductPage = () => {
                             const src = getProductImage(product.image);
                             const isVid = src.match(/\.(mp4|webm|mov)$/i);
                             return isVid ? (
-                              <video src={src} style={{ width: '100%', height: '100%', objectFit: 'cover' }} muted playsInline />
+                              <div style={{ backgroundColor: '#000', width: '100%', height: '100%', aspectRatio: '1/1', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                                <video src={src} style={{ width: '100%', height: '100%', objectFit: 'contain' }} muted playsInline />
+                              </div>
                             ) : (
-                              <img src={src} alt="product side" />
+                              <img src={src} alt="product side" style={{ height: '100px', objectFit: 'cover' }} />
                             );
                           })()}
                         </a>
