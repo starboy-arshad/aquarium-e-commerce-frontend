@@ -442,7 +442,7 @@ const ProductManagement = () => {
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [pageSize] = useState(100); // Show 100 products per page
+  const [pageSize] = useState(10); // Show 10 products per page
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);

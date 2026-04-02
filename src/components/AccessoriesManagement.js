@@ -410,7 +410,7 @@ const AccessoriesManagement = () => {
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [pageSize] = useState(100); // Show 100 accessories per page
+  const [pageSize] = useState(10); // Show 10 accessories per page
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);

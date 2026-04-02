@@ -12,7 +12,7 @@ const ShopPage = () => {
   const [error, setError] = useState(null);
   const [page, setPage] = useState(1);
   const [pages, setPages] = useState(1);
-  const [sortBy, setSortBy] = useState('popularity');
+
   const [selectedCategory, setSelectedCategory] = useState([]);
   const [keyword, setKeyword] = useState('');
 
@@ -149,14 +149,13 @@ const ShopPage = () => {
 
   useEffect(() => {
     fetchProducts();
-  }, [page, sortBy, selectedCategory, keyword]);
+  }, [page, selectedCategory, keyword]);
 
   const fetchProducts = async () => {
     try {
       setLoading(true);
       const params = new URLSearchParams({
         pageNumber: page,
-        sortBy: sortBy,
       });
       if (keyword) {
         params.append('keyword', keyword);
@@ -194,10 +193,6 @@ const ShopPage = () => {
     }
   };
 
-  const handleSortChange = (e) => {
-    setSortBy(e.target.value);
-    setPage(1);
-  };
 
   const handleCategoryChange = (category) => {
     setSelectedCategory(prev =>
@@ -275,16 +270,6 @@ const ShopPage = () => {
                 </div>
 
                 <div className="toolbox-right">
-                  <div className="toolbox-sort">
-                    <label htmlFor="sortby">Sort by:</label>
-                    <div className="select-custom">
-                      <select name="sortby" id="sortby" className="form-control" value={sortBy} onChange={handleSortChange}>
-                        <option value="popularity">Most Popular</option>
-                        <option value="rating">Most Rated</option>
-                        <option value="date">Date</option>
-                      </select>
-                    </div>
-                  </div>
                   <div className="toolbox-layout">
                     <a href="#" className={`btn-layout ${gridColumns === 2 ? 'active' : ''}`} onClick={(e) => { e.preventDefault(); handleGridChange(2); }}>
                       <svg width="16" height="10">

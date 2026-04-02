@@ -12,7 +12,7 @@ const AccessoriesPage = () => {
   const [error, setError] = useState(null);
   const [page, setPage] = useState(1);
   const [pages, setPages] = useState(1);
-  const [sortBy, setSortBy] = useState('date');
+
   const [selectedCategory, setSelectedCategory] = useState([]);
   const [priceRange, setPriceRange] = useState([0, 200]);
   const [gridColumns, setGridColumns] = useState(4);
@@ -31,14 +31,13 @@ const AccessoriesPage = () => {
 
   useEffect(() => {
     fetchAccessories();
-  }, [page, sortBy, selectedCategory, priceRange]);
+  }, [page, selectedCategory, priceRange]);
 
   const fetchAccessories = async () => {
     try {
       setLoading(true);
       const params = new URLSearchParams({
         pageNumber: page,
-        sortBy: sortBy,
       });
       if (selectedCategory.length > 0) {
         selectedCategory.forEach(cat => params.append('category', cat));
@@ -71,10 +70,7 @@ const AccessoriesPage = () => {
     }
   };
 
-  const handleSortChange = (e) => {
-    setSortBy(e.target.value);
-    setPage(1);
-  };
+
 
   const handleCategoryChange = (category) => {
     setSelectedCategory(prev =>
@@ -183,15 +179,6 @@ const AccessoriesPage = () => {
                 </div>
 
                 <div className="toolbox-right">
-                  <div className="toolbox-sort">
-                    <label htmlFor="sortby">Sort by:</label>
-                    <div className="select-custom">
-                      <select name="sortby" id="sortby" className="form-control" value={sortBy} onChange={handleSortChange}>
-                        <option value="popularity">Most Popular</option>
-                        <option value="date">Date</option>
-                      </select>
-                    </div>
-                  </div>
                   <div className="toolbox-layout">
                     <a href="#" className={`btn-layout ${gridColumns === 4 ? 'active' : ''}`} onClick={(e) => { e.preventDefault(); handleGridChange(4); }}>
                       <svg width="22" height="10">
