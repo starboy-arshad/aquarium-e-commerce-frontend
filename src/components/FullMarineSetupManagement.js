@@ -746,7 +746,6 @@ const FullMarineSetupManagement = () => {
                             }}
                             onClick={() => {
                               setCurrentPage(i);
-                              fetchProducts();
                             }}
                           >
                             {i}
@@ -763,7 +762,6 @@ const FullMarineSetupManagement = () => {
                       }}
                       onClick={() => {
                         setCurrentPage(prev => Math.min(totalPages, prev + 1));
-                        fetchProducts();
                       }}
                       disabled={currentPage === totalPages}
                     >
@@ -776,7 +774,6 @@ const FullMarineSetupManagement = () => {
                       }}
                       onClick={() => {
                         setCurrentPage(totalPages);
-                        fetchProducts();
                       }}
                       disabled={currentPage === totalPages}
                     >

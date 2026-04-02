@@ -718,7 +718,6 @@ const AccessoriesManagement = () => {
                             }}
                             onClick={() => {
                               setCurrentPage(i);
-                              fetchAccessories();
                             }}
                           >
                             {i}
@@ -735,7 +734,6 @@ const AccessoriesManagement = () => {
                       }}
                       onClick={() => {
                         setCurrentPage(prev => Math.min(totalPages, prev + 1));
-                        fetchAccessories();
                       }}
                       disabled={currentPage === totalPages}
                     >
@@ -748,7 +746,6 @@ const AccessoriesManagement = () => {
                       }}
                       onClick={() => {
                         setCurrentPage(totalPages);
-                        fetchAccessories();
                       }}
                       disabled={currentPage === totalPages}
                     >

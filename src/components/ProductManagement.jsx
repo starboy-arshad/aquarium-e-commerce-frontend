@@ -838,7 +838,6 @@ const ProductManagement = () => {
                             }}
                             onClick={() => {
                               setCurrentPage(i);
-                              fetchProducts();
                             }}
                           >
                             {i}
@@ -855,7 +854,6 @@ const ProductManagement = () => {
                       }}
                       onClick={() => {
                         setCurrentPage(prev => Math.min(totalPages, prev + 1));
-                        fetchProducts();
                       }}
                       disabled={currentPage === totalPages}
                     >
@@ -868,7 +866,6 @@ const ProductManagement = () => {
                       }}
                       onClick={() => {
                         setCurrentPage(totalPages);
-                        fetchProducts();
                       }}
                       disabled={currentPage === totalPages}
                     >
