@@ -613,7 +613,10 @@ const AccessoriesManagement = () => {
                               {(() => {
                                 const rawImage = accessory.images && accessory.images.length > 0 ? accessory.images[0] : accessory.image;
                                 const imageSrc = rawImage ? (rawImage.startsWith('http') ? rawImage : `${API_BASE_URL}/${rawImage.startsWith('/') ? rawImage.substring(1) : (rawImage.startsWith('uploads/') ? rawImage : `uploads/${rawImage}`)}`) : '/assets/images/products/product-1.jpg';
-                                return (
+                                const isVid = imageSrc.match(/\.(mp4|webm|mov)$/i);
+                                return isVid ? (
+                                  <video src={imageSrc} style={{ ...styles.thumbImg, width: '44px', height: '44px', objectFit: 'cover', borderRadius: '6px' }} muted playsInline />
+                                ) : (
                                   <img
                                     src={imageSrc}
                                     alt={accessory.name}
@@ -807,32 +810,38 @@ const AccessoriesManagement = () => {
                     </div>
 
                     <div style={styles.formGroup}>
-                      <label style={styles.label}>Images</label>
+                      <label style={styles.label}>Media</label>
                       <input
                         type="file"
                         style={styles.fileInput}
                         name="images"
                         multiple
                         onChange={handleImageChange}
-                        accept="image/*"
+                        accept="image/*,video/*"
                       />
                       {imageFiles.length > 0 && (
                         <span style={styles.helpText}>Selected files: {imageFiles.length}</span>
                       )}
 
-                      {/* Current multiple images when editing */}
+                      {/* Current multiple media when editing */}
                       {editingAccessory && editingAccessory.images && editingAccessory.images.length > 0 && (
                         <div style={{ marginTop: '8px' }}>
-                          <span style={styles.labelMuted}>Current Images:</span>
+                          <span style={styles.labelMuted}>Current Media:</span>
                           <div style={styles.currentImagesGrid}>
-                            {editingAccessory.images.map((img, idx) => (
-                              <img
-                                key={idx}
-                                src={`${API_BASE_URL}${img.startsWith('/') ? '' : '/'}${img}`}
-                                alt="Current"
-                                style={styles.currentImg}
-                              />
-                            ))}
+                            {editingAccessory.images.map((img, idx) => {
+                              const srcUrl = `${API_BASE_URL}${img.startsWith('/') ? '' : '/'}${img}`;
+                              const isVid = img.match(/\.(mp4|webm|mov)$/i);
+                              return isVid ? (
+                                <video key={idx} src={srcUrl} style={styles.currentImg} controls />
+                              ) : (
+                                <img
+                                  key={idx}
+                                  src={srcUrl}
+                                  alt="Current"
+                                  style={styles.currentImg}
+                                />
+                              );
+                            })}
                           </div>
                         </div>
                       )}

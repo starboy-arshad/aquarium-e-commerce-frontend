@@ -83,17 +83,32 @@ const ShopPage = () => {
           <div className="product product-7 text-center">
             <figure className="product-media">
               <Link to={`/product/${product._id}`}>
-                <img
-                  src={hasError ? '/assets/images/products/product-1.jpg' : productImage}
-                  alt={product.name}
-                  className="product-image"
-                  onLoad={() => handleImageLoad(product._id, 'main')}
-                  onError={() => handleImageError(product._id, 'main')}
-                  style={{
-                    opacity: imageLoadState === 'loaded' ? 1 : (hasError ? 1 : 0),
-                    transition: 'opacity 0.3s ease-in-out'
-                  }}
-                />
+                {productImage.match(/\.(mp4|webm|mov)$/i) ? (
+                  <video
+                    src={productImage}
+                    className="product-image"
+                    style={{
+                      opacity: 1,
+                      objectFit: 'cover'
+                    }}
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                  />
+                ) : (
+                  <img
+                    src={hasError ? '/assets/images/products/product-1.jpg' : productImage}
+                    alt={product.name}
+                    className="product-image"
+                    onLoad={() => handleImageLoad(product._id, 'main')}
+                    onError={() => handleImageError(product._id, 'main')}
+                    style={{
+                      opacity: imageLoadState === 'loaded' ? 1 : (hasError ? 1 : 0),
+                      transition: 'opacity 0.3s ease-in-out'
+                    }}
+                  />
+                )}
               </Link>
 
               <div className="product-action">

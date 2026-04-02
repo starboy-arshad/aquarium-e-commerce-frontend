@@ -521,7 +521,10 @@ const ProductManagement = () => {
   const handleFileChange = (e) => {
     const files = Array.from(e.target.files);
     setSelectedFiles(files);
-    const fileURLs = files.map(file => URL.createObjectURL(file));
+    const fileURLs = files.map(file => ({
+      url: URL.createObjectURL(file),
+      type: file.type.startsWith('video/') ? 'video' : 'image'
+    }));
     setPreviewImages(fileURLs);
   };
 
@@ -724,7 +727,10 @@ const ProductManagement = () => {
                               {(() => {
                                 const rawImage = product.images && product.images.length > 0 ? product.images[0] : product.image;
                                 const imageSrc = rawImage ? (rawImage.startsWith('http') ? rawImage : `${API_BASE_URL}/${rawImage.startsWith('/') ? rawImage.substring(1) : (rawImage.startsWith('uploads/') ? rawImage : `uploads/${rawImage}`)}`) : '/assets/images/products/product-1.jpg';
-                                return (
+                                const isVid = imageSrc.match(/\.(mp4|webm|mov)$/i);
+                                return isVid ? (
+                                  <video src={imageSrc} style={styles.thumbImg} muted playsInline disablePictureInPicture />
+                                ) : (
                                   <img
                                     src={imageSrc}
                                     alt={product.name}
@@ -762,7 +768,10 @@ const ProductManagement = () => {
                           {(() => {
                             const rawImage = product.images && product.images.length > 0 ? product.images[0] : product.image;
                             const imageSrc = rawImage ? (rawImage.startsWith('http') ? rawImage : `${API_BASE_URL}/${rawImage.startsWith('/') ? rawImage.substring(1) : (rawImage.startsWith('uploads/') ? rawImage : `uploads/${rawImage}`)}`) : '/assets/images/products/product-1.jpg';
-                            return (
+                            const isVid = imageSrc.match(/\.(mp4|webm|mov)$/i);
+                            return isVid ? (
+                              <video src={imageSrc} className="pm-product-card-thumb" muted playsInline />
+                            ) : (
                               <img
                                 src={imageSrc}
                                 alt={product.name}
@@ -949,28 +958,32 @@ const ProductManagement = () => {
                     </div>
 
                     <div style={styles.formGroup}>
-                      <label style={styles.label}>Product Images</label>
+                      <label style={styles.label}>Product Media</label>
                       <input
                         type="file"
                         style={styles.fileInput}
                         multiple
-                        accept="image/*"
+                        accept="image/*,video/*"
                         onChange={handleFileChange}
                       />
-                      <span style={styles.helpText}>Select up to 5 images (max 5MB each)</span>
+                      <span style={styles.helpText}>Select up to 5 images/videos (max 50MB each)</span>
                     </div>
 
                     {previewImages.length > 0 && (
                       <div style={styles.formGroup}>
-                        <label style={styles.label}>Image Preview</label>
+                        <label style={styles.label}>Media Preview</label>
                         <div style={styles.previewGrid}>
-                          {previewImages.map((url, index) => (
-                            <img
-                              key={index}
-                              src={url}
-                              alt={`Preview ${index + 1}`}
-                              style={styles.previewImg}
-                            />
+                          {previewImages.map((media, index) => (
+                            media.type === 'video' ? (
+                              <video key={index} src={media.url} controls style={styles.previewImg} />
+                            ) : (
+                              <img
+                                key={index}
+                                src={media.url}
+                                alt={`Preview ${index + 1}`}
+                                style={styles.previewImg}
+                              />
+                            )
                           ))}
                         </div>
                       </div>
@@ -978,16 +991,22 @@ const ProductManagement = () => {
 
                     {editingProduct && editingProduct.images && editingProduct.images.length > 0 && (
                       <div style={styles.formGroup}>
-                        <label style={styles.label}>Current Images</label>
+                        <label style={styles.label}>Current Media</label>
                         <div style={styles.previewGrid}>
-                          {editingProduct.images.map((image, index) => (
-                            <img
-                              key={index}
-                              src={`${API_BASE_URL}${image.startsWith('/') ? '' : '/'}${image}`}
-                              alt={`Current ${index + 1}`}
-                              style={styles.previewImg}
-                            />
-                          ))}
+                          {editingProduct.images.map((image, index) => {
+                            const srcUrl = `${API_BASE_URL}${image.startsWith('/') ? '' : '/'}${image}`;
+                            const isVid = image.match(/\.(mp4|webm|mov)$/i);
+                            return isVid ? (
+                              <video key={index} src={srcUrl} controls style={styles.previewImg} />
+                            ) : (
+                              <img
+                                key={index}
+                                src={srcUrl}
+                                alt={`Current ${index + 1}`}
+                                style={styles.previewImg}
+                              />
+                            );
+                          })}
                         </div>
                       </div>
                     )}

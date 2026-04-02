@@ -426,7 +426,7 @@ const FullMarineSetupManagement = () => {
     image: ''
   });
   const [selectedFile, setSelectedFile] = useState(null);
-  const [previewImage, setPreviewImage] = useState('');
+  const [previewImage, setPreviewImage] = useState(null);
 
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
@@ -495,7 +495,7 @@ const FullMarineSetupManagement = () => {
     const file = e.target.files[0];
     if (file) {
       setSelectedFile(file);
-      setPreviewImage(URL.createObjectURL(file));
+      setPreviewImage({ url: URL.createObjectURL(file), type: file.type.startsWith('video/') ? 'video' : 'image' });
       setFormData(prev => ({ ...prev, image: file.name }));
     }
   };
@@ -555,7 +555,7 @@ const FullMarineSetupManagement = () => {
       stock: product.stock,
       image: product.image || (product.images && product.images[0]) || ''
     });
-    setPreviewImage('');
+    setPreviewImage(null);
     setSelectedFile(null);
   };
 
@@ -581,7 +581,7 @@ const FullMarineSetupManagement = () => {
     setEditingProduct(null);
     setFormData({ name: '', description: '', price: '', stock: '', image: '' });
     setSelectedFile(null);
-    setPreviewImage('');
+    setPreviewImage(null);
   };
 
   if (loading) return <div style={styles.loading}>Loading...</div>;
@@ -638,7 +638,10 @@ const FullMarineSetupManagement = () => {
                               {(() => {
                                 const rawImage = product.image || (product.images && product.images.length > 0 ? product.images[0] : null);
                                 const imageSrc = rawImage ? (rawImage.startsWith('http') ? rawImage : `${API_BASE_URL}/${rawImage.startsWith('/') ? rawImage.substring(1) : (rawImage.startsWith('uploads/') ? rawImage : `uploads/${rawImage}`)}`) : '/assets/images/products/product-1.jpg';
-                                return (
+                                const isVid = imageSrc.match(/\.(mp4|webm|mov)$/i);
+                                return isVid ? (
+                                  <video src={imageSrc} style={styles.thumbImg} muted playsInline disablePictureInPicture />
+                                ) : (
                                   <img
                                     src={imageSrc}
                                     alt={product.name}
@@ -671,7 +674,10 @@ const FullMarineSetupManagement = () => {
                           {(() => {
                             const rawImage = product.image || (product.images && product.images.length > 0 ? product.images[0] : null);
                             const imageSrc = rawImage ? (rawImage.startsWith('http') ? rawImage : `${API_BASE_URL}/${rawImage.startsWith('/') ? rawImage.substring(1) : (rawImage.startsWith('uploads/') ? rawImage : `uploads/${rawImage}`)}`) : '/assets/images/products/product-1.jpg';
-                            return (
+                            const isVid = imageSrc.match(/\.(mp4|webm|mov)$/i);
+                            return isVid ? (
+                              <video src={imageSrc} className="fms-product-card-thumb" muted playsInline />
+                            ) : (
                               <img
                                 src={imageSrc}
                                 alt={product.name}
@@ -835,26 +841,34 @@ const FullMarineSetupManagement = () => {
                     </div>
 
                     <div style={styles.formGroup}>
-                      <label style={styles.label}>Product Image</label>
+                      <label style={styles.label}>Product Media</label>
                       <input
                         type="file"
                         style={styles.fileInput}
-                        accept="image/*"
+                        accept="image/*,video/*"
                         onChange={handleFileChange}
                       />
                       {previewImage && (
-                        <img src={previewImage} alt="Preview" style={styles.previewImg} />
+                        previewImage.type === 'video' ? (
+                          <video src={previewImage.url} controls style={styles.previewImg} />
+                        ) : (
+                          <img src={previewImage.url} alt="Preview" style={styles.previewImg} />
+                        )
                       )}
-                      {editingProduct && editingProduct.image && !previewImage && (
-                        <div style={{ marginTop: '8px' }}>
-                          <span style={styles.labelMuted}>Current Image:</span>
-                          <img
-                            src={`${API_BASE_URL}${editingProduct.image.startsWith('/') ? '' : '/'}${editingProduct.image}`}
-                            alt="Current"
-                            style={styles.previewImg}
-                          />
-                        </div>
-                      )}
+                      {editingProduct && editingProduct.image && !previewImage && (() => {
+                        const src = `${API_BASE_URL}${editingProduct.image.startsWith('/') ? '' : '/'}${editingProduct.image}`;
+                        const isVid = src.match(/\.(mp4|webm|mov)$/i);
+                        return (
+                          <div style={{ marginTop: '8px' }}>
+                            <span style={styles.labelMuted}>Current Media:</span>
+                            {isVid ? (
+                              <video src={src} controls style={styles.previewImg} />
+                            ) : (
+                              <img src={src} alt="Current" style={styles.previewImg} />
+                            )}
+                          </div>
+                        );
+                      })()}
                     </div>
 
                     <div style={styles.formGroup}>
