@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { API_BASE_URL } from '../config';
 import AdminLayout from './AdminLayout';
+import DOMPurify from 'dompurify';
 
 const PolicyManagement = () => {
   const { user } = useAuth();
@@ -158,10 +159,10 @@ const PolicyManagement = () => {
         <div className="mt-4">
           <h4>Preview:</h4>
           <div className="border p-3">
-            <div dangerouslySetInnerHTML={{ __html: policies.shippingPolicy }} />
-            <div dangerouslySetInnerHTML={{ __html: policies.refundPolicy }} />
-            <div dangerouslySetInnerHTML={{ __html: policies.termsAndConditions }} />
-            <div dangerouslySetInnerHTML={{ __html: policies.privacyPolicy }} />
+            <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(policies.shippingPolicy) }} />
+            <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(policies.refundPolicy) }} />
+            <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(policies.termsAndConditions) }} />
+            <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(policies.privacyPolicy) }} />
           </div>
         </div>
       </div>
